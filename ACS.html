@@ -1,0 +1,1051 @@
+﻿<!DOCTYPE html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+</head>
+<link rel="stylesheet" href="style.css" />
+<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+<!--<script src="http://code.jquery.com/jquery-1.12.1.js"></script>-->
+<script src="jquery-3.1.0.js"></script>
+<script src="jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="geography_lookupNew.js"></script>
+<!--[if lt IE 9]>
+       <script type="text/javascript" src="aight.js"></script>
+   <![endif]-->
+<!--[if lte IE 8]><script type="text/javascript" src="r2d3.js"></script><![endif]-->
+<!--[if gte IE 9]><!-->
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<!--<![endif]-->
+
+<script src="queue.v1.min.js"></script>
+<script src="../ACS_New/modernizr-custom.js"></script>
+<script src="../ACS_New/excellentexport.js"></script>
+
+<body>
+    <div id="controls">
+        <label>Indicator:</label>
+        <select id='ind_options'></select>
+
+        <label>Year:</label>
+        <select id='year_options'>
+            <!-- add new years here -->
+	    <option value="2012">2008-2012</option>
+            <option value="2013">2009-2013</option>
+            <option value="2014">2010-2014</option>
+            <option value="2015">2011-2015*</option>
+            <option value="2016">2012-2016*</option>
+	    <option value="2017">2013-2017*</option>
+        </select>
+
+        <a href="#" class="myButton" id="get_data">Get Data</a>
+        <a href="#" class="export myButton" id="exportChrome" style="display:none">Export Table into Excel</a>
+        <a href="#" class="export myButton" id="exportIE" style="display:none" onclick="return ExcellentExport.csv(this, 'datatableCsv');">Export Table into Excel</a>
+        <a href="ACS_Documentation.pdf" style="margin: 0px 0px 10px 10px;" id="download">Documentation</a>
+        <input id="chkrank" type="checkbox" name="vehicle" />Include Rank<br>
+    </div>
+
+
+    <div id='test'>*Year unavailable at time of release.</div>
+    <div id='tab_loc' class="CSSTableGenerator"></div>
+</body>
+<script type="text/javascript">
+
+
+    // document.domain = 'https://census.gov';
+    //Census API 5-year ACS URL
+    var api_url = 'https://api.census.gov/data';
+
+    var my_key = 'c8b757f7e16f108647304131056db5bb63ba2e93';
+
+
+    //census variables by indicator
+    var census_param = [
+    {
+        indicator: "Population in Poverty", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY AGE", source: 'acs/acs5',
+        variables: [
+        { name: "B17020_001E", label: "Estimate!!Total", type: "denom" },
+        { name: "B17020_002E", label: "Estimate!!Total!!Income in the past 12 months below poverty level", type: "num" }
+        ]
+    },
+    {
+        indicator: "Population in Poverty TOTAL", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY AGE", source: 'acs/acs5',
+        variables: [
+        { name: "B17020_001E", label: "Estimate!!Total", type: "denom" },
+        { name: "B17020_001E", label: "Estimate!!Total", type: "num" }
+        ]
+    },
+    {
+        indicator: "Children Under 6 in Poverty", table: "B17020. Poverty Status in the Past 12 Months by Age", source: 'acs/acs5',
+        variables: [
+        { name: "B17020_003E", label: "Estimate!!Total!!Income in the past 12 months below poverty level!!Under 6 years", type: "num" },
+        { name: "B17020_011E", label: "Estimate!!Total!!Income in the past 12 months at or above poverty level!!Under 6 years", type: "denom2" }
+        ]
+    },
+    {
+        indicator: "Children Under 5 in Poverty", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY SEX BY AGE", source: 'acs/acs5',
+        variables: [
+        { name: "B17001_004E", label: "Estimate!!Total!!Income in the past 12 months below poverty level!!Male!!Under 5 years", type: "num" },
+        { name: "B17001_033E", label: "Estimate!!Total!!Income in the past 12 months at or above poverty level!!Male!!Under 5 years", type: "denom2" },
+        { name: "B17001_018E", label: "Estimate!!Total!!Income in the past 12 months below poverty level!!Female!!Under 5 years", type: "num" },
+        { name: "B17001_047E", label: "Estimate!!Total!!Income in the past 12 months at or above poverty level!!Female!!Under 5 years", type: "denom2" }
+        ]
+    },
+    {
+        indicator: "Owner Occupied Homes", table: "SELECTED HOUSING CHARACTERISTICS", source: 'acs/acs5/profile',
+        variables: [
+        { name: "DP04_0045E", label: "Estimate!!HOUSING TENURE!!Occupied housing units", type: "denom" },
+        { name: "DP04_0046E", label: "Estimate!!HOUSING TENURE!!Occupied housing units!!Owner-occupied", type: "num" }
+        ]
+    },
+    {
+        indicator: "Foreign Born Population", table: "SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES", source: 'acs/acs5/profile',
+        variables: [
+        { name: "DP02_0086E", label: "Estimate!!PLACE OF BIRTH!!Total population", type: "denom" },
+        { name: "DP02_0092E", label: "Estimate!!PLACE OF BIRTH!!Total population!!Foreign born", type: "num" }
+        ]
+    },
+    {
+        indicator: "Population Living in Crowded Conditions", table: "SELECTED HOUSING CHARACTERISTICS", source: 'acs/acs5/profile',
+        variables: [
+        { name: "DP04_0076E", label: "Estimate!!OCCUPANTS PER ROOM!!Occupied housing units", type: "denom" },
+        { name: "DP04_0078E", label: "Estimate!!OCCUPANTS PER ROOM!!Occupied housing units!!1.01 to 1.50", type: "num" },
+        { name: "DP04_0079E", label: "Estimate!!OCCUPANTS PER ROOM!!Occupied housing units!!1.51 or more", type: "num" }
+        ]
+    },
+    {
+        indicator: "Housing Built Before 1950", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
+        variables: [
+        { name: "B25034_011E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
+        { name: "B25034_010E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
+        { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
+        ]
+    },
+     {
+         indicator: "Housing Built Before 1960", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
+         variables: [
+         { name: "B25034_011E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
+         { name: "B25034_010E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
+         { name: "B25034_009E", label: "Estimate!!Total!!Built 1950 to 1959", type: "num" },
+         { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
+         ]
+     },
+      {
+          indicator: "Housing Built Before 1970", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
+          variables: [
+         { name: "B25034_011E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
+         { name: "B25034_010E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
+         { name: "B25034_009E", label: "Estimate!!Total!!Built 1950 to 1959", type: "num" },
+         { name: "B25034_008E", label: "Estimate!!Total!!Built 1960 to 1969", type: "num" },
+         { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
+          ]
+      },
+     {
+           indicator: "Housing Built Before 1980", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
+           variables: [
+          { name: "B25034_011E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
+          { name: "B25034_010E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
+          { name: "B25034_009E", label: "Estimate!!Total!!Built 1950 to 1959", type: "num" },
+          { name: "B25034_008E", label: "Estimate!!Total!!Built 1960 to 1969", type: "num" },
+          { name: "B25034_007E", label: "Estimate!!Total!!Built 1970 to 1979", type: "num" },
+          { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
+           ]
+     },
+    {
+        indicator: "Hispanic or Latino (of any race)", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile',
+        variables: [
+        { name: "DP05_0065E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" },
+        { name: "DP05_0066E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Hispanic or Latino (of any race)", type: "num" }
+
+        ]
+    },
+    {
+        indicator: "White alone", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile',
+        variables: [
+        { name: "DP05_0065E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" },
+        { name: "DP05_0072E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!White alone", type: "num" }
+
+        ]
+    },
+    {
+        indicator: "Black or African American alone", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile',
+        variables: [
+        { name: "DP05_0065E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" },
+        { name: "DP05_0073E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!Black or African American alone", type: "num" }
+
+        ]
+    },
+    {
+        indicator: "Asian alone", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile',
+        variables: [
+        { name: "DP05_0065E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" },
+        { name: "DP05_0075E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!Asian alone", type: "num" }
+
+        ]
+    },
+   {
+	indicator: "HS Graduation", table: "SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES", source: 'acs/acs5/profile', 
+	variables: [ 
+	{ name: "DP02_0058E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over", type: "denom" }, 
+	{ name: "DP02_0061E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!High school graduate (includes equivalency)", type: "num" },
+	{ name: "DP02_0062E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Some college no degree", type: "num" }, 
+	{ name: "DP02_0063E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Associate's degree", type: "num" },
+	{ name: "DP02_0064E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Bachelor's degree", type: "num" }, 
+	{ name: "DP02_0065E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Graduate or professional degree", type: "num" } 
+     	]
+    },
+    {
+	indicator: "Rent Burdened Households", table: "GROSS RENT AS A PERCENTAGE OF HOUSEHOLD INCOME IN THE PAST 12 MONTHS", source: 'acs/acs5', 
+	variables: [ 
+	{ name: "B25070_001E", label: "Estimate!!Total", type: "denom" }, 
+	{ name: "B25070_007E", label: "Estimate!!Total!!30.0 to 34.9 percent", type: "num" },
+	{ name: "B25070_008E", label: "Estimate!!Total!!35.0 to 39.9 percent", type: "num" },
+	{ name: "B25070_009E", label: "Estimate!!Total!!40.0 to 49.9 percent", type: "num" }, 
+	{ name: "B25070_010E", label: "Estimate!!Total!!50.0 percent or more", type: "num" } 
+	]
+    },	
+    {
+	indicator: "Limited English", table: "SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES", source: 'acs/acs5/profile', 
+	variables: [ 
+	{ name: "DP02_0110E", label: "Estimate!!LANGUAGE SPOKEN AT HOME!!Population 5 years and over", type: "denom" }, 
+	{ name: "DP02_0113E", label: "Estimate!!LANGUAGE SPOKEN AT HOME!!Population 5 years and over!!Language other than English!!Speak English less than 'very well'", type: "num" }
+	]
+    },		
+    {
+	indicator: "Unemployment", table: "EMPLOYMENT STATUS FOR THE POPULATION 16 YEARS AND OVER", source: 'acs/acs5', 
+	variables: [ 
+	{ name: "B23025_003E", label: "Estimate!!Total!!In labor force!!Civilian labor force", type: "denom" }, 
+	{ name: "B23025_005E", label: "Estimate!!Total!!In labor force!!Civilian labor force!!Unemployed", type: "num" } 
+	]
+    },	
+    {
+	indicator: "Total Population", table: "TOTAL POPULATION", source: 'acs/acs5', 
+	variables: [ 
+	{ name: "B01003_001E", label: "Estimate!!Total", type: "denom" }, 
+	{ name: "B01003_001E", label: "Estimate!!Total", type: "num" } 	
+	]
+    },
+   {
+	indicator: "Total Population TEST", table: "TOTAL POPULATION", source: 'acs/acs5', 
+	variables: [ 
+	{ name: "B00001_001E", label: "Estimate!!Total", type: "denom" }, 
+	{ name: "B00001_001E", label: "Estimate!!Total", type: "num" } 	
+	]
+    },
+   {
+	indicator: "Housing Units", table: "TOTAL POPULATION", source: 'acs/acs5', 
+	variables: [ 
+	{ name: "B00002_001E", label: "Estimate!!Total", type: "denom" }, 
+	{ name: "B00002_001E", label: "Estimate!!Total", type: "num" } 	
+	]
+    },
+    {
+	indicator: "Older Adults Living Alone", table: "LIVING ARRANGEMENTS OF ADULTS 18 YEARS AND OVER BY AGE", source: 'acs/acs5', 
+	variables: [ 
+	{ name: "B09021_023E", label: "Estimate!!Total!!65 years and over!!Lives alone", type: "num" }, 
+	{ name: "B09021_022E", label: "Estimate!!Total!!65 years and over", type: "denom" } 	
+	]
+    },
+ 	{
+	indicator: "Older Adults Living Alone2", table: "B09020. Relationship by Household Type (Including Living Alone) for the Population 65 Years and Over", source: 'acs5', 
+	variables: [ 
+	{ name: "B09020_001E", label: "Total:", type: "denom" }, 
+	{ name: "B09020_015E", label: "In households:!!In nonfamily households:!!Householder:!!Male:!!Living alone", type: "num" },
+ 	{ name: "B09020_018E", label: "In households:!!In nonfamily households:!!Householder:!!Female:!!Living alone", type: "num" }
+	]
+    },
+	{
+	indicator: "TEST_121312312", table: "B09020. Relationship by Household Type (Including Living Alone) for the Population 65 Years and Over", source: 'acs5', 
+	variables: [ 
+	{ name: "B09020_001E", label: "Total:", type: "denom" }, 
+	{ name: "B09020_015E", label: "In households:!!In nonfamily households:!!Householder:!!Male:!!Living alone", type: "num" },
+ 	{ name: "B09020_018E", label: "In households:!!In nonfamily households:!!Householder:!!Female:!!Living alone", type: "num" }
+	]
+    },
+
+    ];
+
+    var census_param_after_2014 = [
+    {
+        indicator: "Population in Poverty", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY AGE", source: 'acs/acs5',
+        variables: [
+        { name: "B17020_001E", label: "Estimate!!Total", type: "denom" },
+        { name: "B17020_002E", label: "Estimate!!Total!!Income in the past 12 months below poverty level", type: "num" }
+        ]
+    },
+    {
+        indicator: "Population in Poverty TOTAL", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY AGE", source: 'acs/acs5',
+        variables: [
+        { name: "B17020_001E", label: "Estimate!!Total", type: "denom" },
+        { name: "B17020_001E", label: "Estimate!!Total", type: "num" }
+        ]
+    },
+    {
+        indicator: "Children Under 6 in Poverty", table: "B17020. Poverty Status in the Past 12 Months by Age", source: 'acs/acs5',
+        variables: [
+        { name: "B17020_003E", label: "Estimate!!Total!!Income in the past 12 months below poverty level!!Under 6 years", type: "num" },
+        { name: "B17020_011E", label: "Estimate!!Total!!Income in the past 12 months at or above poverty level!!Under 6 years", type: "denom2" }
+        ]
+    },
+    {
+        indicator: "Children Under 5 in Poverty", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY SEX BY AGE", source: 'acs/acs5',
+        variables: [
+        { name: "B17001_004E", label: "Estimate!!Total!!Income in the past 12 months below poverty level!!Male!!Under 5 years", type: "num" },
+        { name: "B17001_033E", label: "Estimate!!Total!!Income in the past 12 months at or above poverty level!!Male!!Under 5 years", type: "denom2" },
+        { name: "B17001_018E", label: "Estimate!!Total!!Income in the past 12 months below poverty level!!Female!!Under 5 years", type: "num" },
+        { name: "B17001_047E", label: "Estimate!!Total!!Income in the past 12 months at or above poverty level!!Female!!Under 5 years", type: "denom2" }
+        ]
+    },
+    {
+        indicator: "Owner Occupied Homes", table: "SELECTED HOUSING CHARACTERISTICS", source: 'acs/acs5/profile',
+        variables: [
+        { name: "DP04_0045E", label: "Estimate!!HOUSING TENURE!!Occupied housing units", type: "denom" },
+        { name: "DP04_0046E", label: "Estimate!!HOUSING TENURE!!Occupied housing units!!Owner-occupied", type: "num" }
+        ]
+    },
+    {
+        indicator: "Foreign Born Population", table: "SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES", source: 'acs/acs5/profile',
+        variables: [
+        { name: "DP02_0086E", label: "Estimate!!PLACE OF BIRTH!!Total population", type: "denom" },
+        { name: "DP02_0092E", label: "Estimate!!PLACE OF BIRTH!!Total population!!Foreign born", type: "num" }
+        ]
+    },
+    {
+        indicator: "Population Living in Crowded Conditions", table: "SELECTED HOUSING CHARACTERISTICS", source: 'acs/acs5/profile',
+        variables: [
+        { name: "DP04_0076E", label: "Estimate!!OCCUPANTS PER ROOM!!Occupied housing units", type: "denom" },
+        { name: "DP04_0078E", label: "Estimate!!OCCUPANTS PER ROOM!!Occupied housing units!!1.01 to 1.50", type: "num" },
+        { name: "DP04_0079E", label: "Estimate!!OCCUPANTS PER ROOM!!Occupied housing units!!1.51 or more", type: "num" }
+        ]
+    },
+    {
+        indicator: "Housing Built Before 1950", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
+        variables: [
+        { name: "B25034_011E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
+        { name: "B25034_010E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
+        { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
+        ]
+    },
+     {
+         indicator: "Housing Built Before 1960", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
+         variables: [
+         { name: "B25034_011E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
+         { name: "B25034_010E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
+         { name: "B25034_009E", label: "Estimate!!Total!!Built 1950 to 1959", type: "num" },
+         { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
+         ]
+     },
+      {
+          indicator: "Housing Built Before 1970", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
+          variables: [
+         { name: "B25034_011E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
+         { name: "B25034_010E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
+         { name: "B25034_009E", label: "Estimate!!Total!!Built 1950 to 1959", type: "num" },
+         { name: "B25034_008E", label: "Estimate!!Total!!Built 1960 to 1969", type: "num" },
+         { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
+          ]
+      },
+     {
+           indicator: "Housing Built Before 1980", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
+           variables: [
+          { name: "B25034_011E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
+          { name: "B25034_010E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
+          { name: "B25034_009E", label: "Estimate!!Total!!Built 1950 to 1959", type: "num" },
+          { name: "B25034_008E", label: "Estimate!!Total!!Built 1960 to 1969", type: "num" },
+          { name: "B25034_007E", label: "Estimate!!Total!!Built 1970 to 1979", type: "num" },
+          { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
+           ]
+     },
+    {
+        indicator: "Hispanic or Latino (of any race)", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile',
+        variables: [
+        { name: "DP05_0033E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" },
+        { name: "DP05_0071E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Hispanic or Latino (of any race)", type: "num" }
+
+        ]
+    },
+    {
+        indicator: "White alone", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile',
+        variables: [
+        { name: "DP05_0033E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" },
+        { name: "DP05_0037E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!White alone", type: "num" }
+
+        ]
+    },
+    {
+        indicator: "Black or African American alone", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile',
+        variables: [
+        { name: "DP05_0033E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" },
+        { name: "DP05_0038E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!Black or African American alone", type: "num" }
+
+        ]
+    },
+    {
+        indicator: "Asian alone", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile',
+        variables: [
+        { name: "DP05_0033E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" },
+        { name: "DP05_0044E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!Asian alone", type: "num" }
+
+        ]
+    },
+   {
+	indicator: "HS Graduation", table: "SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES", source: 'acs/acs5/profile', 
+	variables: [ 
+	{ name: "DP02_0058E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over", type: "denom" }, 
+	{ name: "DP02_0061E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!High school graduate (includes equivalency)", type: "num" },
+	{ name: "DP02_0062E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Some college no degree", type: "num" },
+	{ name: "DP02_0063E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Associate's degree", type: "num" },
+	{ name: "DP02_0064E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Bachelor's degree", type: "num" }, 
+	{ name: "DP02_0065E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Graduate or professional degree", type: "num" } 
+     	]
+    },
+    {
+	indicator: "Rent Burdened Households", table: "GROSS RENT AS A PERCENTAGE OF HOUSEHOLD INCOME IN THE PAST 12 MONTHS", source: 'acs/acs5', 
+	variables: [ 
+	{ name: "B25070_001E", label: "Estimate!!Total", type: "denom" }, 
+	{ name: "B25070_007E", label: "Estimate!!Total!!30.0 to 34.9 percent", type: "num" },
+	{ name: "B25070_008E", label: "Estimate!!Total!!35.0 to 39.9 percent", type: "num" },
+	{ name: "B25070_009E", label: "Estimate!!Total!!40.0 to 49.9 percent", type: "num" }, 
+	{ name: "B25070_010E", label: "Estimate!!Total!!50.0 percent or more", type: "num" } 
+	]
+    },
+    {
+	indicator: "Limited English", table: "SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES", source: 'acs/acs5/profile', 
+	variables: [ 
+	{ name: "DP02_0110E", label: "Estimate!!LANGUAGE SPOKEN AT HOME!!Population 5 years and over", type: "denom" }, 
+	{ name: "DP02_0113E", label: "Estimate!!LANGUAGE SPOKEN AT HOME!!Population 5 years and over!!Language other than English!!Speak English less than 'very well'", type: "num" }
+	]
+    },	
+     {
+	indicator: "Unemployment", table: "EMPLOYMENT STATUS FOR THE POPULATION 16 YEARS AND OVER", source: 'acs/acs5', 
+	variables: [ 
+	{ name: "B23025_003E", label: "Estimate!!Total!!In labor force!!Civilian labor force", type: "denom" }, 
+	{ name: "B23025_005E", label: "Estimate!!Total!!In labor force!!Civilian labor force!!Unemployed", type: "num" } 
+	]
+    },		
+    {
+	indicator: "Total Population", table: "TOTAL POPULATION", source: 'acs/acs5', 
+	variables: [ 
+	{ name: "B01003_001E", label: "Estimate!!Total", type: "denom" }, 
+	{ name: "B01003_001E", label: "Estimate!!Total", type: "num" } 	
+	]
+    },
+   {
+	indicator: "Total Population TEST", table: "TOTAL POPULATION", source: 'acs/acs5', 
+	variables: [ 
+	{ name: "B00001_001E", label: "Estimate!!Total", type: "denom" }, 
+	{ name: "B00001_001E", label: "Estimate!!Total", type: "num" } 	
+	]
+    },
+   {
+	indicator: "Housing Units", table: "TOTAL POPULATION", source: 'acs/acs5', 
+	variables: [ 
+	{ name: "B00002_001E", label: "Estimate!!Total", type: "denom" }, 
+	{ name: "B00002_001E", label: "Estimate!!Total", type: "num" } 	
+	]
+    },
+    {
+	indicator: "Older Adults Living Alone", table: "LIVING ARRANGEMENTS OF ADULTS 18 YEARS AND OVER BY AGE", source: 'acs/acs5', 
+	variables: [ 
+	{ name: "B09021_023E", label: "Estimate!!Total!!65 years and over!!Lives alone", type: "num" }, 
+	{ name: "B09021_022E", label: "Estimate!!Total!!65 years and over", type: "denom" } 	
+	]
+    },
+  {
+	indicator: "Older Adults Living Alone2", table: "B09020. Relationship by Household Type (Including Living Alone) for the Population 65 Years and Over", source: 'acs5', 
+	variables: [ 
+	{ name: "B09020_001E", label: "Total:", type: "denom" }, 
+	{ name: "B09020_015E", label: "In households:!!In nonfamily households:!!Householder:!!Male:!!Living alone", type: "num" },
+ 	{ name: "B09020_018E", label: "In households:!!In nonfamily households:!!Householder:!!Female:!!Living alone", type: "num" }
+	]
+    },
+	{
+	indicator: "TEST_121312312", table: "B09020. Relationship by Household Type (Including Living Alone) for the Population 65 Years and Over", source: 'acs5', 
+	variables: [ 
+	{ name: "B09020_001E", label: "Total:", type: "denom" }, 
+	{ name: "B09020_015E", label: "In households:!!In nonfamily households:!!Householder:!!Male:!!Living alone", type: "num" },
+ 	{ name: "B09020_018E", label: "In households:!!In nonfamily households:!!Householder:!!Female:!!Living alone", type: "num" }
+	]
+    },
+    ];
+
+    //populate indicator dropdown
+    var options = $("#ind_options");
+    $.each(census_param, function (i, d) {
+        options.append($("<option />").val(i).text(d.indicator));
+    });
+
+
+
+
+
+
+
+    //function to display data in table
+    function getdata() {
+        var e = document.getElementById("ind_options");
+        var e_val = e.options[e.selectedIndex].value;
+
+        var y = document.getElementById("year_options");
+        var y_val = y.options[y.selectedIndex].value;
+
+        if (y_val <= 2014) {
+            hit_api(census_param[e_val], y_val);
+        }
+        else {
+            hit_api(census_param_after_2014[e_val], y_val);
+        }
+    }
+
+
+    function hit_api(census_param, year) {
+        flag = 0;
+        nta_uhf_data = {};
+        census_param['year'] = year;
+
+        //delete old table
+        $('#tab_loc').empty();
+        //create table and add header corresponding to EPHT Indicator Tool input fields
+        $('#tab_loc').append('<table id="datatableCsv">');
+        var row = $('<tr>');
+        row.append($('<th>').text('IndicatorName'));
+        row.append($('<th>').text('MeasureType'));
+        row.append($('<th>').text('GeoType'));
+        row.append($('<th>').text('GeoEntity'));
+        row.append($('<th>').text('TimePeriod'));
+        row.append($('<th>').text('DataValue'));
+        row.append($('<th>').text('UnreliabilityFlag'));
+        row.append($('<th>').text('ConfidenceInterval'));
+        ///row.append($('<th>').text('Rank'));
+        //row.append($('<th>').text('Rank Percent'));
+        $('#tab_loc table').append(row);
+
+        var census_var = census_param.variables;
+
+        var this_url = api_url + '/' + year + '/' + census_param.source + '?';
+
+        //COUNTY PATH
+        var county = $.map(county2boro, function (n, i) { return n.county; });
+        var county_path = this_url + "key=" + my_key + "&get=";
+        for (i = 0; i < census_var.length; ++i) {
+            county_path += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
+        }
+        county_path += "&for=county:" + county.toString() + "&in=state:36";
+
+        //ZCTA PATH
+        var zcta = $.map(zcta2UHF, function (n, i) { return n.ZCTA; });
+        var zcta_path = this_url + "key=" + my_key + "&get=";
+        for (i = 0; i < census_var.length; ++i) {
+            zcta_path += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
+        }
+        zcta_path += "&for=zip+code+tabulation+area:" + zcta.toString();
+
+        //PUMA PATH
+        var puma = $.map(puma2subboro, function (n, i) { return n.PUMA; });
+        var puma_path = this_url + "key=" + my_key + "&get=";
+        for (i = 0; i < census_var.length; ++i) {
+            puma_path += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
+        }
+        puma_path += "&for=public+use+microdata+area:" + puma.toString() + "&in=state:36";
+
+
+        //PUMA CD
+        var pumacd = $.map(puma2subboro, function (n, i) { return n.PUMA; });
+        var puma_path_cd = this_url + "key=" + my_key + "&get=";
+        for (i = 0; i < census_var.length; ++i) {
+            puma_path_cd += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
+        }
+        puma_path_cd += "&for=public+use+microdata+area:" + pumacd.toString() + "&in=state:36";
+
+
+        //BX
+        var nta = $.map(tractToNTABX, function (n, i) { return n.TRACT; });
+        var nta_path = this_url + "key=" + my_key + "&get=";
+        for (i = 0; i < census_var.length; ++i) {
+            nta_path += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
+        }
+        nta_path += "&for=tract:" + nta.toString() + "&in=state:36+county:005";
+        //console.log(nta_path)
+
+        //BK
+        var ntaBK = $.map(tractToNTABK, function (n, i) { return n.TRACT; });
+        var nta_pathBK = this_url + "key=" + my_key + "&get=";
+        for (i = 0; i < census_var.length; ++i) {
+            nta_pathBK += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
+        }
+        nta_pathBK += "&for=tract:" + ntaBK.toString() + "&in=state:36+county:047";
+        console.log(nta_pathBK);
+
+        //MN
+        var ntaMN = $.map(tractToNTAMN, function (n, i) { return n.TRACT; });
+        var nta_pathMN = this_url + "key=" + my_key + "&get=";
+        for (i = 0; i < census_var.length; ++i) {
+            nta_pathMN += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
+        }
+        nta_pathMN += "&for=tract:" + ntaMN.toString() + "&in=state:36+county:061";
+
+
+
+        //QN
+        var ntaQN = $.map(tractToNTAQN, function (n, i) { return n.TRACT; });
+        var nta_pathQN = this_url + "key=" + my_key + "&get=";
+        for (i = 0; i < census_var.length; ++i) {
+            nta_pathQN += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
+        }
+        nta_pathQN += "&for=tract:" + ntaQN.toString() + "&in=state:36+county:081";
+
+
+        //SI
+        var ntaSI = $.map(tractToNTASI, function (n, i) { return n.TRACT; });
+        var nta_pathSI = this_url + "key=" + my_key + "&get=";
+        for (i = 0; i < census_var.length; ++i) {
+            nta_pathSI += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
+        }
+        nta_pathSI += "&for=tract:" + ntaSI.toString() + "&in=state:36+county:085";
+        var error_msg = "The " + year + " release of ACS 5-Year data is not yet available.  Please select an earlier year."
+
+        $.getJSON(county_path, function (json) {
+            $.getJSON(county_path, function (a_json) {
+                $.getJSON(puma_path, function (b_json) {
+                    $.getJSON(zcta_path, function (c_json) {
+
+                        $.getJSON(puma_path_cd, function (cd_json) {
+                            $.getJSON(nta_path, function (n_json) {
+                                $.getJSON(nta_pathBK, function (BKn_json) {
+                                    $.getJSON(nta_pathMN, function (MNn_json) {
+                                        $.getJSON(nta_pathQN, function (QNn_json) {
+                                            $.getJSON(nta_pathSI, function (SIn_json) {
+                                                parse_json(census_param, json, "county", 'county', 'Citywide', county2boro);
+                                                parse_json(census_param, a_json, "county", 'county', 'Borough', county2boro);
+                                                parse_json(census_param, b_json, "public use microdata area", 'PUMA', 'Subboro', puma2subboro);
+                                                parse_json(census_param, c_json, "zip code tabulation area", 'ZCTA', 'UHF42', zcta2UHF);
+                                                parse_json(census_param, cd_json, "public use microdata area", 'PUMA', 'CD', puma2subboro);
+                                                parse_json(census_param, n_json, "tract", 'TRACT', 'NTA', tractToNTABX);
+                                                parse_json(census_param, BKn_json, "tract", 'TRACT', 'NTA', tractToNTABK);
+                                                parse_json(census_param, MNn_json, "tract", 'TRACT', 'NTA', tractToNTAMN);
+                                                parse_json(census_param, QNn_json, "tract", 'TRACT', 'NTA', tractToNTAQN);
+                                                parse_json(census_param, SIn_json, "tract", 'TRACT', 'NTA', tractToNTASI);
+                                            }).error(function () { alert(error_msg); });
+                                        }).error(function () { alert(error_msg); });
+                                    }).error(function () { alert(error_msg); });
+                                }).error(function () { alert(error_msg); });
+                            }).error(function () { alert(error_msg); });
+                        }).error(function () { alert(error_msg); });
+                    }).error(function () { alert(error_msg); });
+                }).error(function () { alert(error_msg); });
+            }).error(function () { alert(error_msg); });
+        }).error(function () { alert(error_msg); });
+    }
+    var flag = 0;
+    var nta_uhf_data = {};
+    function parse_json(census_param, c_json, c_geo, from_geo, to_geo, geos) {
+        //  debugger
+        //ACS 5-year data represents middle year
+        var this_year = census_param.year - 2;
+
+        var census_var = census_param.variables;
+        // create table from Geo to geo table according to lookup
+        var geoOL = {};
+        $.each(geos, function (i, val) {
+            geoOL[geos[i][from_geo]] = geos[i][to_geo];
+        });
+
+        //grab variable names// Get all title for Key value pair
+        var c_var = c_json.shift();
+
+        //assign variable names as keys//  Assign key value accoridng to c_var table= table name, state=
+        var cdata2 = [];// again all data with object key value
+        for (i = 0; i < c_json.length; ++i) {
+            var c = c_json[i];
+            var temp_OL = {};
+            for (j = 0; j < c.length; ++j) {
+                temp_OL[c_var[j]] = c[j];
+            }
+            cdata2.push(temp_OL);
+        }
+
+        //get type for each variable name // table name with num or denonminator assignmrnt type_OL
+        var type_OL = {};
+        for (i = 0; i < census_var.length; ++i) {
+            type_OL[census_var[i].name] = census_var[i].type;
+        }
+
+        //create object for each geographic entity with variables summed by type
+        var cdata = {};
+        for (i = 0; i < cdata2.length; ++i) {
+            var temp_OL = {};
+            var p = cdata2[i];
+            for (var key in p) {
+                // all data arrary will itrate
+                if (p.hasOwnProperty(key)) {
+                    // only take table values
+                    if (type_OL.hasOwnProperty(key)) {
+                        //(type_OL
+                        if (temp_OL.hasOwnProperty(type_OL[key])) {
+                            temp_OL[type_OL[key]] = temp_OL[type_OL[key]] + parseInt(p[key]);
+                        }
+                        else {
+                            temp_OL[type_OL[key]] = parseInt(p[key]);
+                        }
+                    }
+                }
+            }
+            temp_OL[to_geo] = geoOL[p[c_geo]];
+            //if (geoOL[p[c_geo]] == undefined)
+            //{
+            //    alert(p)
+            //}
+            cdata[p[c_geo]] = temp_OL;
+        }
+        // console.log(cdata);
+
+
+        //aggregate by geography
+        var uhf_data = {};
+        for (var key1 in cdata) {
+            var key = cdata[key1][to_geo];
+            if (!uhf_data[key]) {
+                uhf_data[key] = {};
+            }
+            for (var key2 in cdata[key1]) {
+                if (key2 !== to_geo) {
+                    if (!uhf_data[key][key2]) {
+                        // alert("hi")
+                        uhf_data[key][key2] = parseInt(cdata[key1][key2]);
+                    }
+                    else {
+                        uhf_data[key][key2] += parseInt(cdata[key1][key2]);
+                    }
+                }
+            }
+        }
+
+        if (to_geo != 'NTA' && flag != 5) {
+            var uhf_data = populate_stats(uhf_data, census_param.indicator)
+            DrawTable(uhf_data, to_geo, this_year, census_param.indicator);
+        }
+
+        else {
+            for (var key in uhf_data) {
+                nta_uhf_data[key] = (uhf_data[key])
+            }
+            flag = flag + 1;
+        }
+
+        if (to_geo == 'NTA' && flag == 5) {
+            var new_uhf_data = populate_stats(nta_uhf_data, census_param.indicator)
+            DrawTable(new_uhf_data, to_geo, this_year, census_param.indicator);
+        }
+
+        //populate table with EPHT variables
+        //for (var key in uhf_data) {
+
+        //	var temp_OL = uhf_data[key];
+        //	var row = $('<tr>');
+        //	row.append($('<td>').text(census_param.indicator));//IndicatorName
+        //	row.append($('<td>').text('Number')); //MeasureType
+        //	row.append($('<td>').text(to_geo)); //GeoType
+        //	row.append($('<td>').text(key)); //GeoEntity
+        //	row.append($('<td>').text((this_year - 2) + '-' + ((this_year + 2) - 2000) + ' ACS')); //TimePeriod
+        //	row.append($('<td>').text(temp_OL["num"])); //DataValue
+        //	row.append($('<td>').text('0')); //UnreliabilityFlag
+        //	row.append($('<td>').text(temp_OL["rank"]));
+
+        //	$('#tab_loc table').append(row);
+        //	var row = $('<tr>');
+        //	if (!temp_OL["denom"]) {
+        //		var test_ind = d3.round((100*(temp_OL["num"]/(temp_OL["denom2"] + temp_OL["num"]))), 2);
+        //	}
+        //	else {
+        //		var test_ind = d3.round((100*(temp_OL["num"]/temp_OL["denom"])), 2);
+        //	}
+        //	row.append($('<td>').text(census_param.indicator));//IndicatorName
+        //	row.append($('<td>').text('Percent')); //MeasureType
+        //	row.append($('<td>').text(to_geo)); //GeoType
+        //	row.append($('<td>').text(key)); //GeoEntity
+        //	row.append($('<td>').text((this_year - 2) + '-' + ((this_year + 2)-2000) + ' ACS')); //TimePeriod
+        //	row.append($('<td>').text(test_ind));//DataValue
+        //	row.append($('<td>').text('0')); //UnreliabilityFlag
+        //	//row.append($('<td>').text(temp_OL["rank"]));
+        //	row.append($('<td>').text(temp_OL["rankper"]));
+
+        //	$('#tab_loc table').append(row);
+        //}
+
+
+    }
+    function DrawTable(uhf_data, to_geo, this_year, indicator) {
+        for (var key in uhf_data) {
+            var keyArray = key.split(',');
+            // cd devide logic
+            for (var i = 0; i < keyArray.length; i++) {
+
+                var temp_OL = uhf_data[key];
+                var row = $('<tr>');
+                row.append($('<td>').text(indicator));//IndicatorName
+                row.append($('<td>').text('Number')); //MeasureType
+                row.append($('<td>').text(to_geo)); //GeoType
+                row.append($('<td>').text(keyArray[i])); //GeoEntity
+                row.append($('<td>').text((this_year - 2) + '-' + ((this_year + 2) - 2000))); //TimePeriod
+                row.append($('<td>').text(temp_OL["num"])); //DataValue
+                row.append($('<td>').text('0')); //UnreliabilityFlag
+                row.append($('<td>').text('')); //ConfidenceInterval
+                // row.append($('<td>').text(temp_OL["rank"]));
+
+                $('#tab_loc table').append(row);
+                var row = $('<tr>');
+                if (indicator === "Children Under 6 in Poverty" || indicator === "Children Under 5 in Poverty") {
+                    var test_ind = d3.round((100 * (temp_OL["num"] / (temp_OL["denom2"] + temp_OL["num"]))), 2);
+                }
+                else if (!temp_OL["denom"]) {
+                    var test_ind = d3.round((100 * (temp_OL["num"] / (temp_OL["denom2"]))), 2);
+                }
+
+                else {
+                    var test_ind = d3.round((100 * (temp_OL["num"] / temp_OL["denom"])), 2);
+                }
+                row.append($('<td>').text(indicator));//IndicatorName
+                row.append($('<td>').text('Percent')); //MeasureType
+                row.append($('<td>').text(to_geo)); //GeoType
+                row.append($('<td>').text(keyArray[i])); //GeoEntity
+                row.append($('<td>').text((this_year - 2) + '-' + ((this_year + 2) - 2000))); //TimePeriod
+                if (!isNaN(test_ind)) {
+                    row.append($('<td>').text(test_ind));//DataValue
+                }
+                else {
+                    row.append($('<td>').text(0));//DataValue
+                }
+                row.append($('<td>').text('0')); //UnreliabilityFlag
+                row.append($('<td>').text('')); //ConfidenceInterval
+                //row.append($('<td>').text(temp_OL["rank"]));
+                //  row.append($('<td>').text(temp_OL["rankper"]));
+
+                $('#tab_loc table').append(row);
+                if (to_geo != 'Citywide' && document.getElementById("chkrank").checked ) {
+                      if (to_geo != 'Borough' && document.getElementById("chkrank").checked) {
+                        var row = $('<tr>');
+                        row.append($('<td>').text(indicator));//IndicatorName
+                        row.append($('<td>').text('Rank')); //MeasureType
+                        row.append($('<td>').text(to_geo)); //GeoType
+                        row.append($('<td>').text(keyArray[i])); //GeoEntity
+                        row.append($('<td>').text((this_year - 2) + '-' + ((this_year + 2) - 2000))); //TimePeriod
+                        row.append($('<td>').text(temp_OL["rankper"])); //DataValue
+                        row.append($('<td>').text('0')); //UnreliabilityFlag
+                        row.append($('<td>').text('')); //ConfidenceInterval
+                        // row.append($('<td>').text('0'));
+                        $('#tab_loc table').append(row);
+                    }
+                }
+            }
+        }
+    }
+    function populate_stats(uhf_data, indicator) {
+
+        var dataNumber = [];
+        var dataPercent = [];
+        var range_array = [];
+        var leg_no = 3;
+        var ranks = [];
+        var ranksPer = [];
+        for (var key in uhf_data) {
+            var temp_OL = uhf_data[key];
+            dataNumber.push(temp_OL["num"]);
+        }
+
+        for (var key in uhf_data) {
+            var temp_OL = uhf_data[key];
+            if (indicator == "Children Under 6 in Poverty" || indicator == "Children Under 5 in Poverty") {
+                var test_ind = d3.round((100 * (temp_OL["num"] / (temp_OL["denom2"] + temp_OL["num"]))), 2);
+                if (!isNaN(test_ind)) {
+                    dataPercent.push(test_ind);
+                }
+                else {
+                    dataPercent.push(0);
+                }
+            }
+            else if (!temp_OL["denom"]) {
+                var test_ind = d3.round((100 * (temp_OL["num"] / (temp_OL["denom2"]))), 2);
+                if (!isNaN(test_ind)) {
+                    dataPercent.push(test_ind);
+                }
+                else {
+                    dataPercent.push(0);
+                }
+            }
+
+            else {
+                var test_ind = d3.round((100 * (temp_OL["num"] / temp_OL["denom"])), 2);
+                if (!isNaN(test_ind)) {
+                    dataPercent.push(test_ind);
+                }
+                else {
+                    dataPercent.push(0);
+                }
+            }
+        }
+
+        data_quantile = d3.scale.quantile();
+        data_quantile.domain(dataNumber);
+
+        range_array.length = 0;
+        for (i = 0; i < leg_no; i++) {
+            range_array[i] = i + 1
+        }
+
+        data_quantile.range(range_array);
+        for (var i = 0; i < dataNumber.length; i++) {
+            var f = dataNumber[i];
+            var q = data_quantile(f);
+            ranks.push(q);
+        }
+
+        //var sorted = dataNumber.slice().sort(function (a, b) { return b - a })
+        //var ranks = dataNumber.slice().map(function (v) { return sorted.indexOf(v) + 1 });
+        var i = 0;
+        for (var key in uhf_data) {
+            uhf_data[key]["rank"] = ranks[i];
+            i++;
+        }
+
+        ///percent disparity
+        // data_quantile = d3.scale.quantile();
+        data_quantile.domain(dataPercent);
+        for (var i = 0; i < dataPercent.length; i++) {
+            var f = dataPercent[i];
+            var q = data_quantile(f);
+            ranksPer.push(q);
+        }
+        // Add to orignal node
+        var i = 0;
+        for (var key in uhf_data) {
+            uhf_data[key]["rankper"] = ranksPer[i];
+            i++;
+        }
+
+        // uhf_data = sort(uhf_data.rank, uhf_data)
+
+        return uhf_data;
+
+    }
+
+
+    //function to download as CSV from http://jsfiddle.net/terryyounghk/KPEGU/
+    $(document).ready(function () {
+
+        function exportTableToCSV($table, filename) {
+
+            //var $rows = $table.find('tr:has(td)'),
+            var $rows = $table.find('tr:has(th,td)'),
+
+                // Temporary delimiter characters unlikely to be typed by keyboard
+                // This is to avoid accidentally splitting the actual contents
+                tmpColDelim = String.fromCharCode(11), // vertical tab character
+                tmpRowDelim = String.fromCharCode(0), // null character
+
+                // actual delimiter characters for CSV format
+                colDelim = '","',
+                rowDelim = '"\r\n"',
+
+                // Grab text from table into CSV formatted string
+                csv = '"' + $rows.map(function (i, row) {
+                    var $row = $(row),
+                        //$cols = $row.find('td');
+                        $cols = $row.find('th,td');
+
+                    return $cols.map(function (j, col) {
+                        var $col = $(col),
+                            text = $col.text();
+
+                        return text.replace('"', '""'); // escape double quotes
+
+                    }).get().join(tmpColDelim);
+
+                }).get().join(tmpRowDelim)
+                    .split(tmpRowDelim).join(rowDelim)
+                    .split(tmpColDelim).join(colDelim) + '"',
+
+                // Data URI
+                csvData = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csv);
+
+            $(this)
+                .attr({
+                    'download': filename,
+                    'href': csvData,
+                    'target': '_blank'
+                });
+        }
+
+        // This must be a hyperlink
+        $("#exportChrome").on('click', function (event) {
+            // CSV
+            exportTableToCSV.apply(this, [$('#tab_loc>table'), 'export.csv']);
+
+            // IF CSV, don't do event.preventDefault() or return false
+            // We actually need this to be a typical hyperlink
+        });
+
+
+        //get data event
+        $("#get_data").click(function (event) {
+            event.preventDefault();
+            getdata();
+        });
+
+        $(document).ready(function () {
+
+            var BrowserDetect = {
+                init: function () {
+                    this.browser = this.searchString(this.dataBrowser) || "Other";
+                    this.version = this.searchVersion(navigator.userAgent) || this.searchVersion(navigator.appVersion) || "Unknown";
+                },
+                searchString: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        var dataString = data[i].string;
+                        this.versionSearchString = data[i].subString;
+
+                        if (dataString.indexOf(data[i].subString) !== -1) {
+                            return data[i].identity;
+                        }
+                    }
+                },
+                searchVersion: function (dataString) {
+                    var index = dataString.indexOf(this.versionSearchString);
+                    if (index === -1) {
+                        return;
+                    }
+
+                    var rv = dataString.indexOf("rv:");
+                    if (this.versionSearchString === "Trident" && rv !== -1) {
+                        return parseFloat(dataString.substring(rv + 3));
+                    } else {
+                        return parseFloat(dataString.substring(index + this.versionSearchString.length + 1));
+                    }
+                },
+
+                dataBrowser: [
+                    { string: navigator.userAgent, subString: "Edge", identity: "MS Edge" },
+                    { string: navigator.userAgent, subString: "MSIE", identity: "Explorer" },
+                    { string: navigator.userAgent, subString: "Trident", identity: "Explorer" },
+                    { string: navigator.userAgent, subString: "Firefox", identity: "Firefox" },
+                    { string: navigator.userAgent, subString: "Opera", identity: "Opera" },
+                    { string: navigator.userAgent, subString: "OPR", identity: "Opera" },
+                    { string: navigator.userAgent, subString: "Chrome", identity: "Chrome" },
+                    { string: navigator.userAgent, subString: "Safari", identity: "Safari" }
+                ]
+            };
+
+            BrowserDetect.init();
+            if (BrowserDetect.browser == "Explorer") {
+                $("#exportIE").show();
+
+            }
+            else {
+                $("#exportChrome").show();
+            }
+            // document.write("You are using <b>" + BrowserDetect.browser + "</b> with version <b>" + BrowserDetect.version + "</b>");
+        });
+
+    });
+
+</script>
