@@ -16,7 +16,7 @@
    <![endif]-->
 <!--[if lte IE 8]><script type="text/javascript" src="r2d3.js"></script><![endif]-->
 <!--[if gte IE 9]><!-->
-<script src="https://d3js.org/d3.v4.min.js"></script>
+<!--<script src="https://d3js.org/d3.v4.min.js"></script>--> 
 <!--<![endif]-->
 
 <script src="queue.v1.min.js"></script>
@@ -540,6 +540,9 @@
             zcta_path += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
         zcta_path += "&for=zip+code+tabulation+area:" + zcta.toString();
+        console.log(zcta_path);
+        console.log(zcta);
+        
 
         //PUMA PATH
         var puma = $.map(puma2subboro, function (n, i) { return n.PUMA; });
