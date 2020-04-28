@@ -540,6 +540,7 @@
             zcta_path += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
         zcta_path += "&for=zip+code+tabulation+area:" + zcta.toString();
+        console.log(zcta_path);
 
         //PUMA PATH
         var puma = $.map(puma2subboro, function (n, i) { return n.PUMA; });
