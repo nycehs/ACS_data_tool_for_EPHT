@@ -552,7 +552,8 @@
             puma_path += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
         puma_path += "&for=public+use+microdata+area:" + puma.toString() + "&in=state:36";
-
+        console.log(puma_path);
+        console.log(puma);
 
         //PUMA CD
         var pumacd = $.map(puma2subboro, function (n, i) { return n.PUMA; });
