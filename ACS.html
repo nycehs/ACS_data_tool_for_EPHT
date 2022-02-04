@@ -79,13 +79,13 @@
         { name: "B17020_001E", label: "Estimate!!Total", type: "num" }
         ]
     },
-    {
-        indicator: "Children Under 6 in Poverty", table: "B17020. Poverty Status in the Past 12 Months by Age", source: 'acs/acs5',
-        variables: [
-        { name: "B17020_003E", label: "Estimate!!Total!!Income in the past 12 months below poverty level!!Under 6 years", type: "num" },
-        { name: "B17020_011E", label: "Estimate!!Total!!Income in the past 12 months at or above poverty level!!Under 6 years", type: "denom2" }
-        ]
-    },
+    // {
+    //     indicator: "Children Under 6 in Poverty", table: "B17020. Poverty Status in the Past 12 Months by Age", source: 'acs/acs5',
+    //     variables: [
+    //     { name: "B17020_003E", label: "Estimate!!Total!!Income in the past 12 months below poverty level!!Under 6 years", type: "num" },
+    //     { name: "B17020_011E", label: "Estimate!!Total!!Income in the past 12 months at or above poverty level!!Under 6 years", type: "denom2" }
+    //     ]
+    // },
     {
         indicator: "Children Under 5 in Poverty", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY SEX BY AGE", source: 'acs/acs5',
         variables: [
@@ -118,43 +118,44 @@
         ]
     },
     {
-        indicator: "Housing Built Before 1950", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
+        // indicator: "Housing Built Before 1950", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
+        indicator: "Pre-1950 Homes", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
         variables: [
         { name: "B25034_011E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
         { name: "B25034_010E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
         { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
         ]
     },
-    {
-        indicator: "Housing Built Before 1960", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
-        variables: [
-        { name: "B25034_011E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
-        { name: "B25034_010E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
-        { name: "B25034_009E", label: "Estimate!!Total!!Built 1950 to 1959", type: "num" },
-        { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
-        ]
-    },
-    {
-        indicator: "Housing Built Before 1970", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
-        variables: [
-        { name: "B25034_011E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
-        { name: "B25034_010E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
-        { name: "B25034_009E", label: "Estimate!!Total!!Built 1950 to 1959", type: "num" },
-        { name: "B25034_008E", label: "Estimate!!Total!!Built 1960 to 1969", type: "num" },
-        { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
-        ]
-    },
-    {
-        indicator: "Housing Built Before 1980", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
-        variables: [
-        { name: "B25034_011E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
-        { name: "B25034_010E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
-        { name: "B25034_009E", label: "Estimate!!Total!!Built 1950 to 1959", type: "num" },
-        { name: "B25034_008E", label: "Estimate!!Total!!Built 1960 to 1969", type: "num" },
-        { name: "B25034_007E", label: "Estimate!!Total!!Built 1970 to 1979", type: "num" },
-        { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
-        ]
-    },
+    // {
+    //     indicator: "Housing Built Before 1960", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
+    //     variables: [
+    //     { name: "B25034_011E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
+    //     { name: "B25034_010E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
+    //     { name: "B25034_009E", label: "Estimate!!Total!!Built 1950 to 1959", type: "num" },
+    //     { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
+    //     ]
+    // },
+    // {
+    //     indicator: "Housing Built Before 1970", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
+    //     variables: [
+    //     { name: "B25034_011E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
+    //     { name: "B25034_010E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
+    //     { name: "B25034_009E", label: "Estimate!!Total!!Built 1950 to 1959", type: "num" },
+    //     { name: "B25034_008E", label: "Estimate!!Total!!Built 1960 to 1969", type: "num" },
+    //     { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
+    //     ]
+    // },
+    // {
+    //     indicator: "Housing Built Before 1980", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
+    //     variables: [
+    //     { name: "B25034_011E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
+    //     { name: "B25034_010E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
+    //     { name: "B25034_009E", label: "Estimate!!Total!!Built 1950 to 1959", type: "num" },
+    //     { name: "B25034_008E", label: "Estimate!!Total!!Built 1960 to 1969", type: "num" },
+    //     { name: "B25034_007E", label: "Estimate!!Total!!Built 1970 to 1979", type: "num" },
+    //     { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
+    //     ]
+    // },
     {
         indicator: "Hispanic or Latino (of any race)", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile',
         variables: [
@@ -261,13 +262,13 @@
         { name: "B17020_001E", label: "Estimate!!Total", type: "num" }
         ]
     },
-    {
-        indicator: "Children Under 6 in Poverty", table: "B17020. Poverty Status in the Past 12 Months by Age", source: 'acs/acs5',
-        variables: [
-        { name: "B17020_003E", label: "Estimate!!Total!!Income in the past 12 months below poverty level!!Under 6 years", type: "num" },
-        { name: "B17020_011E", label: "Estimate!!Total!!Income in the past 12 months at or above poverty level!!Under 6 years", type: "denom2" }
-        ]
-    },
+    // {
+    //     indicator: "Children Under 6 in Poverty", table: "B17020. Poverty Status in the Past 12 Months by Age", source: 'acs/acs5',
+    //     variables: [
+    //     { name: "B17020_003E", label: "Estimate!!Total!!Income in the past 12 months below poverty level!!Under 6 years", type: "num" },
+    //     { name: "B17020_011E", label: "Estimate!!Total!!Income in the past 12 months at or above poverty level!!Under 6 years", type: "denom2" }
+    //     ]
+    // },
     {
         indicator: "Children Under 5 in Poverty", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY SEX BY AGE", source: 'acs/acs5',
         variables: [
@@ -300,43 +301,44 @@
         ]
     },
     {
-        indicator: "Housing Built Before 1950", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
+        // indicator: "Housing Built Before 1950", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
+        indicator: "Pre-1950 Homes", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
         variables: [
         { name: "B25034_011E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
         { name: "B25034_010E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
         { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
         ]
     },
-    {
-        indicator: "Housing Built Before 1960", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
-        variables: [
-        { name: "B25034_011E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
-        { name: "B25034_010E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
-        { name: "B25034_009E", label: "Estimate!!Total!!Built 1950 to 1959", type: "num" },
-        { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
-        ]
-    },
-    {
-        indicator: "Housing Built Before 1970", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
-        variables: [
-        { name: "B25034_011E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
-        { name: "B25034_010E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
-        { name: "B25034_009E", label: "Estimate!!Total!!Built 1950 to 1959", type: "num" },
-        { name: "B25034_008E", label: "Estimate!!Total!!Built 1960 to 1969", type: "num" },
-        { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
-        ]
-    },
-    {
-        indicator: "Housing Built Before 1980", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
-        variables: [
-        { name: "B25034_011E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
-        { name: "B25034_010E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
-        { name: "B25034_009E", label: "Estimate!!Total!!Built 1950 to 1959", type: "num" },
-        { name: "B25034_008E", label: "Estimate!!Total!!Built 1960 to 1969", type: "num" },
-        { name: "B25034_007E", label: "Estimate!!Total!!Built 1970 to 1979", type: "num" },
-        { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
-        ]
-    },
+    // {
+    //     indicator: "Housing Built Before 1960", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
+    //     variables: [
+    //     { name: "B25034_011E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
+    //     { name: "B25034_010E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
+    //     { name: "B25034_009E", label: "Estimate!!Total!!Built 1950 to 1959", type: "num" },
+    //     { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
+    //     ]
+    // },
+    // {
+    //     indicator: "Housing Built Before 1970", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
+    //     variables: [
+    //     { name: "B25034_011E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
+    //     { name: "B25034_010E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
+    //     { name: "B25034_009E", label: "Estimate!!Total!!Built 1950 to 1959", type: "num" },
+    //     { name: "B25034_008E", label: "Estimate!!Total!!Built 1960 to 1969", type: "num" },
+    //     { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
+    //     ]
+    // },
+    // {
+    //     indicator: "Housing Built Before 1980", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
+    //     variables: [
+    //     { name: "B25034_011E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
+    //     { name: "B25034_010E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
+    //     { name: "B25034_009E", label: "Estimate!!Total!!Built 1950 to 1959", type: "num" },
+    //     { name: "B25034_008E", label: "Estimate!!Total!!Built 1960 to 1969", type: "num" },
+    //     { name: "B25034_007E", label: "Estimate!!Total!!Built 1970 to 1979", type: "num" },
+    //     { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
+    //     ]
+    // },
     {
         indicator: "Hispanic or Latino (of any race)", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile',
         variables: [
