@@ -31,8 +31,8 @@
         <label>Year:</label>
         <select id='year_options'>
             <!-- add new years here -->
-            <!--  <option value="2012">2008-2012</option>-->
-            <!--  <option value="2013">2009-2013</option>-->
+            <option value="2020">2016-2020</option>
+            <option value="2019">2015-2019</option>
             <option value="2018">2014-2018</option>
             <option value="2017">2013-2017</option>
             <option value="2016">2012-2016</option>
@@ -227,20 +227,20 @@
 	{ name: "B01003_001E", label: "Estimate!!Total", type: "num" } 	
 	]
     },
-   {
-	indicator: "Total Population TEST", table: "TOTAL POPULATION", source: 'acs/acs5', 
-	variables: [ 
-	{ name: "B00001_001E", label: "Estimate!!Total", type: "denom" }, 
-	{ name: "B00001_001E", label: "Estimate!!Total", type: "num" } 	
-	]
-    },
-   {
-	indicator: "Housing Units", table: "TOTAL POPULATION", source: 'acs/acs5', 
-	variables: [ 
-	{ name: "B00002_001E", label: "Estimate!!Total", type: "denom" }, 
-	{ name: "B00002_001E", label: "Estimate!!Total", type: "num" } 	
-	]
-    },
+//   {
+//	indicator: "Total Population TEST", table: "TOTAL POPULATION", source: 'acs/acs5', 
+//	variables: [ 
+//	{ name: "B00001_001E", label: "Estimate!!Total", type: "denom" }, 
+//	{ name: "B00001_001E", label: "Estimate!!Total", type: "num" } 	
+//	]
+//    },
+//   {
+//	indicator: "Housing Units", table: "TOTAL POPULATION", source: 'acs/acs5', 
+//	variables: [ 
+//	{ name: "B00002_001E", label: "Estimate!!Total", type: "denom" }, 
+//	{ name: "B00002_001E", label: "Estimate!!Total", type: "num" } 	
+//	]
+//    },
     {
 	indicator: "Older Adults Living Alone", table: "LIVING ARRANGEMENTS OF ADULTS 18 YEARS AND OVER BY AGE", source: 'acs/acs5', 
 	variables: [ 
@@ -256,14 +256,14 @@
  	{ name: "B09020_018E", label: "In households:!!In nonfamily households:!!Householder:!!Female:!!Living alone", type: "num" }
 	]
     },
-	{
-	indicator: "TEST_121312312", table: "B09020. Relationship by Household Type (Including Living Alone) for the Population 65 Years and Over", source: 'acs5', 
-	variables: [ 
-	{ name: "B09020_001E", label: "Total:", type: "denom" }, 
-	{ name: "B09020_015E", label: "In households:!!In nonfamily households:!!Householder:!!Male:!!Living alone", type: "num" },
- 	{ name: "B09020_018E", label: "In households:!!In nonfamily households:!!Householder:!!Female:!!Living alone", type: "num" }
-	]
-    },
+//	{
+//	indicator: "TEST_121312312", table: "B09020. Relationship by Household Type (Including Living Alone) for the Population 65 Years and Over", source: 'acs5', 
+//	variables: [ 
+//	{ name: "B09020_001E", label: "Total:", type: "denom" }, 
+//	{ name: "B09020_015E", label: "In households:!!In nonfamily households:!!Householder:!!Male:!!Living alone", type: "num" },
+// 	{ name: "B09020_018E", label: "In households:!!In nonfamily households:!!Householder:!!Female:!!Living alone", type: "num" }
+//	]
+//    },
 
     ];
 
@@ -432,20 +432,49 @@
 	{ name: "B01003_001E", label: "Estimate!!Total", type: "num" } 	
 	]
     },
-   {
-	indicator: "Total Population TEST", table: "TOTAL POPULATION", source: 'acs/acs5', 
-	variables: [ 
-	{ name: "B00001_001E", label: "Estimate!!Total", type: "denom" }, 
-	{ name: "B00001_001E", label: "Estimate!!Total", type: "num" } 	
-	]
-    },
-   {
-	indicator: "Housing Units", table: "TOTAL POPULATION", source: 'acs/acs5', 
-	variables: [ 
-	{ name: "B00002_001E", label: "Estimate!!Total", type: "denom" }, 
-	{ name: "B00002_001E", label: "Estimate!!Total", type: "num" } 	
-	]
-    },
+
+// ######################################################################################################################## //
+
+//   {
+//	indicator: "Housing Units", table: "TOTAL POPULATION", source: 'acs/acs5', 
+//	variables: [ 
+//	{ name: "B00002_001E", label: "Estimate!!Total", type: "denom" }, 
+//	{ name: "B00002_001E", label: "Estimate!!Total", type: "num" } 	
+//	]
+//    },
+
+//    "B25026_001E": {
+//      "label": "Estimate!!Total population in occupied housing units:",
+//      "concept": "TOTAL POPULATION IN OCCUPIED HOUSING UNITS BY TENURE BY YEAR HOUSEHOLDER MOVED INTO UNIT",
+//      "predicateType": "int",
+//      "group": "B25026",
+//      "limit": 0,
+//      "attributes": "B25026_001EA,B25026_001M,B25026_001MA"
+//    },
+//    "B25026_009E": {
+//      "label": "Estimate!!Total population in occupied housing units:!!Renter occupied:",
+//      "concept": "TOTAL POPULATION IN OCCUPIED HOUSING UNITS BY TENURE BY YEAR HOUSEHOLDER MOVED INTO UNIT",
+//      "predicateType": "int",
+//      "group": "B25026",
+//      "limit": 0,
+//      "attributes": "B25026_009EA,B25026_009M,B25026_009MA"
+//    },
+//    "B25008_003E": {
+//      "label": "Estimate!!Total:!!Renter occupied",
+//      "concept": "TOTAL POPULATION IN OCCUPIED HOUSING UNITS BY TENURE",
+//      "predicateType": "int",
+//      "group": "B25008",
+//      "limit": 0,
+//      "attributes": "B25008_003EA,B25008_003M,B25008_003MA"
+//    },
+//    "B25008_001E": {
+//      "label": "Estimate!!Total:",
+//      "concept": "TOTAL POPULATION IN OCCUPIED HOUSING UNITS BY TENURE",
+//      "predicateType": "int",
+//      "group": "B25008",
+//      "limit": 0,
+//      "attributes": "B25008_001EA,B25008_001M,B25008_001MA"
+//    },
     {
 	indicator: "Older Adults Living Alone", table: "LIVING ARRANGEMENTS OF ADULTS 18 YEARS AND OVER BY AGE", source: 'acs/acs5', 
 	variables: [ 
@@ -455,14 +484,6 @@
     },
   {
 	indicator: "Older Adults Living Alone2", table: "B09020. Relationship by Household Type (Including Living Alone) for the Population 65 Years and Over", source: 'acs5', 
-	variables: [ 
-	{ name: "B09020_001E", label: "Total:", type: "denom" }, 
-	{ name: "B09020_015E", label: "In households:!!In nonfamily households:!!Householder:!!Male:!!Living alone", type: "num" },
- 	{ name: "B09020_018E", label: "In households:!!In nonfamily households:!!Householder:!!Female:!!Living alone", type: "num" }
-	]
-    },
-	{
-	indicator: "TEST_121312312", table: "B09020. Relationship by Household Type (Including Living Alone) for the Population 65 Years and Over", source: 'acs5', 
 	variables: [ 
 	{ name: "B09020_001E", label: "Total:", type: "denom" }, 
 	{ name: "B09020_015E", label: "In households:!!In nonfamily households:!!Householder:!!Male:!!Living alone", type: "num" },
@@ -495,7 +516,7 @@
             hit_api(census_param[e_val], y_val);
         }
         else {
-            hit_api(census_param_after_2014[e_val], y_val);
+            hit_api(census_param_after_2014[e_val], y_val); // ---- this might be the problem ---- //
         }
     }
 
@@ -540,9 +561,10 @@
         for (i = 0; i < census_var.length; ++i) {
             zcta_path += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
-        zcta_path += "&for=zip+code+tabulation+area:" + zcta.toString();
-        console.log(zcta_path);
-        console.log(zcta);
+        zcta_path += "&for=zip+code+tabulation+area:" + zcta.toString() + "&in=state:36";
+        // zcta_path += "&for=zip+code+tabulation+area:" + zcta.toString();
+        console.log("zcta_path:", zcta_path);
+        console.log("zcta:", zcta);
         
 
         //PUMA PATH
@@ -552,9 +574,9 @@
             puma_path += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
         puma_path += "&for=public+use+microdata+area:" + puma.toString() + "&in=state:36";
-        console.log(puma_path);
-        console.log(puma);
-
+        console.log("puma_path:", puma_path);
+        console.log("puma:", puma);
+        
         //PUMA CD
         var pumacd = $.map(puma2subboro, function (n, i) { return n.PUMA; });
         var puma_path_cd = this_url + "key=" + my_key + "&get=";
@@ -571,7 +593,7 @@
             nta_path += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
         nta_path += "&for=tract:" + nta.toString() + "&in=state:36+county:005";
-        //console.log(nta_path)
+        console.log("nta_path:", nta_path)
 
         //BK
         var ntaBK = $.map(tractToNTABK, function (n, i) { return n.TRACT; });
@@ -580,7 +602,7 @@
             nta_pathBK += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
         nta_pathBK += "&for=tract:" + ntaBK.toString() + "&in=state:36+county:047";
-        console.log(nta_pathBK);
+        console.log("nta_pathBK:", nta_pathBK);
 
         //MN
         var ntaMN = $.map(tractToNTAMN, function (n, i) { return n.TRACT; });
@@ -589,6 +611,7 @@
             nta_pathMN += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
         nta_pathMN += "&for=tract:" + ntaMN.toString() + "&in=state:36+county:061";
+        console.log("nta_pathMN:", nta_pathMN);
 
 
 
@@ -599,6 +622,7 @@
             nta_pathQN += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
         nta_pathQN += "&for=tract:" + ntaQN.toString() + "&in=state:36+county:081";
+        console.log("nta_pathQN:", nta_pathQN);
 
 
         //SI
@@ -608,13 +632,15 @@
             nta_pathSI += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
         nta_pathSI += "&for=tract:" + ntaSI.toString() + "&in=state:36+county:085";
+        console.log("nta_pathSI:", nta_pathSI);
+
+
         var error_msg = "The " + year + " release of ACS 5-Year data is not yet available.  Please select an earlier year."
 
         $.getJSON(county_path, function (json) {
             $.getJSON(county_path, function (a_json) {
                 $.getJSON(puma_path, function (b_json) {
                     $.getJSON(zcta_path, function (c_json) {
-
                         $.getJSON(puma_path_cd, function (cd_json) {
                             $.getJSON(nta_path, function (n_json) {
                                 $.getJSON(nta_pathBK, function (BKn_json) {
@@ -631,17 +657,18 @@
                                                 parse_json(census_param, MNn_json, "tract", 'TRACT', 'NTA', tractToNTAMN);
                                                 parse_json(census_param, QNn_json, "tract", 'TRACT', 'NTA', tractToNTAQN);
                                                 parse_json(census_param, SIn_json, "tract", 'TRACT', 'NTA', tractToNTASI);
-                                            }).error(function () { alert(error_msg); });
-                                        }).error(function () { alert(error_msg); });
-                                    }).error(function () { alert(error_msg); });
-                                }).error(function () { alert(error_msg); });
-                            }).error(function () { alert(error_msg); });
-                        }).error(function () { alert(error_msg); });
-                    }).error(function () { alert(error_msg); });
-                }).error(function () { alert(error_msg); });
-            }).error(function () { alert(error_msg); });
-        }).error(function () { alert(error_msg); });
+                                            }).fail(data => {alert(data.responseText)}).always(data => {console.log(data)});
+                                        }).fail(data => {alert(data.responseText)}).always(data => {console.log(data)});
+                                    }).fail(data => {alert(data.responseText)}).always(data => {console.log(data)});
+                                }).fail(data => {alert(data.responseText)}).always(data => {console.log(data)});
+                            }).fail(data => {alert(data.responseText)}).always(data => {console.log(data)});
+                        }).fail(data => {alert(data.responseText)}).always(data => {console.log(data)});
+                    }).fail(data => {alert(data.responseText)}).always(data => {console.log(data)});
+                }).fail(data => {alert(data.responseText)}).always(data => {console.log(data)});
+            }).fail(data => {alert(data.responseText)}).always(data => {console.log(data)})
+        }).fail(data => {alert(data.responseText)}).always(data => {console.log(data)});
     }
+
     var flag = 0;
     var nta_uhf_data = {};
     function parse_json(census_param, c_json, c_geo, from_geo, to_geo, geos) {
