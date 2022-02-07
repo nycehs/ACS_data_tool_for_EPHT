@@ -90,7 +90,7 @@
     //     ]
     // },
     {
-        indicator: "Children Under 5 in Poverty", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY SEX BY AGE", source: 'acs/acs5',
+        indicator: "Children Under 5 years old in Poverty", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY SEX BY AGE", source: 'acs/acs5',
         variables: [
         { name: "B17001_004E", label: "Estimate!!Total!!Income in the past 12 months below poverty level!!Male!!Under 5 years", type: "num" },
         { name: "B17001_033E", label: "Estimate!!Total!!Income in the past 12 months at or above poverty level!!Male!!Under 5 years", type: "denom2" },
@@ -273,7 +273,7 @@
     //     ]
     // },
     {
-        indicator: "Children Under 5 in Poverty", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY SEX BY AGE", source: 'acs/acs5',
+        indicator: "Children Under 5 years old in Poverty", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY SEX BY AGE", source: 'acs/acs5',
         variables: [
         { name: "B17001_004E", label: "Estimate!!Total!!Income in the past 12 months below poverty level!!Male!!Under 5 years", type: "num" },
         { name: "B17001_033E", label: "Estimate!!Total!!Income in the past 12 months at or above poverty level!!Male!!Under 5 years", type: "denom2" },
@@ -730,7 +730,7 @@
                 
                 var row = $('<tr>');
                 
-                if (indicator === "Children Under 6 in Poverty" || indicator === "Children Under 5 in Poverty") {
+                if (indicator === "Children Under 6 in Poverty" || indicator === "Children Under 5 years old in Poverty") {
                     var test_ind = d3.round((100 * (temp_OL["num"] / (temp_OL["denom2"] + temp_OL["num"]))), 2);
                 }
                 else if (!temp_OL["denom"]) {
@@ -795,7 +795,7 @@
         
         for (var key in uhf_data) {
             var temp_OL = uhf_data[key];
-            if (indicator == "Children Under 6 in Poverty" || indicator == "Children Under 5 in Poverty") {
+            if (indicator == "Children Under 6 in Poverty" || indicator == "Children Under 5 years old in Poverty") {
                 var test_ind = d3.round((100 * (temp_OL["num"] / (temp_OL["denom2"] + temp_OL["num"]))), 2);
                 if (!isNaN(test_ind)) {
                     dataPercent.push(test_ind);
