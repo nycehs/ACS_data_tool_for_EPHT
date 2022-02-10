@@ -69,14 +69,14 @@
 
     var census_param = [
     {
-        indicator: "Population in Poverty", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY AGE", source: 'acs/acs5',
+        indicator: "Poverty", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY AGE", source: 'acs/acs5',
         variables: [
         { name: "B17020_001E", label: "Estimate!!Total", type: "denom" },
         { name: "B17020_002E", label: "Estimate!!Total!!Income in the past 12 months below poverty level", type: "num" }
         ]
     },
     {
-        indicator: "Population in Poverty TOTAL", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY AGE", source: 'acs/acs5',
+        indicator: "Poverty TOTAL", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY AGE", source: 'acs/acs5',
         variables: [
         { name: "B17020_001E", label: "Estimate!!Total", type: "denom" },
         { name: "B17020_001E", label: "Estimate!!Total", type: "num" }
@@ -99,21 +99,21 @@
         ]
     },
     {
-        indicator: "Owner Occupied Homes", table: "SELECTED HOUSING CHARACTERISTICS", source: 'acs/acs5/profile',
+        indicator: "Owner-Occupied Homes", table: "SELECTED HOUSING CHARACTERISTICS", source: 'acs/acs5/profile',
         variables: [
         { name: "DP04_0045E", label: "Estimate!!HOUSING TENURE!!Occupied housing units", type: "denom" },
         { name: "DP04_0046E", label: "Estimate!!HOUSING TENURE!!Occupied housing units!!Owner-occupied", type: "num" }
         ]
     },
     {
-        indicator: "Foreign Born Population", table: "SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES", source: 'acs/acs5/profile',
+        indicator: "Foreign-Born", table: "SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES", source: 'acs/acs5/profile',
         variables: [
         { name: "DP02_0086E", label: "Estimate!!PLACE OF BIRTH!!Total population", type: "denom" },
         { name: "DP02_0092E", label: "Estimate!!PLACE OF BIRTH!!Total population!!Foreign born", type: "num" }
         ]
     },
     {
-        indicator: "Population Living in Crowded Conditions", table: "SELECTED HOUSING CHARACTERISTICS", source: 'acs/acs5/profile',
+        indicator: "Crowding (> 1 person/room)", table: "SELECTED HOUSING CHARACTERISTICS", source: 'acs/acs5/profile',
         variables: [
         { name: "DP04_0076E", label: "Estimate!!OCCUPANTS PER ROOM!!Occupied housing units", type: "denom" },
         { name: "DP04_0078E", label: "Estimate!!OCCUPANTS PER ROOM!!Occupied housing units!!1.01 to 1.50", type: "num" },
@@ -121,7 +121,6 @@
         ]
     },
     {
-        // indicator: "Housing Built Before 1950", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
         indicator: "Pre-1950 Homes", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
         variables: [
         { name: "B25034_011E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
@@ -192,7 +191,14 @@
         ]
     },
     {
-        indicator: "HS Graduation", table: "SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES", source: 'acs/acs5/profile', 
+        indicator: "Total Population", table: "TOTAL POPULATION", source: 'acs/acs5', 
+        variables: [ 
+        { name: "B01003_001E", label: "Estimate!!Total", type: "denom" }, 
+        { name: "B01003_001E", label: "Estimate!!Total", type: "num" } 	
+        ]
+    },    
+    {
+        indicator: "High School Graduation", table: "SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES", source: 'acs/acs5/profile', 
         variables: [ 
         { name: "DP02_0058E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over", type: "denom" }, 
         { name: "DP02_0061E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!High school graduate (includes equivalency)", type: "num" },
@@ -227,13 +233,6 @@
         ]
     },	
     {
-        indicator: "Total Population", table: "TOTAL POPULATION", source: 'acs/acs5', 
-        variables: [ 
-        { name: "B01003_001E", label: "Estimate!!Total", type: "denom" }, 
-        { name: "B01003_001E", label: "Estimate!!Total", type: "num" } 	
-        ]
-    },
-    {
         indicator: "Older Adults Living Alone", table: "LIVING ARRANGEMENTS OF ADULTS 18 YEARS AND OVER BY AGE", source: 'acs/acs5', 
         variables: [ 
         { name: "B09021_023E", label: "Estimate!!Total!!65 years and over!!Lives alone", type: "num" }, 
@@ -250,16 +249,17 @@
     },
     ];
 
+
     var census_param_after_2014 = [
     {
-        indicator: "Population in Poverty", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY AGE", source: 'acs/acs5',
+        indicator: "Poverty", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY AGE", source: 'acs/acs5',
         variables: [
         { name: "B17020_001E", label: "Estimate!!Total", type: "denom" },
         { name: "B17020_002E", label: "Estimate!!Total!!Income in the past 12 months below poverty level", type: "num" }
         ]
     },
     {
-        indicator: "Population in Poverty TOTAL", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY AGE", source: 'acs/acs5',
+        indicator: "Poverty TOTAL", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY AGE", source: 'acs/acs5',
         variables: [
         { name: "B17020_001E", label: "Estimate!!Total", type: "denom" },
         { name: "B17020_001E", label: "Estimate!!Total", type: "num" }
@@ -282,21 +282,21 @@
         ]
     },
     {
-        indicator: "Owner Occupied Homes", table: "SELECTED HOUSING CHARACTERISTICS", source: 'acs/acs5/profile',
+        indicator: "Owner-Occupied Homes", table: "SELECTED HOUSING CHARACTERISTICS", source: 'acs/acs5/profile',
         variables: [
         { name: "DP04_0045E", label: "Estimate!!HOUSING TENURE!!Occupied housing units", type: "denom" },
         { name: "DP04_0046E", label: "Estimate!!HOUSING TENURE!!Occupied housing units!!Owner-occupied", type: "num" }
         ]
     },
     {
-        indicator: "Foreign Born Population", table: "SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES", source: 'acs/acs5/profile',
+        indicator: "Foreign-Born", table: "SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES", source: 'acs/acs5/profile',
         variables: [
         { name: "DP02_0086E", label: "Estimate!!PLACE OF BIRTH!!Total population", type: "denom" },
         { name: "DP02_0092E", label: "Estimate!!PLACE OF BIRTH!!Total population!!Foreign born", type: "num" }
         ]
     },
     {
-        indicator: "Population Living in Crowded Conditions", table: "SELECTED HOUSING CHARACTERISTICS", source: 'acs/acs5/profile',
+        indicator: "Crowding (> 1 person/room)", table: "SELECTED HOUSING CHARACTERISTICS", source: 'acs/acs5/profile',
         variables: [
         { name: "DP04_0076E", label: "Estimate!!OCCUPANTS PER ROOM!!Occupied housing units", type: "denom" },
         { name: "DP04_0078E", label: "Estimate!!OCCUPANTS PER ROOM!!Occupied housing units!!1.01 to 1.50", type: "num" },
@@ -375,7 +375,14 @@
         ]
     },
     {
-        indicator: "HS Graduation", table: "SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES", source: 'acs/acs5/profile', 
+        indicator: "Total Population", table: "TOTAL POPULATION", source: 'acs/acs5', 
+        variables: [ 
+        { name: "B01003_001E", label: "Estimate!!Total", type: "denom" }, 
+        { name: "B01003_001E", label: "Estimate!!Total", type: "num" } 	
+        ]
+    },    
+    {
+        indicator: "High School Graduation", table: "SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES", source: 'acs/acs5/profile', 
         variables: [ 
         { name: "DP02_0058E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over", type: "denom" }, 
         { name: "DP02_0061E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!High school graduate (includes equivalency)", type: "num" },
@@ -409,13 +416,6 @@
         { name: "B23025_005E", label: "Estimate!!Total!!In labor force!!Civilian labor force!!Unemployed", type: "num" } 
         ]
     },		
-    {
-        indicator: "Total Population", table: "TOTAL POPULATION", source: 'acs/acs5', 
-        variables: [ 
-        { name: "B01003_001E", label: "Estimate!!Total", type: "denom" }, 
-        { name: "B01003_001E", label: "Estimate!!Total", type: "num" } 	
-        ]
-    },
     {
         indicator: "Older Adults Living Alone", table: "LIVING ARRANGEMENTS OF ADULTS 18 YEARS AND OVER BY AGE", source: 'acs/acs5', 
         variables: [ 
