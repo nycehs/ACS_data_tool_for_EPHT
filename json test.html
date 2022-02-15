@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+</head>
+
+<script type="text/javascript" src="https://d3js.org/d3.v3.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script type="text/javascript" src="geography_lookupNew.js"></script>
+<script type="text/javascript" src="queue.v1.min.js"></script>
+<script type="text/javascript" src="modernizr-custom.js"></script>
+<script type="text/javascript" src="excellentexport.js"></script>
+
+<body>
+
+    <script>
+
+        var census_param_1 = 
+            [{
+                indicator: "Poverty", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY AGE", source: 'acs/acs5',
+                variables: [
+                    { name: "B17020_001E", label: "Estimate!!Total", type: "denom" },
+                    { name: "B17020_002E", label: "Estimate!!Total!!Income in the past 12 months below poverty level", type: "num" }
+                ]
+            }]
+        
+
+        var census_param_2 = 
+            [{
+                indicator: "Poverty TOTAL", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY AGE", source: 'acs/acs5',
+                variables: [
+                    { name: "B17020_001E", label: "Estimate!!Total", type: "denom" },
+                    { name: "B17020_001E", label: "Estimate!!Total", type: "num" }
+                ]
+            }]
+        
+
+
+        // var census_param = Object.assign({}, census_param_1, census_param_2);
+        // var census_param = {...census_param_1, ...census_param_2};
+        var census_param = jQuery.extend(census_param_1, census_param_2);
+        console.log(census_param_1);
+        console.log(census_param_2);
+        console.log(census_param);
+
+    </script>
+
+</body>

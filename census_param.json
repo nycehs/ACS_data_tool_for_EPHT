@@ -1,0 +1,140 @@
+[
+    {
+        "indicator": "Poverty", "table": "POVERTY STATUS IN THE PAST 12 MONTHS BY AGE", "source": "acs/acs5",
+        "variables": [
+            { "name": "B17020_001E", "label": "Estimate!!Total", "type": "denom" },
+            { "name": "B17020_002E", "label": "Estimate!!Total!!Income in the past 12 months below poverty level", "type": "num" }
+        ]
+    },
+    {
+        "indicator": "Poverty TOTAL", "table": "POVERTY STATUS IN THE PAST 12 MONTHS BY AGE", "source": "acs/acs5",
+        "variables": [
+            { "name": "B17020_001E", "label": "Estimate!!Total", "type": "denom" },
+            { "name": "B17020_001E", "label": "Estimate!!Total", "type": "num" }
+        ]
+    },
+    {
+        "indicator": "Children Under 5 years old in Poverty", "table": "POVERTY STATUS IN THE PAST 12 MONTHS BY SEX BY AGE", "source": "acs/acs5",
+        "variables": [
+            { "name": "B17001_004E", "label": "Estimate!!Total!!Income in the past 12 months below poverty level!!Male!!Under 5 years", "type": "num" },
+            { "name": "B17001_033E", "label": "Estimate!!Total!!Income in the past 12 months at or above poverty level!!Male!!Under 5 years", "type": "denom2" },
+            { "name": "B17001_018E", "label": "Estimate!!Total!!Income in the past 12 months below poverty level!!Female!!Under 5 years", "type": "num" },
+            { "name": "B17001_047E", "label": "Estimate!!Total!!Income in the past 12 months at or above poverty level!!Female!!Under 5 years", "type": "denom2" }
+        ]
+    },
+    {
+        "indicator": "Owner-Occupied Homes", "table": "SELECTED HOUSING CHARACTERISTICS", "source": "acs/acs5/profile",
+        "variables": [
+            { "name": "DP04_0045E", "label": "Estimate!!HOUSING TENURE!!Occupied housing units", "type": "denom" },
+            { "name": "DP04_0046E", "label": "Estimate!!HOUSING TENURE!!Occupied housing units!!Owner-occupied", "type": "num" }
+        ]
+    },
+    {
+        "indicator": "Foreign-Born", "table": "SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES", "source": "acs/acs5/profile",
+        "variables": [
+            { "name": "DP02_0086E", "label": "Estimate!!PLACE OF BIRTH!!Total population", "type": "denom" },
+            { "name": "DP02_0092E", "label": "Estimate!!PLACE OF BIRTH!!Total population!!Foreign born", "type": "num" }
+        ]
+    },
+    {
+        "indicator": "Crowding (> 1 person/room)", "table": "SELECTED HOUSING CHARACTERISTICS", "source": "acs/acs5/profile",
+        "variables": [
+            { "name": "DP04_0076E", "label": "Estimate!!OCCUPANTS PER ROOM!!Occupied housing units", "type": "denom" },
+            { "name": "DP04_0078E", "label": "Estimate!!OCCUPANTS PER ROOM!!Occupied housing units!!1.01 to 1.50", "type": "num" },
+            { "name": "DP04_0079E", "label": "Estimate!!OCCUPANTS PER ROOM!!Occupied housing units!!1.51 or more", "type": "num" }
+        ]
+    },
+    {
+        "indicator": "Pre-1950 Homes", "table": "YEAR STRUCTURE BUILT", "source": "acs/acs5",
+        "variables": [
+            { "name": "B25034_011E", "label": "Estimate!!Total!!Built 1939 or earlier", "type": "num" },
+            { "name": "B25034_010E", "label": "Estimate!!Total!!Built 1940 to 1949", "type": "num" },
+            { "name": "B25034_001E", "label": "Estimate!!Total", "type": "denom2" }
+        ]
+    },
+    {
+        "indicator": "Hispanic or Latino (of any race)", "table": "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", "source": "acs/acs5/profile",
+        "variables": [
+            { "name": "DP05_0065E", "label": "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", "type": "denom" },
+            { "name": "DP05_0066E", "label": "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Hispanic or Latino (of any race)", "type": "num" }
+        ]
+    },
+    {
+        "indicator": "White alone", "table": "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", "source": "acs/acs5/profile",
+        "variables": [
+            { "name": "DP05_0065E", "label": "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", "type": "denom" },
+            { "name": "DP05_0072E", "label": "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!White alone", "type": "num" }
+        ]
+    },
+    {
+        "indicator": "Black or African American alone", "table": "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", "source": "acs/acs5/profile",
+        "variables": [
+            { "name": "DP05_0065E", "label": "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", "type": "denom" },
+            { "name": "DP05_0073E", "label": "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!Black or African American alone", "type": "num" }
+        ]
+    },
+    {
+        "indicator": "Asian alone", "table": "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", "source": "acs/acs5/profile",
+        "variables": [
+            { "name": "DP05_0065E", "label": "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", "type": "denom" },
+            { "name": "DP05_0075E", "label": "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!Asian alone", "type": "num" }
+        ]
+    },
+    {
+        "indicator": "Total Population", "table": "TOTAL POPULATION", "source": "acs/acs5", 
+        "variables": [ 
+            { "name": "B01003_001E", "label": "Estimate!!Total", "type": "denom" }, 
+            { "name": "B01003_001E", "label": "Estimate!!Total", "type": "num" } 	
+        ]
+    },    
+    {
+        "indicator": "High School Graduation", "table": "SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES", "source": "acs/acs5/profile", 
+        "variables": [ 
+            { "name": "DP02_0058E", "label": "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over", "type": "denom" }, 
+            { "name": "DP02_0061E", "label": "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!High school graduate (includes equivalency)", "type": "num" },
+            { "name": "DP02_0062E", "label": "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Some college no degree", "type": "num" }, 
+            { "name": "DP02_0063E", "label": "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Associate's degree", "type": "num" },
+            { "name": "DP02_0064E", "label": "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Bachelor's degree", "type": "num" }, 
+            { "name": "DP02_0065E", "label": "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Graduate or professional degree", "type": "num" } 
+        ]
+    },
+    {
+        "indicator": "Rent Burdened Households", "table": "GROSS RENT AS A PERCENTAGE OF HOUSEHOLD INCOME IN THE PAST 12 MONTHS", "source": "acs/acs5", 
+        "variables": [ 
+            { "name": "B25070_001E", "label": "Estimate!!Total", "type": "denom" }, 
+            { "name": "B25070_007E", "label": "Estimate!!Total!!30.0 to 34.9 percent", "type": "num" },
+            { "name": "B25070_008E", "label": "Estimate!!Total!!35.0 to 39.9 percent", "type": "num" },
+            { "name": "B25070_009E", "label": "Estimate!!Total!!40.0 to 49.9 percent", "type": "num" }, 
+            { "name": "B25070_010E", "label": "Estimate!!Total!!50.0 percent or more", "type": "num" } 
+        ]
+    },	
+    {
+        "indicator": "Limited English", "table": "SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES", "source": "acs/acs5/profile", 
+        "variables": [ 
+            { "name": "DP02_0110E", "label": "Estimate!!LANGUAGE SPOKEN AT HOME!!Population 5 years and over", "type": "denom" }, 
+            { "name": "DP02_0113E", "label": "Estimate!!LANGUAGE SPOKEN AT HOME!!Population 5 years and over!!Language other than English!!Speak English less than \"very well\"", "type": "num" }
+        ]
+    },		
+    {
+        "indicator": "Unemployment", "table": "EMPLOYMENT STATUS FOR THE POPULATION 16 YEARS AND OVER", "source": "acs/acs5", 
+        "variables": [ 
+            { "name": "B23025_003E", "label": "Estimate!!Total!!In labor force!!Civilian labor force", "type": "denom" }, 
+            { "name": "B23025_005E", "label": "Estimate!!Total!!In labor force!!Civilian labor force!!Unemployed", "type": "num" } 
+        ]
+    },	
+    {
+        "indicator": "Older Adults Living Alone", "table": "LIVING ARRANGEMENTS OF ADULTS 18 YEARS AND OVER BY AGE", "source": "acs/acs5", 
+        "variables": [ 
+            { "name": "B09021_023E", "label": "Estimate!!Total!!65 years and over!!Lives alone", "type": "num" }, 
+            { "name": "B09021_022E", "label": "Estimate!!Total!!65 years and over", "type": "denom" } 	
+        ]
+    },
+    {
+        "indicator": "Older Adults Living Alone2", "table": "B09020. Relationship by Household Type (Including Living Alone) for the Population 65 Years and Over", "source": "acs5", 
+        "variables": [ 
+            { "name": "B09020_001E", "label": "Total:", "type": "denom" }, 
+            { "name": "B09020_015E", "label": "In households:!!In nonfamily households:!!Householder:!!Male:!!Living alone", "type": "num" },
+            { "name": "B09020_018E", "label": "In households:!!In nonfamily households:!!Householder:!!Female:!!Living alone", "type": "num" }
+        ]
+    }
+]
