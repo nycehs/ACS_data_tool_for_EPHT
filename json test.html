@@ -29,13 +29,13 @@
 
 
         var race_ind =
-            {
+            [{
                 indicator: "Poverty TOTAL", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY AGE", source: 'acs/acs5',
                 variables: [
                     { name: "B17020_001E", label: "Estimate!!Total", type: "denom" },
                     { name: "B17020_001E", label: "Estimate!!Total", type: "num" }
                 ]
-            }
+            }]
 
 
 
@@ -43,8 +43,8 @@
         console.log(race_ind);
 
         // conditional push based on year
-        
-        census_param.push(race_ind);
+
+        census_param.push(race_ind[0]);
         console.log(census_param);
 
         // var census_param = Object.assign({}, census_param_1, census_param_2);
