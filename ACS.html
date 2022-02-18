@@ -15,14 +15,6 @@
 <script type="text/javascript" src="modernizr-custom.js"></script>
 <script type="text/javascript" src="excellentexport.js"></script>
 
-<!--[if lt IE 9]>
-       <script type="text/javascript" src="aight.js"></script>
-   <![endif]-->
-<!--[if lte IE 8]><script type="text/javascript" src="r2d3.js"></script><![endif]-->
-<!--[if gte IE 9]><!-->
-<!--<script src="https://d3js.org/d3.v4.min.js"></script>--> 
-<!--<![endif]-->
-
 
 <body>
     <div id="controls">
@@ -31,6 +23,7 @@
 
         <label>Year:</label>
         <select id='year_options'>
+
             <!-- add new years here -->
             <option value="2019">2015-2019</option>
             <option value="2018">2014-2018</option>
@@ -48,12 +41,15 @@
     </div>
 
 
-    <!-- <div id='test'>*Year unavailable at time of release.</div> -->
     <div id='tab_loc' class="CSSTableGenerator"></div>
 </body>
 
 <script type="text/javascript">
-    
+
+
+    //===========================================================================//
+    // setting initial variable values
+    //===========================================================================//
     
     // document.domain = 'https://census.gov';
     //Census API 5-year ACS URL
@@ -61,8 +57,9 @@
     var api_url = 'https://api.census.gov/data';
     var my_key = 'c8b757f7e16f108647304131056db5bb63ba2e93';
 
-
-    //census variables by indicator
+    //---------------------------------------------------------------------------//
+    // indicators whose definitions and variables haven't changed
+    //---------------------------------------------------------------------------//
 
     // denom = complete denominator
     // denom2 = combined with number to form complete denominator
@@ -122,6 +119,9 @@
         ]
     },
     {
+        indicator: "Race and Ethnicity"
+    },
+    {
         indicator: "Total Population", table: "TOTAL POPULATION", source: 'acs/acs5', 
         variables: [ 
         { name: "B01003_001E", label: "Estimate!!Total", type: "denom" }, 
@@ -177,8 +177,12 @@
         { name: "B09020_015E", label: "In households:!!In nonfamily households:!!Householder:!!Male:!!Living alone", type: "num" },
         { name: "B09020_018E", label: "In households:!!In nonfamily households:!!Householder:!!Female:!!Living alone", type: "num" }
         ]
-    }
+    },
     ];
+
+    //---------------------------------------------------------------------------//
+    // variables for race indicators pre-2014
+    //---------------------------------------------------------------------------//
 
     var race_var_before_2014 = [
     {
@@ -211,6 +215,11 @@
     }
     ];
 
+
+    //---------------------------------------------------------------------------//
+    // variables for race indicators post-2014
+    //---------------------------------------------------------------------------//
+
     var race_var_after_2014 = [
     {
         indicator: "Hispanic or Latino (of any race)", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile',
@@ -241,9 +250,13 @@
         ]
     }
     ];
+    
+    //---------------------------------------------------------------------------//
+    // setting up UI
+    //---------------------------------------------------------------------------//
 
     //populate indicator dropdown
-    
+
     var options = $("#ind_options");
     
     $.each(census_param, function (i, d) {
@@ -251,28 +264,56 @@
     });
     
     
+    //===========================================================================//
+    // defining data-getting functions
+    //===========================================================================//
+
+    //---------------------------------------------------------------------------//
+    // getdata (which calls hit_api with the correct indicator(s))
+    //---------------------------------------------------------------------------//
+    
     //function to display data in table
     function getdata(i_val, y_val) {
 
-        if (y_val <= 2014) {
-            hit_api(census_param[i_val], y_val);
+        // if this is the Race and Ethnicity indicator, check the year, then loop through the constituent indicators
+        if (census_param[i_val].indicator == "Race and Ethnicity") {
+
+            if (y_val <= 2014) {
+                race_var_before_2014.forEach(indicator => hit_api(indicator, y_val));
+            }
+            else {
+                race_var_after_2014.forEach(indicator => hit_api(indicator, y_val));
+            }
         }
         else {
-            hit_api(census_param_after_2014[i_val], y_val); 
+            hit_api(census_param[i_val], y_val);
         }
     }
 
-
+    //---------------------------------------------------------------------------//
+    // hit_api (which constructs API calls from paramaters)
+    //---------------------------------------------------------------------------//
+    
+    var nta_uhf_data;
+    
     function hit_api(census_param, year) {
-        flag = 0;
+
+        // reset these values each time we hit the API
+
         nta_uhf_data = {};
-        census_param['year'] = year;
+        
+        census_param['year'] = year; 
 
         //delete old table
         $('#tab_loc').empty();
+
         //create table and add header corresponding to EPHT Indicator Tool input fields
         $('#tab_loc').append('<table id="datatableCsv">');
+
         var row = $('<tr>');
+        var census_var = census_param.variables;
+        var this_url = api_url + '/' + year + '/' + census_param.source + '?';
+
         row.append($('<th>').text('IndicatorName'));
         row.append($('<th>').text('MeasureType'));
         row.append($('<th>').text('GeoType'));
@@ -281,14 +322,13 @@
         row.append($('<th>').text('DataValue'));
         row.append($('<th>').text('UnreliabilityFlag'));
         row.append($('<th>').text('ConfidenceInterval'));
-        ///row.append($('<th>').text('Rank'));
-        //row.append($('<th>').text('Rank Percent'));
         $('#tab_loc table').append(row);
         
-        var census_var = census_param.variables;
-        var this_url = api_url + '/' + year + '/' + census_param.source + '?';
         
-        
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+        // constructing paths
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
         //COUNTY PATH
         var county = $.map(county2boro, function (n, i) { return n.county; });
         var county_path = this_url + "key=" + my_key + "&get=";
@@ -296,7 +336,7 @@
             county_path += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
         county_path += "&for=county:" + county.toString() + "&in=state:36";
-        
+        console.log("county_path:", county_path);
         
         //ZCTA PATH
         var zcta = $.map(zcta2UHF, function (n, i) { return n.ZCTA; });
@@ -306,9 +346,6 @@
         }
         zcta_path += "&for=zip+code+tabulation+area:" + zcta.toString() + "&in=state:36";
         console.log("zcta_path:", zcta_path);
-        console.log("zcta:", zcta);
-        
-        
         
         //PUMA PATH
         var puma = $.map(puma2subboro, function (n, i) { return n.PUMA; });
@@ -318,8 +355,6 @@
         }
         puma_path += "&for=public+use+microdata+area:" + puma.toString() + "&in=state:36";
         console.log("puma_path:", puma_path);
-        console.log("puma:", puma);
-        
         
         //PUMA CD
         var pumacd = $.map(puma2subboro, function (n, i) { return n.PUMA; });
@@ -328,17 +363,16 @@
             puma_path_cd += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
         puma_path_cd += "&for=public+use+microdata+area:" + pumacd.toString() + "&in=state:36";
-        
+        console.log("puma_path_cd:", puma_path_cd)
         
         //BX
-        var nta = $.map(tractToNTABX, function (n, i) { return n.TRACT; });
-        var nta_path = this_url + "key=" + my_key + "&get=";
+        var ntaBX = $.map(tractToNTABX, function (n, i) { return n.TRACT; });
+        var nta_pathBX = this_url + "key=" + my_key + "&get=";
         for (i = 0; i < census_var.length; ++i) {
-            nta_path += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
+            nta_pathBX += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
-        nta_path += "&for=tract:" + nta.toString() + "&in=state:36+county:005";
-        console.log("nta_path:", nta_path)
-        
+        nta_pathBX += "&for=tract:" + ntaBX.toString() + "&in=state:36+county:005";
+        console.log("nta_pathBX:", nta_pathBX)
         
         //BK
         var ntaBK = $.map(tractToNTABK, function (n, i) { return n.TRACT; });
@@ -349,7 +383,6 @@
         nta_pathBK += "&for=tract:" + ntaBK.toString() + "&in=state:36+county:047";
         console.log("nta_pathBK:", nta_pathBK);
         
-        
         //MN
         var ntaMN = $.map(tractToNTAMN, function (n, i) { return n.TRACT; });
         var nta_pathMN = this_url + "key=" + my_key + "&get=";
@@ -359,7 +392,6 @@
         nta_pathMN += "&for=tract:" + ntaMN.toString() + "&in=state:36+county:061";
         console.log("nta_pathMN:", nta_pathMN);
         
-        
         //QN
         var ntaQN = $.map(tractToNTAQN, function (n, i) { return n.TRACT; });
         var nta_pathQN = this_url + "key=" + my_key + "&get=";
@@ -368,7 +400,6 @@
         }
         nta_pathQN += "&for=tract:" + ntaQN.toString() + "&in=state:36+county:081";
         console.log("nta_pathQN:", nta_pathQN);
-        
         
         //SI
         var ntaSI = $.map(tractToNTASI, function (n, i) { return n.TRACT; });
@@ -380,59 +411,70 @@
         console.log("nta_pathSI:", nta_pathSI);
         
         
-        var error_msg = "The " + year + " release of ACS 5-Year data is not yet available.  Please select an earlier year."
-        
-        $.getJSON(county_path, function (json) {
-            $.getJSON(county_path, function (a_json) {
-                $.getJSON(puma_path, function (b_json) {
-                    $.getJSON(zcta_path, function (c_json) {
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+        // get and parse json
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+        $.getJSON(county_path, function (city_json) {
+            $.getJSON(county_path, function (county_json) {
+                $.getJSON(puma_path, function (puma_json) {
+                    $.getJSON(zcta_path, function (zcta_json) {
                         $.getJSON(puma_path_cd, function (cd_json) {
-                            $.getJSON(nta_path, function (n_json) {
-                                $.getJSON(nta_pathBK, function (BKn_json) {
-                                    $.getJSON(nta_pathMN, function (MNn_json) {
-                                        $.getJSON(nta_pathQN, function (QNn_json) {
-                                            $.getJSON(nta_pathSI, function (SIn_json) {
-                                                parse_json(census_param, json, "county", 'county', 'Citywide', county2boro);
-                                                parse_json(census_param, a_json, "county", 'county', 'Borough', county2boro);
-                                                parse_json(census_param, b_json, "public use microdata area", 'PUMA', 'Subboro', puma2subboro);
-                                                parse_json(census_param, c_json, "zip code tabulation area", 'ZCTA', 'UHF42', zcta2UHF);
+                            $.getJSON(nta_pathBX, function (BX_nta_json) {
+                                $.getJSON(nta_pathBK, function (BK_nta_json) {
+                                    $.getJSON(nta_pathMN, function (MN_nta_json) {
+                                        $.getJSON(nta_pathQN, function (QN_nta_json) {
+                                            $.getJSON(nta_pathSI, function (SI_nta_json) {
+                                                parse_json(census_param, city_json, "county", 'county', 'Citywide', county2boro);
+                                                parse_json(census_param, county_json, "county", 'county', 'Borough', county2boro);
+                                                parse_json(census_param, puma_json, "public use microdata area", 'PUMA', 'Subboro', puma2subboro);
+                                                parse_json(census_param, zcta_json, "zip code tabulation area", 'ZCTA', 'UHF42', zcta2UHF);
                                                 parse_json(census_param, cd_json, "public use microdata area", 'PUMA', 'CD', puma2subboro);
-                                                parse_json(census_param, n_json, "tract", 'TRACT', 'NTA', tractToNTABX);
-                                                parse_json(census_param, BKn_json, "tract", 'TRACT', 'NTA', tractToNTABK);
-                                                parse_json(census_param, MNn_json, "tract", 'TRACT', 'NTA', tractToNTAMN);
-                                                parse_json(census_param, QNn_json, "tract", 'TRACT', 'NTA', tractToNTAQN);
-                                                parse_json(census_param, SIn_json, "tract", 'TRACT', 'NTA', tractToNTASI);
-                                            }).fail(data => {alert(data.responseText)}).always(data => {console.log(data)});
-                                        }).fail(data => {alert(data.responseText)}).always(data => {console.log(data)});
-                                    }).fail(data => {alert(data.responseText)}).always(data => {console.log(data)});
-                                }).fail(data => {alert(data.responseText)}).always(data => {console.log(data)});
-                            }).fail(data => {alert(data.responseText)}).always(data => {console.log(data)});
-                        }).fail(data => {alert(data.responseText)}).always(data => {console.log(data)});
-                    }).fail(data => {alert(data.responseText)}).always(data => {console.log(data)});
-                }).fail(data => {alert(data.responseText)}).always(data => {console.log(data)});
-            }).fail(data => {alert(data.responseText)}).always(data => {console.log(data)})
-        }).fail(data => {alert(data.responseText)}).always(data => {console.log(data)});
-    }
-    
-    var flag = 0;
-    var nta_uhf_data = {};
-    function parse_json(census_param, c_json, c_geo, from_geo, to_geo, geos) {
-        //  debugger
-        //ACS 5-year data represents middle year
-        var this_year = census_param.year - 2;
+                                                parse_json(census_param, BX_nta_json, "tract", 'TRACT', 'NTA', tractToNTABX);
+                                                parse_json(census_param, BK_nta_json, "tract", 'TRACT', 'NTA', tractToNTABK);
+                                                parse_json(census_param, MN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAMN);
+                                                parse_json(census_param, QN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAQN);
+                                                parse_json(census_param, SI_nta_json, "tract", 'TRACT', 'NTA', tractToNTASI);
+                                            }).fail(data => alert(data.responseText));
+                                        }).fail(data => alert(data.responseText));
+                                    }).fail(data => alert(data.responseText));
+                                }).fail(data => alert(data.responseText));
+                            }).fail(data => alert(data.responseText));
+                        }).fail(data => alert(data.responseText));
+                    }).fail(data => alert(data.responseText));
+                }).fail(data => alert(data.responseText));
+            }).fail(data => alert(data.responseText));
+        }).fail(data => alert(data.responseText));
         
+    }
+
+    //---------------------------------------------------------------------------//
+    // parse_json
+    //---------------------------------------------------------------------------//
+
+    function parse_json(census_param, c_json, c_geo, from_geo, to_geo, geos) {
+        
+        console.log("from_geo [parse_json]:", from_geo);
+        console.log("to_geo [parse_json]:", to_geo);
+        
+        // ACS 5-year data represents middle year
+        var this_year = census_param.year - 2;
         var census_var = census_param.variables;
+
         // create table from Geo to geo table according to lookup
         var geoOL = {};
         $.each(geos, function (i, val) {
             geoOL[geos[i][from_geo]] = geos[i][to_geo];
         });
         
-        //grab variable names// Get all title for Key value pair
+        // grab variable names // Get all title for Key value pair
         var c_var = c_json.shift();
         
-        //assign variable names as keys//  Assign key value accoridng to c_var table= table name, state=
-        var cdata2 = [];// again all data with object key value
+        // assign variable names as keys 
+        //  Assign key value accoridng to c_var table= table name, state=
+
+        var cdata2 = []; // again all data with object key value
+
         for (i = 0; i < c_json.length; ++i) {
             var c = c_json[i];
             var temp_OL = {};
@@ -442,22 +484,31 @@
             cdata2.push(temp_OL);
         }
         
-        //get type for each variable name // table name with num or denonminator assignmrnt type_OL
+        //get type for each variable name 
+        // table name with num or denonminator assignmrnt type_OL
+
         var type_OL = {};
+
         for (i = 0; i < census_var.length; ++i) {
             type_OL[census_var[i].name] = census_var[i].type;
         }
         
         //create object for each geographic entity with variables summed by type
         var cdata = {};
+
         for (i = 0; i < cdata2.length; ++i) {
+
             var temp_OL = {};
             var p = cdata2[i];
+
             for (var key in p) {
+
                 // all data arrary will itrate
                 if (p.hasOwnProperty(key)) {
+
                     // only take table values
                     if (type_OL.hasOwnProperty(key)) {
+
                         //(type_OL
                         if (temp_OL.hasOwnProperty(type_OL[key])) {
                             temp_OL[type_OL[key]] = temp_OL[type_OL[key]] + parseInt(p[key]);
@@ -469,26 +520,27 @@
                 }
             }
             temp_OL[to_geo] = geoOL[p[c_geo]];
-            //if (geoOL[p[c_geo]] == undefined)
-            //{
-                //    alert(p)
-                //}
-                cdata[p[c_geo]] = temp_OL;
+            cdata[p[c_geo]] = temp_OL;
         }
-        // console.log(cdata);
         
-        
-        //aggregate by geography
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+        // aggregate by geography
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
         var uhf_data = {};
+
         for (var key1 in cdata) {
+
             var key = cdata[key1][to_geo];
+
             if (!uhf_data[key]) {
                 uhf_data[key] = {};
             }
+
             for (var key2 in cdata[key1]) {
+
                 if (key2 !== to_geo) {
                     if (!uhf_data[key][key2]) {
-                        // alert("hi")
                         uhf_data[key][key2] = parseInt(cdata[key1][key2]);
                     }
                     else {
@@ -498,46 +550,49 @@
             }
         }
         
-        if (to_geo != 'NTA' && flag != 5) {
-            var uhf_data = populate_stats(uhf_data, census_param.indicator)
-            DrawTable(uhf_data, to_geo, this_year, census_param.indicator);
-        }
+        // don't need to test for flag here: as long as to_geo != NTA, flag will only 
+        //  ever be 0. flag can only be > 0 when to_geo == NTA 
         
-        else {
-            for (var key in uhf_data) {
-                nta_uhf_data[key] = (uhf_data[key])
-            }
-            flag = flag + 1;
-        }
-        
-        if (to_geo == 'NTA' && flag == 5) {
-            var new_uhf_data = populate_stats(nta_uhf_data, census_param.indicator)
-            DrawTable(new_uhf_data, to_geo, this_year, census_param.indicator);
-        }
+        var uhf_data = populate_stats(uhf_data, census_param.indicator)
+        DrawTable(uhf_data, to_geo, this_year, census_param.indicator);
         
     }
     
+
+    //---------------------------------------------------------------------------//
+    // DrawTable
+    //---------------------------------------------------------------------------//
+
     function DrawTable(uhf_data, to_geo, this_year, indicator) {
+
+        // table only clears when hit_api is called, so looping through race indicators just keeps appending rows. 
+        //  export functions take data from the html table, so everything works.
+        
         for (var key in uhf_data) {
+
             var keyArray = key.split(',');
             // cd devide logic
+
             for (var i = 0; i < keyArray.length; i++) {
                 
                 var temp_OL = uhf_data[key];
                 var row = $('<tr>');
-                row.append($('<td>').text(indicator));//IndicatorName
-                row.append($('<td>').text('Number')); //MeasureType
-                row.append($('<td>').text(to_geo)); //GeoType
-                row.append($('<td>').text(keyArray[i])); //GeoEntity
-                row.append($('<td>').text((this_year - 2) + '-' + ((this_year + 2) - 2000))); //TimePeriod
-                row.append($('<td>').text(temp_OL["num"])); //DataValue
-                row.append($('<td>').text('0')); //UnreliabilityFlag
-                row.append($('<td>').text('')); //ConfidenceInterval
-                // row.append($('<td>').text(temp_OL["rank"]));
+
+                row.append($('<td>').text(indicator));      // IndicatorName
+                row.append($('<td>').text('Number'));       // MeasureType
+                row.append($('<td>').text(to_geo));         // GeoType
+                row.append($('<td>').text(keyArray[i]));    // GeoEntity
+                row.append($('<td>').text((this_year - 2) + '-' + ((this_year + 2) - 2000))); // TimePeriod
+                row.append($('<td>').text(temp_OL["num"])); // DataValue
+                row.append($('<td>').text('0'));            // UnreliabilityFlag
+                row.append($('<td>').text(''));             // ConfidenceInterval
                 
                 $('#tab_loc table').append(row);
                 
                 var row = $('<tr>');
+                
+                // might be able to replace these duplicated calculations by declaring a `test_ind` var inside of `parse_json`. would be available to
+                //  later functions.
                 
                 if (indicator === "Children Under 6 in Poverty" || indicator === "Children Under 5 years old in Poverty") {
                     var test_ind = d3.round((100 * (temp_OL["num"] / (temp_OL["denom2"] + temp_OL["num"]))), 2);
@@ -545,49 +600,50 @@
                 else if (!temp_OL["denom"]) {
                     var test_ind = d3.round((100 * (temp_OL["num"] / (temp_OL["denom2"]))), 2);
                 }
-                
                 else {
                     var test_ind = d3.round((100 * (temp_OL["num"] / temp_OL["denom"])), 2);
                 }
                 
-                row.append($('<td>').text(indicator));//IndicatorName
-                row.append($('<td>').text('Percent')); //MeasureType
-                row.append($('<td>').text(to_geo)); //GeoType
-                row.append($('<td>').text(keyArray[i])); //GeoEntity
-                row.append($('<td>').text((this_year - 2) + '-' + ((this_year + 2) - 2000))); //TimePeriod
+                row.append($('<td>').text(indicator));   // IndicatorName
+                row.append($('<td>').text('Percent'));   // MeasureType
+                row.append($('<td>').text(to_geo));      // GeoType
+                row.append($('<td>').text(keyArray[i])); // GeoEntity
+                row.append($('<td>').text((this_year - 2) + '-' + ((this_year + 2) - 2000))); // TimePeriod
                 
                 if (!isNaN(test_ind)) {
-                    row.append($('<td>').text(test_ind));//DataValue
+                    row.append($('<td>').text(test_ind)); // DataValue
                 }
                 else {
-                    row.append($('<td>').text(0));//DataValue
+                    row.append($('<td>').text(0)); // DataValue
                 }
                 
-                row.append($('<td>').text('0')); //UnreliabilityFlag
-                row.append($('<td>').text('')); //ConfidenceInterval
-                //row.append($('<td>').text(temp_OL["rank"]));
-                //  row.append($('<td>').text(temp_OL["rankper"]));
+                row.append($('<td>').text('0')); // UnreliabilityFlag
+                row.append($('<td>').text(''));  // ConfidenceInterval
                 
                 $('#tab_loc table').append(row);
                 
                 if (to_geo != 'Citywide' && document.getElementById("chkrank").checked ) {
                       if (to_geo != 'Borough' && document.getElementById("chkrank").checked) {
                         var row = $('<tr>');
-                        row.append($('<td>').text(indicator));//IndicatorName
-                        row.append($('<td>').text('Rank')); //MeasureType
-                        row.append($('<td>').text(to_geo)); //GeoType
-                        row.append($('<td>').text(keyArray[i])); //GeoEntity
-                        row.append($('<td>').text((this_year - 2) + '-' + ((this_year + 2) - 2000))); //TimePeriod
-                        row.append($('<td>').text(temp_OL["rankper"])); //DataValue
-                        row.append($('<td>').text('0')); //UnreliabilityFlag
-                        row.append($('<td>').text('')); //ConfidenceInterval
-                        // row.append($('<td>').text('0'));
+                        row.append($('<td>').text(indicator));          // IndicatorName
+                        row.append($('<td>').text('Rank'));             // MeasureType
+                        row.append($('<td>').text(to_geo));             // GeoType
+                        row.append($('<td>').text(keyArray[i]));        // GeoEntity
+                        row.append($('<td>').text((this_year - 2) + '-' + ((this_year + 2) - 2000))); // TimePeriod
+                        row.append($('<td>').text(temp_OL["rankper"])); // DataValue
+                        row.append($('<td>').text('0'));                // UnreliabilityFlag
+                        row.append($('<td>').text(''));                 // ConfidenceInterval
                         $('#tab_loc table').append(row);
                     }
                 }
             }
         }
     }
+    
+    
+    //---------------------------------------------------------------------------//
+    // populate_stats
+    //---------------------------------------------------------------------------//
     
     function populate_stats(uhf_data, indicator) {
         
@@ -597,15 +653,24 @@
         var leg_no = 3;
         var ranks = [];
         var ranksPer = [];
+
         for (var key in uhf_data) {
+
             var temp_OL = uhf_data[key];
             dataNumber.push(temp_OL["num"]);
+
         }
         
         for (var key in uhf_data) {
+
             var temp_OL = uhf_data[key];
+
+            // put here: logical test for race indicator, then renaming of indicators
+
             if (indicator == "Children Under 6 in Poverty" || indicator == "Children Under 5 years old in Poverty") {
+
                 var test_ind = d3.round((100 * (temp_OL["num"] / (temp_OL["denom2"] + temp_OL["num"]))), 2);
+
                 if (!isNaN(test_ind)) {
                     dataPercent.push(test_ind);
                 }
@@ -615,7 +680,9 @@
             }
 
             else if (!temp_OL["denom"]) {
+
                 var test_ind = d3.round((100 * (temp_OL["num"] / (temp_OL["denom2"]))), 2);
+
                 if (!isNaN(test_ind)) {
                     dataPercent.push(test_ind);
                 }
@@ -625,7 +692,9 @@
             }
             
             else {
+
                 var test_ind = d3.round((100 * (temp_OL["num"] / temp_OL["denom"])), 2);
+
                 if (!isNaN(test_ind)) {
                     dataPercent.push(test_ind);
                 }
@@ -650,8 +719,6 @@
             ranks.push(q);
         }
         
-        //var sorted = dataNumber.slice().sort(function (a, b) { return b - a })
-        //var ranks = dataNumber.slice().map(function (v) { return sorted.indexOf(v) + 1 });
         var i = 0;
         for (var key in uhf_data) {
             uhf_data[key]["rank"] = ranks[i];
@@ -659,13 +726,13 @@
         }
         
         ///percent disparity
-        // data_quantile = d3.scale.quantile();
         data_quantile.domain(dataPercent);
         for (var i = 0; i < dataPercent.length; i++) {
             var f = dataPercent[i];
             var q = data_quantile(f);
             ranksPer.push(q);
         }
+
         // Add to orignal node
         var i = 0;
         for (var key in uhf_data) {
@@ -673,41 +740,49 @@
             i++;
         }
         
-        // uhf_data = sort(uhf_data.rank, uhf_data)
-        
         return uhf_data;
         
     }
     
     
-    //function to download as CSV from http://jsfiddle.net/terryyounghk/KPEGU/
+    //---------------------------------------------------------------------------//
+    // get and download
+    //---------------------------------------------------------------------------//
+    
+    // function to download as CSV from http://jsfiddle.net/terryyounghk/KPEGU/
+    
     $(document).ready(function () {
+        
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+        // exportTableToCSV
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
         
         function exportTableToCSV($table, filename) {
             
-            //var $rows = $table.find('tr:has(td)'),
+            // this downloads the data from the html table
+            
             var $rows = $table.find('tr:has(th,td)'),
+            
+            // Temporary delimiter characters unlikely to be typed by keyboard
+            //  This is to avoid accidentally splitting the actual contents
+            
+            tmpColDelim = String.fromCharCode(11), // vertical tab character
+            tmpRowDelim = String.fromCharCode(0), // null character
+            
+            // actual delimiter characters for CSV format
+            colDelim = '","',
+            rowDelim = '"\r\n"',
+            
+            // Grab text from table into CSV formatted string
+            csv = '"' + $rows.map(function (i, row) {
+                var $row = $(row),
+                $cols = $row.find('th,td');
                 
-                // Temporary delimiter characters unlikely to be typed by keyboard
-                // This is to avoid accidentally splitting the actual contents
-                tmpColDelim = String.fromCharCode(11), // vertical tab character
-                tmpRowDelim = String.fromCharCode(0), // null character
-                
-                // actual delimiter characters for CSV format
-                colDelim = '","',
-                rowDelim = '"\r\n"',
-                
-                // Grab text from table into CSV formatted string
-                csv = '"' + $rows.map(function (i, row) {
-                    var $row = $(row),
-                    //$cols = $row.find('td');
-                    $cols = $row.find('th,td');
+                return $cols.map(function (j, col) {
+                    var $col = $(col),
+                    text = $col.text();
                     
-                    return $cols.map(function (j, col) {
-                        var $col = $(col),
-                        text = $col.text();
-                        
-                        return text.replace('"', '""'); // escape double quotes
+                    return text.replace('"', '""'); // escape double quotes
                     
                 }).get().join(tmpColDelim);
                 
@@ -724,61 +799,66 @@
                 'href': csvData,
                 'target': '_blank'
             });
-        }        
-        
-    
-    
-    //get data event (and set indicator & year options)
-    
-    var iy_vals = [];
-    
-    $("#get_data").click(function (event) {
-        
-        event.preventDefault();
-        
-        // setting indicator and year values when the "Get Data" button is clicked. Because of the assignment 
-        //  to `iy_vals`, they persist and are readable by the export function when the "Export" button is clicked.
-        //  This allows us to save files named with indicator and year, but also insure that they're the same values
-        //  that are in the data
-        
-        var ind = document.getElementById("ind_options");
-        var i_val = ind.options[ind.selectedIndex].value;
-        
-        var yr = document.getElementById("year_options");
-        var y_val = yr.options[yr.selectedIndex].value;
-        
-        getdata(i_val, y_val);
-        
-        iy_vals = [i_val, y_val]
-        
-        console.log("get:", iy_vals)
-        
-    });
-    
-    
-    // This must be a hyperlink
-    $("#exportChrome").on('click', function (event) {
-        
-        console.log("export:", iy_vals);
-        
-        var year = iy_vals[1];
-        
-        if (year <= 2014) {
-            var indicator = census_param[iy_vals[0]].indicator;
-        }
-        else {
-            var indicator = census_param_after_2014[iy_vals[0]].indicator;
         }
         
-        // CSV
-        exportTableToCSV.apply(this, [$('#tab_loc>table'), 'ACS ' + indicator + ' ' + year + '.csv']);
         
-        // IF CSV, don't do event.preventDefault() or return false
-        // We actually need this to be a typical hyperlink
-    });        
-        
-        $(document).ready(function () {
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+        // get data (and set indicator & year options)
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
+        var iy_vals = [];
+        var ind;
+        
+        $("#get_data").click(function (event) {
+            
+            event.preventDefault();
+            
+            // setting indicator and year values when the "Get Data" button is clicked. Because of the assignment 
+            //  to `iy_vals`, they persist and are readable by the export function when the "Export" button is clicked.
+            //  This allows us to save files named with indicator and year, but also ensure that they're the same values
+            //  that are in the data we downloaded.
+            
+            var ind = document.getElementById("ind_options");
+            var i_val = ind.options[ind.selectedIndex].value;
+            
+            var yr = document.getElementById("year_options");
+            var y_val = yr.options[yr.selectedIndex].value;
+            
+            getdata(i_val, y_val);
+            
+            iy_vals = [i_val, y_val]
+            
+            console.log("[i_val, y_val]:", iy_vals)
+            
+        });
+        
+        
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+        // export
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+        // This must be a hyperlink
+        $("#exportChrome").on('click', function (event) {
+            
+            console.log("export:", iy_vals);
+            
+            var year = iy_vals[1];
+            var indicator = census_param[iy_vals[0]].indicator
+            
+            // CSV
+            exportTableToCSV.apply(this, [$('#tab_loc>table'), 'ACS ' + indicator + ' ' + year + '.csv']);
+            
+            // IF CSV, don't do event.preventDefault() or return false
+            // We actually need this to be a typical hyperlink
+        });        
+        
+        
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+        // set BrowserDetect
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+        $(document).ready(function () {
+            
             var BrowserDetect = {
                 init: function () {
                     this.browser = this.searchString(this.dataBrowser) || "Other";
@@ -788,7 +868,7 @@
                     for (var i = 0; i < data.length; i++) {
                         var dataString = data[i].string;
                         this.versionSearchString = data[i].subString;
-
+                        
                         if (dataString.indexOf(data[i].subString) !== -1) {
                             return data[i].identity;
                         }
@@ -799,7 +879,7 @@
                     if (index === -1) {
                         return;
                     }
-
+                    
                     var rv = dataString.indexOf("rv:");
                     if (this.versionSearchString === "Trident" && rv !== -1) {
                         return parseFloat(dataString.substring(rv + 3));
@@ -827,7 +907,6 @@
             else {
                 $("#exportChrome").show();
             }
-            // document.write("You are using <b>" + BrowserDetect.browser + "</b> with version <b>" + BrowserDetect.version + "</b>");
         });
         
     });
