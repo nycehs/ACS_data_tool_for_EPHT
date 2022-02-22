@@ -66,17 +66,17 @@
 
     var census_param = [
     {
-        indicator: "Poverty", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY AGE", source: 'acs/acs5',
+        indicator: "Poverty", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY SEX BY AGE", source: 'acs/acs5',
         variables: [
-        { name: "B17020_001E", label: "Estimate!!Total", type: "denom" },
-        { name: "B17020_002E", label: "Estimate!!Total!!Income in the past 12 months below poverty level", type: "num" }
+        { name: "B17001_001E", label: "Estimate!!Total", type: "denom" },
+        { name: "B17001_002E", label: "Estimate!!Total!!Income in the past 12 months below poverty level", type: "num" }
         ]
     },
     {
         indicator: "Poverty TOTAL", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY AGE", source: 'acs/acs5',
         variables: [
-        { name: "B17020_001E", label: "Estimate!!Total", type: "denom" },
-        { name: "B17020_001E", label: "Estimate!!Total", type: "num" }
+        { name: "B17001_001E", label: "Estimate!!Total", type: "denom" },
+        { name: "B17001_001E", label: "Estimate!!Total", type: "num" }
         ]
     },
     {
@@ -171,7 +171,7 @@
         ]
     },
     {
-        indicator: "Older Adults Living Alone2", table: "B09020. Relationship by Household Type (Including Living Alone) for the Population 65 Years and Over", source: 'acs5', 
+        indicator: "Older Adults Living Alone2", table: "B09020. Relationship by Household Type (Including Living Alone) for the Population 65 Years and Over", source: 'acs/acs5', 
         variables: [ 
         { name: "B09020_001E", label: "Total:", type: "denom" }, 
         { name: "B09020_015E", label: "In households:!!In nonfamily households:!!Householder:!!Male:!!Living alone", type: "num" },
@@ -179,74 +179,83 @@
         ]
     },
     ];
-
+    
+    
     //---------------------------------------------------------------------------//
-    // variables for race indicators pre-2014
+    // variables for race indicators pre-2017
     //---------------------------------------------------------------------------//
-
-    var race_var_before_2014 = [
+    
+    // Because we want to compare Hispanic vs. non-Hispanic, and people reporting 
+    //  "Hispanic" can be of any race, we use the "race alone" variables under "Not 
+    //  Hispanic or Latino", which ensures that our race categories are mutually 
+    //  exclusive, i.e., they will sum to <= 100%. If we use the estimates under 
+    //  "RACE!!One race", the counts could include people reporting "Hispanic" 
+    //  (e.g., "White" and "Hispanic"), which would make the estimates higher, and
+    //  probably sum to > 100%.
+    
+    var before_2017_race_vars = [
     {
         indicator: "Hispanic or Latino (of any race)", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile',
         variables: [
-        { name: "DP05_0065E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" },
-        { name: "DP05_0066E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Hispanic or Latino (of any race)", type: "num" }
+        { name: "DP05_0066E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Hispanic or Latino (of any race)", type: "num" },
+        { name: "DP05_0065E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
         ]
     },
     {
         indicator: "White alone", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile',
         variables: [
-        { name: "DP05_0065E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" },
-        { name: "DP05_0072E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!White alone", type: "num" }
+        { name: "DP05_0072E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!White alone", type: "num" },
+        { name: "DP05_0065E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
         ]
     },
     {
         indicator: "Black or African American alone", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile',
         variables: [
-        { name: "DP05_0065E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" },
-        { name: "DP05_0073E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!Black or African American alone", type: "num" }
+        { name: "DP05_0073E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!Black or African American alone", type: "num" },
+        { name: "DP05_0065E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
         ]
     },
     {
         indicator: "Asian alone", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile',
         variables: [
-        { name: "DP05_0065E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" },
-        { name: "DP05_0075E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!Asian alone", type: "num" }
+        { name: "DP05_0075E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!Asian alone", type: "num" },
+        { name: "DP05_0065E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
         ]
     }
     ];
-
-
+    
+    
     //---------------------------------------------------------------------------//
-    // variables for race indicators post-2014
+    // variables for race indicators post-2017
     //---------------------------------------------------------------------------//
-
-    var race_var_after_2014 = [
+    
+    var after_2017_race_vars = [
     {
         indicator: "Hispanic or Latino (of any race)", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile',
         variables: [
-        { name: "DP05_0033E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" },
-        { name: "DP05_0071E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Hispanic or Latino (of any race)", type: "num" }
+        { name: "DP05_0071E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Hispanic or Latino (of any race)", type: "num" },
+        { name: "DP05_0070E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
         ]
     },
     {
         indicator: "White alone", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile',
         variables: [
-        { name: "DP05_0033E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" },
-        { name: "DP05_0037E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!White alone", type: "num" }
+        { name: "DP05_0077E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!White alone", type: "num" },
+        { name: "DP05_0070E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
         ]
     },
     {
         indicator: "Black or African American alone", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile',
         variables: [
-        { name: "DP05_0033E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" },
-        { name: "DP05_0038E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!Black or African American alone", type: "num" }
+        { name: "DP05_0078E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!Black or African American alone", type: "num" },
+        { name: "DP05_0070E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
         ]
     },
     {
         indicator: "Asian alone", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile',
         variables: [
-        { name: "DP05_0033E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" },
-        { name: "DP05_0044E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!Asian alone", type: "num" }
+        { name: "DP05_0080E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!Asian alone", type: "num" },
+        { name: "DP05_0070E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
         ]
     }
     ];
@@ -278,11 +287,11 @@
         // if this is the Race and Ethnicity indicator, check the year, then loop through the constituent indicators
         if (census_param[i_val].indicator == "Race and Ethnicity") {
 
-            if (y_val <= 2014) {
-                race_var_before_2014.forEach(indicator => hit_api(indicator, y_val));
+            if (y_val <= 2017) {
+                before_2017_race_vars.forEach(indicator => hit_api(indicator, y_val));
             }
             else {
-                race_var_after_2014.forEach(indicator => hit_api(indicator, y_val));
+                after_2017_race_vars.forEach(indicator => hit_api(indicator, y_val));
             }
         }
         else {
