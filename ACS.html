@@ -61,6 +61,14 @@
     // indicators whose definitions and variables haven't changed
     //---------------------------------------------------------------------------//
 
+    /* 
+    ACS variable names are {table}_{row}, so when the row number of an estimate changes, 
+        the variable name changes also. If we keep track of those changes, we can account 
+        for them. So I recoded the census_param and race_var objects to include the 
+        correct variable names for specified time periods, then included a test so that 
+        census_var includes the correct variables. 
+    */
+
     // denom = complete denominator
     // denom2 = combined with number to form complete denominator
 
@@ -764,6 +772,9 @@
     // DrawTable
     //---------------------------------------------------------------------------//
 
+    // I added a bunch of logic so that the Race and Ethnicity indicator is exported 
+    //  in the format that the portal is expecting (i.e., race group as measure).
+
     function DrawTable(uhf_data, to_geo, year, indicator) {
 
         // table only clears when hit_api is called, so looping through race indicators just keeps appending rows. 
@@ -901,6 +912,9 @@
     //---------------------------------------------------------------------------//
     // populate_stats
     //---------------------------------------------------------------------------//
+    
+    // I added a bunch of logic so that the Race and Ethnicity indicator is exported 
+    //  in the format that the portal is expecting (i.e., race group as measure).
     
     function populate_stats(uhf_data, indicator) {
         
