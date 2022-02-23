@@ -51,7 +51,6 @@
     // setting initial variable values
     //===========================================================================//
     
-    // document.domain = 'https://census.gov';
     //Census API 5-year ACS URL
 
     var api_url = 'https://api.census.gov/data';
@@ -60,9 +59,8 @@
     //---------------------------------------------------------------------------//
     // indicators whose definitions and variables haven't changed
     //---------------------------------------------------------------------------//
-
     /* 
-    ACS variable names are {table}_{row}, so when the row number of an estimate changes, 
+        ACS variable names are {table}_{row}, so when the row number of an estimate changes, 
         the variable name changes also. If we keep track of those changes, we can account 
         for them. So I recoded the census_param and race_var objects to include the 
         correct variable names for specified time periods, then included a test so that 
@@ -338,14 +336,15 @@
     //---------------------------------------------------------------------------//
     // variables for race indicators
     //---------------------------------------------------------------------------//
-    
-    // Because we want to compare Hispanic vs. non-Hispanic, and people reporting 
-    //  "Hispanic" can be of any race, we use the "race alone" variables under "Not 
-    //  Hispanic or Latino", which ensures that our race categories are mutually 
-    //  exclusive, i.e., they will sum to <= 100%. If we use the estimates under 
-    //  "RACE!!One race", the counts could include people reporting "Hispanic" 
-    //  (e.g., "White" and "Hispanic"), which would make the estimates higher, and
-    //  probably sum to > 100%.
+    /*     
+        Because we want to compare Hispanic vs. non-Hispanic, and people reporting 
+        "Hispanic" can be of any race, we use the "race alone" variables under "Not 
+        Hispanic or Latino", which ensures that our race categories are mutually 
+        exclusive, i.e., they will sum to <= 100%. If we use the estimates under 
+        "RACE!!One race", the counts could include people reporting "Hispanic" 
+        (e.g., "White" and "Hispanic"), which would make the estimates higher, and
+        probably sum to > 100%. 
+    */
     
     var race_vars = [
     {
@@ -489,10 +488,10 @@
     // getdata (which calls hit_api with the correct indicator(s))
     //---------------------------------------------------------------------------//
     
-    //function to display data in table
     function getdata(i_val, y_val) {
         
         // if this is the Race and Ethnicity indicator, loop through the constituent indicators
+
         if (census_param[i_val].indicator == "Race and Ethnicity") {
         
             race_vars.forEach(indicator => hit_api(indicator, y_val));
@@ -511,9 +510,11 @@
     function hit_api(this_ind, year) {
 
         // reset this value each time we hit the API
+
         nta_uhf_data = {};
         
         // filter the time period by selected year to get the correct variables
+
         var census_var = this_ind.time_period.filter(time => year >= time.min && year <= time.max)[0].variables;
         var indicator = this_ind.indicator;
 
@@ -759,11 +760,136 @@
             }
         }
         
-        // don't need to test for flag here: as long as to_geo != NTA, flag will only 
-        //  ever be 0. flag can only be > 0 when to_geo == NTA 
-        
+        // call calculation and display functions
+
         var uhf_data = populate_stats(uhf_data, indicator)
         DrawTable(uhf_data, to_geo, year, indicator);
+        
+    }
+    
+        
+    //---------------------------------------------------------------------------//
+    // populate_stats
+    //---------------------------------------------------------------------------//
+    
+    // I added a bunch of logic so that the Race and Ethnicity indicator is exported 
+    //  in the format that the portal is expecting (i.e., race group as measure).
+    
+    function populate_stats(uhf_data, indicator) {
+        
+        var dataNumber = [];
+        var dataPercent = [];
+        var range_array = [];
+        var leg_no = 3;
+        var ranks = [];
+        var ranksPer = [];
+
+        for (var key in uhf_data) {
+            
+            // if race indicator, don't print number
+            
+            if (!indicator.startsWith("Percent")) {
+                
+                var temp_OL = uhf_data[key];
+                dataNumber.push(temp_OL["num"]);
+
+            }
+        }
+        
+        for (var key in uhf_data) {
+
+            var temp_OL = uhf_data[key];
+
+            // put here: logical test for race indicator, then renaming of indicators
+            // rename indicator to Race and Ethnicity, remove "Number", replace "Percent" with "Percent [race indicator]""
+
+            if (indicator == "Children Under 5 years old in Poverty") {
+
+                var test_ind = d3.round((100 * (temp_OL["num"] / (temp_OL["denom2"] + temp_OL["num"]))), 2);
+
+                if (!isNaN(test_ind)) {
+                    dataPercent.push(test_ind);
+                }
+                else {
+                    dataPercent.push(0);
+                }
+            }
+            else if (indicator === "Percent Non-White") {
+                
+                // literally total population minus white-alone
+                var test_ind = d3.round((100 * ((temp_OL["denom"] - temp_OL["num"]) / (temp_OL["denom"]))), 2);
+
+                if (!isNaN(test_ind)) {
+                    dataPercent.push(test_ind);
+                }
+                else {
+                    dataPercent.push(0);
+                }
+            }
+            else if (indicator === "Total Population" || indicator === "Poverty TOTAL") {
+                // don't push anything to dataPercent, b/c only num matters
+            }
+            else if (!temp_OL["denom"]) {
+
+                var test_ind = d3.round((100 * (temp_OL["num"] / (temp_OL["denom2"]))), 2);
+
+                if (!isNaN(test_ind)) {
+                    dataPercent.push(test_ind);
+                }
+                else {
+                    dataPercent.push(0);
+                }
+            }
+            else {
+
+                var test_ind = d3.round((100 * (temp_OL["num"] / temp_OL["denom"])), 2);
+
+                if (!isNaN(test_ind)) {
+                    dataPercent.push(test_ind);
+                }
+                else {
+                    dataPercent.push(0);
+                }
+            }
+        }
+        
+        data_quantile = d3.scale.quantile();
+        data_quantile.domain(dataNumber);
+        
+        range_array.length = 0;
+        for (i = 0; i < leg_no; i++) {
+            range_array[i] = i + 1
+        }
+        
+        data_quantile.range(range_array);
+        for (var i = 0; i < dataNumber.length; i++) {
+            var f = dataNumber[i];
+            var q = data_quantile(f);
+            ranks.push(q);
+        }
+        
+        var i = 0;
+        for (var key in uhf_data) {
+            uhf_data[key]["rank"] = ranks[i];
+            i++;
+        }
+        
+        ///percent disparity
+        data_quantile.domain(dataPercent);
+        for (var i = 0; i < dataPercent.length; i++) {
+            var f = dataPercent[i];
+            var q = data_quantile(f);
+            ranksPer.push(q);
+        }
+
+        // Add to orignal node
+        var i = 0;
+        for (var key in uhf_data) {
+            uhf_data[key]["rankper"] = ranksPer[i];
+            i++;
+        }
+        
+        return uhf_data;
         
     }
     
@@ -910,132 +1036,6 @@
     
     
     //---------------------------------------------------------------------------//
-    // populate_stats
-    //---------------------------------------------------------------------------//
-    
-    // I added a bunch of logic so that the Race and Ethnicity indicator is exported 
-    //  in the format that the portal is expecting (i.e., race group as measure).
-    
-    function populate_stats(uhf_data, indicator) {
-        
-        var dataNumber = [];
-        var dataPercent = [];
-        var range_array = [];
-        var leg_no = 3;
-        var ranks = [];
-        var ranksPer = [];
-
-        for (var key in uhf_data) {
-            
-            // if race indicator, don't print number
-            
-            if (!indicator.startsWith("Percent")) {
-                
-                var temp_OL = uhf_data[key];
-                dataNumber.push(temp_OL["num"]);
-
-            }
-        }
-        
-        for (var key in uhf_data) {
-
-            var temp_OL = uhf_data[key];
-
-            // put here: logical test for race indicator, then renaming of indicators
-            // rename indicator to Race and Ethnicity, remove "Number", replace "Percent" with "Percent [race indicator]""
-
-            if (indicator == "Children Under 5 years old in Poverty") {
-
-                var test_ind = d3.round((100 * (temp_OL["num"] / (temp_OL["denom2"] + temp_OL["num"]))), 2);
-
-                if (!isNaN(test_ind)) {
-                    dataPercent.push(test_ind);
-                }
-                else {
-                    dataPercent.push(0);
-                }
-            }
-            else if (indicator === "Percent Non-White") {
-                
-                // literally total population minus white-alone
-                var test_ind = d3.round((100 * ((temp_OL["denom"] - temp_OL["num"]) / (temp_OL["denom"]))), 2);
-
-                if (!isNaN(test_ind)) {
-                    dataPercent.push(test_ind);
-                }
-                else {
-                    dataPercent.push(0);
-                }
-            }
-            else if (indicator === "Total Population" || indicator === "Poverty TOTAL") {
-                // don't push anything to dataPercent, b/c only num matters
-            }
-            else if (!temp_OL["denom"]) {
-
-                var test_ind = d3.round((100 * (temp_OL["num"] / (temp_OL["denom2"]))), 2);
-
-                if (!isNaN(test_ind)) {
-                    dataPercent.push(test_ind);
-                }
-                else {
-                    dataPercent.push(0);
-                }
-            }
-            else {
-
-                var test_ind = d3.round((100 * (temp_OL["num"] / temp_OL["denom"])), 2);
-
-                if (!isNaN(test_ind)) {
-                    dataPercent.push(test_ind);
-                }
-                else {
-                    dataPercent.push(0);
-                }
-            }
-        }
-        
-        data_quantile = d3.scale.quantile();
-        data_quantile.domain(dataNumber);
-        
-        range_array.length = 0;
-        for (i = 0; i < leg_no; i++) {
-            range_array[i] = i + 1
-        }
-        
-        data_quantile.range(range_array);
-        for (var i = 0; i < dataNumber.length; i++) {
-            var f = dataNumber[i];
-            var q = data_quantile(f);
-            ranks.push(q);
-        }
-        
-        var i = 0;
-        for (var key in uhf_data) {
-            uhf_data[key]["rank"] = ranks[i];
-            i++;
-        }
-        
-        ///percent disparity
-        data_quantile.domain(dataPercent);
-        for (var i = 0; i < dataPercent.length; i++) {
-            var f = dataPercent[i];
-            var q = data_quantile(f);
-            ranksPer.push(q);
-        }
-
-        // Add to orignal node
-        var i = 0;
-        for (var key in uhf_data) {
-            uhf_data[key]["rankper"] = ranksPer[i];
-            i++;
-        }
-        
-        return uhf_data;
-        
-    }
-    
-    
-    //---------------------------------------------------------------------------//
     // get and download
     //---------------------------------------------------------------------------//
     
@@ -1103,10 +1103,13 @@
             
             event.preventDefault();
             
-            // setting indicator and year values when the "Get Data" button is clicked. Because of the assignment 
-            //  to `iy_vals`, they persist and are readable by the export function when the "Export" button is clicked.
-            //  This allows us to save files named with indicator and year, but also ensure that they're the same values
-            //  that are in the data we downloaded.
+            /*             
+            setting indicator and year values when the "Get Data" button is clicked. Because 
+            of the assignment to `iy_vals`, they persist and are readable by the export 
+            function when the "Export" button is clicked. This allows us to save files 
+            named with indicator and year, but also ensure that they're the same values
+            that are in the data we downloaded. 
+            */
             
             var ind = document.getElementById("ind_options");
             var i_val = ind.options[ind.selectedIndex].value;
