@@ -9,12 +9,15 @@
 <link rel="stylesheet" href="style.css" />
 
 <script type="text/javascript" src="https://d3js.org/d3.v3.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/d3-fetch@3"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script type="text/javascript" src="geography_lookupNew.js"></script>
 <script type="text/javascript" src="queue.v1.min.js"></script>
 <script type="text/javascript" src="modernizr-custom.js"></script>
 <script type="text/javascript" src="excellentexport.js"></script>
 
+<!--Arquero-->
+<script src="https://cdn.jsdelivr.net/npm/arquero@latest"></script>
 
 <body>
     <div id="controls">
@@ -555,8 +558,9 @@
         for (i = 0; i < census_var.length; ++i) {
             county_path += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
-        county_path += "&for=county:" + county.toString() + "&in=state:36";
-        // console.log("county_path:", county_path);
+        // county_path += "&for=county:" + county.toString() + "&in=state:36";
+        county_path += "&for=county:" + county.toString() + "&in=state%3A36";
+        console.log("county_path:", county_path);
         
         //ZCTA PATH
         var zcta = $.map(zcta2UHF, function (n, i) { return n.ZCTA; });
@@ -564,8 +568,9 @@
         for (i = 0; i < census_var.length; ++i) {
             zcta_path += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
-        zcta_path += "&for=zip+code+tabulation+area:" + zcta.toString() + "&in=state:36";
-        // console.log("zcta_path:", zcta_path);
+        // zcta_path += "&for=zip+code+tabulation+area:" + zcta.toString() + "&in=state:36";
+        zcta_path += "&for=zip%20code%20tabulation%20area:" + zcta.toString() + "&in=state%3A36";
+        console.log("zcta_path:", zcta_path);
         
         //PUMA PATH
         var puma = $.map(puma2subboro, function (n, i) { return n.PUMA; });
@@ -573,8 +578,9 @@
         for (i = 0; i < census_var.length; ++i) {
             puma_path += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
-        puma_path += "&for=public+use+microdata+area:" + puma.toString() + "&in=state:36";
-        // console.log("puma_path:", puma_path);
+        // puma_path += "&for=public+use+microdata+area:" + puma.toString() + "&in=state:36";
+        puma_path += "&for=public%20use%20microdata%20area:" + puma.toString() + "&in=state%3A36";
+        console.log("puma_path:", puma_path);
         
         //PUMA CD
         var pumacd = $.map(puma2subboro, function (n, i) { return n.PUMA; });
@@ -582,8 +588,9 @@
         for (i = 0; i < census_var.length; ++i) {
             puma_path_cd += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
-        puma_path_cd += "&for=public+use+microdata+area:" + pumacd.toString() + "&in=state:36";
-        // console.log("puma_path_cd:", puma_path_cd);
+        // puma_path_cd += "&for=public+use+microdata+area:" + pumacd.toString() + "&in=state:36";
+        puma_path_cd += "&for=public%20use%20microdata%20area:" + pumacd.toString() + "&in=state%3A36";
+        console.log("puma_path_cd:", puma_path_cd);
         
         //BX
         var ntaBX = $.map(tractToNTABX, function (n, i) { return n.TRACT; });
@@ -591,8 +598,9 @@
         for (i = 0; i < census_var.length; ++i) {
             nta_pathBX += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
-        nta_pathBX += "&for=tract:" + ntaBX.toString() + "&in=state:36+county:005";
-        // console.log("nta_pathBX:", nta_pathBX);
+        // nta_pathBX += "&for=tract:" + ntaBX.toString() + "&in=state:36+county:005";
+        nta_pathBX += "&for=tract:" + ntaBX.toString() + "&in=state%3A36%20county%3A005";
+        console.log("nta_pathBX:", nta_pathBX);
         
         //BK
         var ntaBK = $.map(tractToNTABK, function (n, i) { return n.TRACT; });
@@ -600,8 +608,9 @@
         for (i = 0; i < census_var.length; ++i) {
             nta_pathBK += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
-        nta_pathBK += "&for=tract:" + ntaBK.toString() + "&in=state:36+county:047";
-        // console.log("nta_pathBK:", nta_pathBK);
+        // nta_pathBK += "&for=tract:" + ntaBK.toString() + "&in=state:36+county:047";
+        nta_pathBK += "&for=tract:" + ntaBK.toString() + "&in=state%3A36%20county%3A047";
+        console.log("nta_pathBK:", nta_pathBK);
         
         //MN
         var ntaMN = $.map(tractToNTAMN, function (n, i) { return n.TRACT; });
@@ -609,8 +618,9 @@
         for (i = 0; i < census_var.length; ++i) {
             nta_pathMN += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
+        // nta_pathMN += "&for=tract:" + ntaMN.toString() + "&in=state:36+county:061";
         nta_pathMN += "&for=tract:" + ntaMN.toString() + "&in=state:36+county:061";
-        // console.log("nta_pathMN:", nta_pathMN);
+        console.log("nta_pathMN:", nta_pathMN);
         
         //QN
         var ntaQN = $.map(tractToNTAQN, function (n, i) { return n.TRACT; });
@@ -618,8 +628,9 @@
         for (i = 0; i < census_var.length; ++i) {
             nta_pathQN += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
-        nta_pathQN += "&for=tract:" + ntaQN.toString() + "&in=state:36+county:081";
-        // console.log("nta_pathQN:", nta_pathQN);
+        // nta_pathQN += "&for=tract:" + ntaQN.toString() + "&in=state:36+county:081";
+        nta_pathQN += "&for=tract:" + ntaQN.toString() + "&in=state%3A36%20county%3A081";
+        console.log("nta_pathQN:", nta_pathQN);
         
         //SI
         var ntaSI = $.map(tractToNTASI, function (n, i) { return n.TRACT; });
@@ -627,8 +638,9 @@
         for (i = 0; i < census_var.length; ++i) {
             nta_pathSI += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
-        nta_pathSI += "&for=tract:" + ntaSI.toString() + "&in=state:36+county:085";
-        // console.log("nta_pathSI:", nta_pathSI);
+        // nta_pathSI += "&for=tract:" + ntaSI.toString() + "&in=state:36+county:085";
+        nta_pathSI += "&for=tract:" + ntaSI.toString() + "&in=state%3A36%20county%3A085";
+        console.log("nta_pathSI:", nta_pathSI);
         
         
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
@@ -637,35 +649,43 @@
 
         // unnested so asynchronous -- rows aren't in pretty order, but all requests happen in parrallel = much faster
 
-        $.getJSON(county_path, city_json => parse_json(census_var, indicator, year, city_json, "county", 'county', 'Citywide', county2boro))
-            .fail(data => alert(data.responseText));
+        d3.json(county_path, {credentials: 'omit'}).then(city_json => parse_json(census_var, indicator, year, city_json, "county", 'county', 'Citywide', county2boro));
+        d3.json(county_path, {credentials: 'omit'}).then(county_json => parse_json(census_var, indicator, year, county_json, "county", 'county', 'Borough', county2boro));
+        d3.json(puma_path, {credentials: 'omit'}).then(puma_json => parse_json(census_var, indicator, year, puma_json, "public use microdata area", 'PUMA', 'Subboro', puma2subboro));
+        d3.json(zcta_path, {credentials: 'omit'}).then(zcta_json => parse_json(census_var, indicator, year, zcta_json, "zip code tabulation area", 'ZCTA', 'UHF42', zcta2UHF));
+        d3.json(puma_path_cd, {credentials: 'omit'}).then(cd_json => parse_json(census_var, indicator, year, cd_json, "public use microdata area", 'PUMA', 'CD', puma2subboro));
+        d3.json(nta_pathBX, {credentials: 'omit'}).then(BX_nta_json => parse_json(census_var, indicator, year, BX_nta_json, "tract", 'TRACT', 'NTA', tractToNTABX));
+        d3.json(nta_pathBK, {credentials: 'omit'}).then(BK_nta_json => parse_json(census_var, indicator, year, BK_nta_json, "tract", 'TRACT', 'NTA', tractToNTABK));
+        d3.json(nta_pathMN, {credentials: 'omit'}).then(MN_nta_json => parse_json(census_var, indicator, year, MN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAMN));
+        d3.json(nta_pathQN, {credentials: 'omit'}).then(QN_nta_json => parse_json(census_var, indicator, year, QN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAQN));
+        d3.json(nta_pathSI, {credentials: 'omit'}).then(SI_nta_json => parse_json(census_var, indicator, year, SI_nta_json, "tract", 'TRACT', 'NTA', tractToNTASI));
 
-        $.getJSON(county_path, county_json => parse_json(census_var, indicator, year, county_json, "county", 'county', 'Borough', county2boro))
-            .fail(data => alert(data.responseText));
+        // $.ajax(county_path, {crossDomain: true, dataType: "json", timeout: 0}).done(county_json => parse_json(census_var, indicator, year, county_json, "county", 'county', 'Borough', county2boro))
+        //     .fail(data => console.log(data)).fail(data => alert(data.responseText));
 
-        $.getJSON(puma_path, puma_json => parse_json(census_var, indicator, year, puma_json, "public use microdata area", 'PUMA', 'Subboro', puma2subboro))
-            .fail(data => alert(data.responseText));
+        // $.ajax(puma_path, {crossDomain: true, dataType: "json", timeout: 0}).done(puma_json => parse_json(census_var, indicator, year, puma_json, "public use microdata area", 'PUMA', 'Subboro', puma2subboro))
+        //     .fail(data => console.log(data)).fail(data => alert(data.responseText));
 
-        $.getJSON(zcta_path, zcta_json => parse_json(census_var, indicator, year, zcta_json, "zip code tabulation area", 'ZCTA', 'UHF42', zcta2UHF))
-            .fail(data => alert(data.responseText));
+        // $.ajax(zcta_path, {crossDomain: true, dataType: "json", timeout: 0}).done(zcta_json => parse_json(census_var, indicator, year, zcta_json, "zip code tabulation area", 'ZCTA', 'UHF42', zcta2UHF))
+        //     .fail(data => console.log(data)).fail(data => alert(data.responseText));
 
-        $.getJSON(puma_path_cd, cd_json => parse_json(census_var, indicator, year, cd_json, "public use microdata area", 'PUMA', 'CD', puma2subboro))
-            .fail(data => alert(data.responseText));
+        // $.ajax(puma_path_cd, {crossDomain: true, dataType: "json", timeout: 0}).done(cd_json => parse_json(census_var, indicator, year, cd_json, "public use microdata area", 'PUMA', 'CD', puma2subboro))
+        //     .fail(data => console.log(data)).fail(data => alert(data.responseText));
 
-        $.getJSON(nta_pathBX, BX_nta_json => parse_json(census_var, indicator, year, BX_nta_json, "tract", 'TRACT', 'NTA', tractToNTABX))
-            .fail(data => alert(data.responseText));
+        // $.ajax(nta_pathBX, {crossDomain: true, dataType: "json", timeout: 0}).done(BX_nta_json => parse_json(census_var, indicator, year, BX_nta_json, "tract", 'TRACT', 'NTA', tractToNTABX))
+        //     .fail(data => console.log(data)).fail(data => alert(data.responseText));
 
-        $.getJSON(nta_pathBK, BK_nta_json => parse_json(census_var, indicator, year, BK_nta_json, "tract", 'TRACT', 'NTA', tractToNTABK))
-            .fail(data => alert(data.responseText));
+        // $.ajax(nta_pathBK, {crossDomain: true, dataType: "json", timeout: 0}).done(BK_nta_json => parse_json(census_var, indicator, year, BK_nta_json, "tract", 'TRACT', 'NTA', tractToNTABK))
+        //     .fail(data => console.log(data)).fail(data => alert(data.responseText));
 
-        $.getJSON(nta_pathMN, MN_nta_json => parse_json(census_var, indicator, year, MN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAMN))
-            .fail(data => alert(data.responseText));
+        // $.ajax(nta_pathMN, {crossDomain: true, dataType: "json", timeout: 0}).done(MN_nta_json => parse_json(census_var, indicator, year, MN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAMN))
+        //     .fail(data => console.log(data)).fail(data => alert(data.responseText));
 
-        $.getJSON(nta_pathQN, QN_nta_json => parse_json(census_var, indicator, year, QN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAQN))
-            .fail(data => alert(data.responseText));
+        // $.ajax(nta_pathQN, {crossDomain: true, dataType: "json", timeout: 0}).done(QN_nta_json => parse_json(census_var, indicator, year, QN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAQN))
+        //     .fail(data => console.log(data)).fail(data => alert(data.responseText));
 
-        $.getJSON(nta_pathSI, SI_nta_json => parse_json(census_var, indicator, year, SI_nta_json, "tract", 'TRACT', 'NTA', tractToNTASI))
-            .fail(data => alert(data.responseText));
+        // $.ajax(nta_pathSI, {crossDomain: true, dataType: "json", timeout: 0}).done(SI_nta_json => parse_json(census_var, indicator, year, SI_nta_json, "tract", 'TRACT', 'NTA', tractToNTASI))
+        //     .fail(data => console.log(data)).fail(data => alert(data.responseText)); 
         
     }
 
@@ -765,6 +785,8 @@
         }
         
         // call calculation and display functions
+
+        console.log("uhf_data [parse_json]:", uhf_data);
 
         var uhf_data = populate_stats(uhf_data, indicator)
         DrawTable(uhf_data, to_geo, year, indicator);
