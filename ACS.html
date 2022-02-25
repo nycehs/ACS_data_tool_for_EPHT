@@ -635,36 +635,37 @@
         // get and parse json
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-        $.getJSON(county_path, function (city_json) {
-            $.getJSON(county_path, function (county_json) {
-                $.getJSON(puma_path, function (puma_json) {
-                    $.getJSON(zcta_path, function (zcta_json) {
-                        $.getJSON(puma_path_cd, function (cd_json) {
-                            $.getJSON(nta_pathBX, function (BX_nta_json) {
-                                $.getJSON(nta_pathBK, function (BK_nta_json) {
-                                    $.getJSON(nta_pathMN, function (MN_nta_json) {
-                                        $.getJSON(nta_pathQN, function (QN_nta_json) {
-                                            $.getJSON(nta_pathSI, function (SI_nta_json) {
-                                                parse_json(census_var, indicator, year, city_json, "county", 'county', 'Citywide', county2boro);
-                                                parse_json(census_var, indicator, year, county_json, "county", 'county', 'Borough', county2boro);
-                                                parse_json(census_var, indicator, year, puma_json, "public use microdata area", 'PUMA', 'Subboro', puma2subboro);
-                                                parse_json(census_var, indicator, year, zcta_json, "zip code tabulation area", 'ZCTA', 'UHF42', zcta2UHF);
-                                                parse_json(census_var, indicator, year, cd_json, "public use microdata area", 'PUMA', 'CD', puma2subboro);
-                                                parse_json(census_var, indicator, year, BX_nta_json, "tract", 'TRACT', 'NTA', tractToNTABX);
-                                                parse_json(census_var, indicator, year, BK_nta_json, "tract", 'TRACT', 'NTA', tractToNTABK);
-                                                parse_json(census_var, indicator, year, MN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAMN);
-                                                parse_json(census_var, indicator, year, QN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAQN);
-                                                parse_json(census_var, indicator, year, SI_nta_json, "tract", 'TRACT', 'NTA', tractToNTASI);
-                                            }).fail(data => alert(data.responseText));
-                                        }).fail(data => alert(data.responseText));
-                                    }).fail(data => alert(data.responseText));
-                                }).fail(data => alert(data.responseText));
-                            }).fail(data => alert(data.responseText));
-                        }).fail(data => alert(data.responseText));
-                    }).fail(data => alert(data.responseText));
-                }).fail(data => alert(data.responseText));
-            }).fail(data => alert(data.responseText));
-        }).fail(data => alert(data.responseText));
+        // unnested so asynchronous -- rows aren't in pretty order, but all requests happen in parrallel = much faster
+
+        $.getJSON(county_path, city_json => parse_json(census_var, indicator, year, city_json, "county", 'county', 'Citywide', county2boro))
+            .fail(data => alert(data.responseText));
+
+        $.getJSON(county_path, county_json => parse_json(census_var, indicator, year, county_json, "county", 'county', 'Borough', county2boro))
+            .fail(data => alert(data.responseText));
+
+        $.getJSON(puma_path, puma_json => parse_json(census_var, indicator, year, puma_json, "public use microdata area", 'PUMA', 'Subboro', puma2subboro))
+            .fail(data => alert(data.responseText));
+
+        $.getJSON(zcta_path, zcta_json => parse_json(census_var, indicator, year, zcta_json, "zip code tabulation area", 'ZCTA', 'UHF42', zcta2UHF))
+            .fail(data => alert(data.responseText));
+
+        $.getJSON(puma_path_cd, cd_json => parse_json(census_var, indicator, year, cd_json, "public use microdata area", 'PUMA', 'CD', puma2subboro))
+            .fail(data => alert(data.responseText));
+
+        $.getJSON(nta_pathBX, BX_nta_json => parse_json(census_var, indicator, year, BX_nta_json, "tract", 'TRACT', 'NTA', tractToNTABX))
+            .fail(data => alert(data.responseText));
+
+        $.getJSON(nta_pathBK, BK_nta_json => parse_json(census_var, indicator, year, BK_nta_json, "tract", 'TRACT', 'NTA', tractToNTABK))
+            .fail(data => alert(data.responseText));
+
+        $.getJSON(nta_pathMN, MN_nta_json => parse_json(census_var, indicator, year, MN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAMN))
+            .fail(data => alert(data.responseText));
+
+        $.getJSON(nta_pathQN, QN_nta_json => parse_json(census_var, indicator, year, QN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAQN))
+            .fail(data => alert(data.responseText));
+
+        $.getJSON(nta_pathSI, SI_nta_json => parse_json(census_var, indicator, year, SI_nta_json, "tract", 'TRACT', 'NTA', tractToNTASI))
+            .fail(data => alert(data.responseText));
         
     }
 
@@ -1042,6 +1043,8 @@
     // get and download
     //---------------------------------------------------------------------------//
     
+    $(document).ready(() => console.log("$('#tab_loc>table')", $('#tab_loc>table')))[0];
+
     // function to download as CSV from http://jsfiddle.net/terryyounghk/KPEGU/
     
     $(document).ready(function () {
