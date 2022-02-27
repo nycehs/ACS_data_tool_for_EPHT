@@ -527,19 +527,11 @@
     //===========================================================================//
     
     function make_arq_table() {
-        
-        // console.log("$('#tab_loc>table')[0]", $('#tab_loc>table')[0]);
-        // console.log("$('#tab_loc>table').toArray()[0]", $('#tab_loc>table').toArray()[0]);
-        
-        // actual_table_1 = tableToObj($('#tab_loc>table').toArray()[0]);
-        // console.log("actual_table [hit_api]", actual_table_1);
 
         datatableCsv = document.getElementById("datatableCsv");
         actual_table = tableToObj(datatableCsv);
         
         arq_table = aq.from(actual_table);
-        console.log("arq_table [hit_api]");
-        // arq_table.print(20);
         
         arq_table = 
             arq_table
@@ -551,14 +543,10 @@
                 "MeasureType"
             )
 
-        const colnames_arr = Array.from(arq_table.columnNames(), name => [name, "c"]);
-        const colnames_obj = Object.fromEntries(colnames_arr);
-
-        console.log("colnames_arr", colnames_arr);
-        console.log("colnames_obj", colnames_obj);
+        var colnames_arr = Array.from(arq_table.columnNames(), name => [name, "c"]);
+        var colnames_obj = Object.fromEntries(colnames_arr);
 
         document.getElementById('datatableCsv').innerHTML = arq_table.toHTML({limit: Infinity, align: colnames_obj}); // print dataTable to HTML
-        // document.querySelector('#datatableCsv table').id = "datatableCsv" // this gives the table an ID (table code gen'd by Arquero)        
         
     }
 
@@ -576,8 +564,6 @@
     
     function getdata(i_val, y_val) {
 
-        // console.log("########## get_data ##########");
-        
         // if this is the Race and Ethnicity indicator, loop through the constituent indicators
 
         if (census_param[i_val].indicator == "Race and Ethnicity") {
@@ -598,8 +584,6 @@
     
     async function hit_api(this_ind, year) {
 
-        // console.log("########## hit_api ##########");
-
         // reset this value each time we hit the API
 
         nta_uhf_data = {};
@@ -609,10 +593,6 @@
         var census_var = this_ind.time_period.filter(time => year >= time.min && year <= time.max)[0].variables;
         var indicator = this_ind.indicator;
 
-        console.log("indicator [hit_api]:", indicator);
-        console.log("census_var [hit_api]:", census_var);
-        console.log("year [hit_api]:", year);
-        
         // delete old table
         $('#tab_loc').empty();
 
@@ -644,8 +624,6 @@
             county_path += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
         county_path += "&for=county:" + county.toString() + "&in=state:36";
-        // county_path += "&for=county:" + county.toString() + "&in=state%3A36";
-        // console.log("county_path:", county_path);
         
         // ZCTA PATH
         var zcta = $.map(zcta2UHF, function (n, i) { return n.ZCTA; });
@@ -654,8 +632,6 @@
             zcta_path += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
         zcta_path += "&for=zip+code+tabulation+area:" + zcta.toString() + "&in=state:36";
-        // zcta_path += "&for=zip%20code%20tabulation%20area:" + zcta.toString() + "&in=state%3A36";
-        // console.log("zcta_path:", zcta_path);
         
         // PUMA PATH
         var puma = $.map(puma2subboro, function (n, i) { return n.PUMA; });
@@ -664,8 +640,6 @@
             puma_path += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
         puma_path += "&for=public+use+microdata+area:" + puma.toString() + "&in=state:36";
-        // puma_path += "&for=public%20use%20microdata%20area:" + puma.toString() + "&in=state%3A36";
-        // console.log("puma_path:", puma_path);
         
         // PUMA CD
         var pumacd = $.map(puma2subboro, function (n, i) { return n.PUMA; });
@@ -674,8 +648,6 @@
             puma_path_cd += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
         puma_path_cd += "&for=public+use+microdata+area:" + pumacd.toString() + "&in=state:36";
-        // puma_path_cd += "&for=public%20use%20microdata%20area:" + pumacd.toString() + "&in=state%3A36";
-        // console.log("puma_path_cd:", puma_path_cd);
         
         // BX
         var ntaBX = $.map(tractToNTABX, function (n, i) { return n.TRACT; });
@@ -684,8 +656,6 @@
             nta_pathBX += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
         nta_pathBX += "&for=tract:" + ntaBX.toString() + "&in=state:36+county:005";
-        // nta_pathBX += "&for=tract:" + ntaBX.toString() + "&in=state%3A36%20county%3A005";
-        // console.log("nta_pathBX:", nta_pathBX);
         
         // BK
         var ntaBK = $.map(tractToNTABK, function (n, i) { return n.TRACT; });
@@ -694,8 +664,6 @@
             nta_pathBK += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
         nta_pathBK += "&for=tract:" + ntaBK.toString() + "&in=state:36+county:047";
-        // nta_pathBK += "&for=tract:" + ntaBK.toString() + "&in=state%3A36%20county%3A047";
-        // console.log("nta_pathBK:", nta_pathBK);
         
         // MN
         var ntaMN = $.map(tractToNTAMN, function (n, i) { return n.TRACT; });
@@ -704,8 +672,6 @@
             nta_pathMN += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
         nta_pathMN += "&for=tract:" + ntaMN.toString() + "&in=state:36+county:061";
-        // nta_pathMN += "&for=tract:" + ntaMN.toString() + "&in=state:36+county:061";
-        // console.log("nta_pathMN:", nta_pathMN);
         
         // QN
         var ntaQN = $.map(tractToNTAQN, function (n, i) { return n.TRACT; });
@@ -714,8 +680,6 @@
             nta_pathQN += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
         nta_pathQN += "&for=tract:" + ntaQN.toString() + "&in=state:36+county:081";
-        // nta_pathQN += "&for=tract:" + ntaQN.toString() + "&in=state%3A36%20county%3A081";
-        // console.log("nta_pathQN:", nta_pathQN);
         
         // SI
         var ntaSI = $.map(tractToNTASI, function (n, i) { return n.TRACT; });
@@ -724,8 +688,6 @@
             nta_pathSI += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
         nta_pathSI += "&for=tract:" + ntaSI.toString() + "&in=state:36+county:085";
-        // nta_pathSI += "&for=tract:" + ntaSI.toString() + "&in=state%3A36%20county%3A085";
-        // console.log("nta_pathSI:", nta_pathSI);
         
         
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
@@ -763,8 +725,6 @@
 
     function parse_json(census_var, indicator, year, c_json, c_geo, from_geo, to_geo, geos) {
         
-        // console.log("to_geo", to_geo);
-
         // create table from Geo to geo table according to lookup
         var geoOL = {};
         $.each(geos, function (i, val) {
@@ -870,8 +830,6 @@
     
     function populate_stats(uhf_data, indicator) {
         
-        // console.log("########## populate_stats ##########");
-
         var dataNumber = [];
         var dataPercent = [];
         var range_array = [];
@@ -997,8 +955,6 @@
     //  in the format that the portal is expecting (i.e., race group as measure).
 
     function DrawTable(uhf_data, to_geo, year, indicator) {
-
-        // console.log("########## DrawTable ##########");
 
         // table only clears when hit_api is called, so looping through race indicators just keeps appending rows. 
         //  export functions take data from the html table, so everything works.
@@ -1142,8 +1098,6 @@
     
     $(document).ready(function () {
         
-        // console.log("########## $(document).ready [exportTableToCSV] ##########");
-
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
         // exportTableToCSV
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
@@ -1175,8 +1129,6 @@
         
         $("#get_data").click(function (event) {
 
-            // console.log("########## Get Data button ##########");
-            
             event.preventDefault();
             
             /*             
@@ -1197,8 +1149,6 @@
             
             iy_vals = [i_val, y_val]
             
-            console.log("iy_vals [Get Data button]:", iy_vals)
-            
         });
         
         
@@ -1208,8 +1158,6 @@
 
         // This must be a hyperlink
         $("#exportChrome").on('click', function () {
-            
-            console.log("iy_vals [exportChrome]:", iy_vals)
             
             var year = iy_vals[1];
             var indicator = census_param[iy_vals[0]].indicator
