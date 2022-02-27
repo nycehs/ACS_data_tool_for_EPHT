@@ -8,8 +8,8 @@
 
 <link rel="stylesheet" href="style.css" />
 
-<script type="text/javascript" src="https://d3js.org/d3.v3.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/d3-fetch@3"></script>
+<script type="text/javascript" src="https://d3js.org/d3.v7.min.js"></script>
+<!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/d3-fetch@3"></script> -->
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script type="text/javascript" src="geography_lookupNew.js"></script>
 <script type="text/javascript" src="queue.v1.min.js"></script>
@@ -57,7 +57,7 @@
     // setting initial variable values
     //===========================================================================//
     
-    //Census API 5-year ACS URL
+    // Census API 5-year ACS URL
 
     var api_url = 'https://api.census.gov/data';
     var my_key = 'c8b757f7e16f108647304131056db5bb63ba2e93';
@@ -477,7 +477,7 @@
     // setting up UI
     //---------------------------------------------------------------------------//
 
-    //populate indicator dropdown
+    // populate indicator dropdown
 
     var options = $("#ind_options");
     
@@ -487,6 +487,82 @@
     
     
     //===========================================================================//
+    // function to turn HTML table into JS table
+    //===========================================================================//
+    
+    // taken from https://gist.github.com/mattheo-gist/4151867
+
+    function tableToObj(table) {
+
+        var rows = table.rows;
+        var propCells = rows[0].cells;
+        var propNames = [];
+        var results = [];
+        var obj, row, cells;
+        
+        // Use the first row for the property names
+        // Could use a header section but result is the same if
+        // there is only one header row
+        for (var i=0, iLen=propCells.length; i<iLen; i++) {
+            propNames.push(propCells[i].textContent || propCells[i].innerText);
+        }
+        
+        // Use the rows for data
+        // Could use tbody rows here to exclude header & footer
+        // but starting from 1 gives required result
+        for (var j=1, jLen=rows.length; j<jLen; j++) {
+            cells = rows[j].cells;
+            obj = {};
+            
+            for (var k=0; k<iLen; k++) {
+                obj[propNames[k]] = cells[k].textContent || cells[k].innerText;
+            }
+            results.push(obj)
+        }
+        return results;
+    }
+
+    //===========================================================================//
+    // defining Arquero function
+    //===========================================================================//
+    
+    function make_arq_table() {
+        
+        // console.log("$('#tab_loc>table')[0]", $('#tab_loc>table')[0]);
+        // console.log("$('#tab_loc>table').toArray()[0]", $('#tab_loc>table').toArray()[0]);
+        
+        // actual_table_1 = tableToObj($('#tab_loc>table').toArray()[0]);
+        // console.log("actual_table [hit_api]", actual_table_1);
+
+        datatableCsv = document.getElementById("datatableCsv");
+        actual_table = tableToObj(datatableCsv);
+        
+        arq_table = aq.from(actual_table);
+        console.log("arq_table [hit_api]");
+        // arq_table.print(20);
+        
+        arq_table = 
+            arq_table
+            .orderby(
+                "IndicatorName", 
+                "TimePeriod",
+                "GeoType", 
+                "GeoEntity", 
+                "MeasureType"
+            )
+
+        const colnames_arr = Array.from(arq_table.columnNames(), name => [name, "c"]);
+        const colnames_obj = Object.fromEntries(colnames_arr);
+
+        console.log("colnames_arr", colnames_arr);
+        console.log("colnames_obj", colnames_obj);
+
+        document.getElementById('datatableCsv').innerHTML = arq_table.toHTML({limit: Infinity, align: colnames_obj}); // print dataTable to HTML
+        // document.querySelector('#datatableCsv table').id = "datatableCsv" // this gives the table an ID (table code gen'd by Arquero)        
+        
+    }
+
+    //===========================================================================//
     // defining data-getting functions
     //===========================================================================//
 
@@ -494,7 +570,13 @@
     // getdata (which calls hit_api with the correct indicator(s))
     //---------------------------------------------------------------------------//
     
+    var datatableCsv;
+    var actual_table;
+    var arq_table;
+    
     function getdata(i_val, y_val) {
+
+        // console.log("########## get_data ##########");
         
         // if this is the Race and Ethnicity indicator, loop through the constituent indicators
 
@@ -505,6 +587,7 @@
         else {
             hit_api(census_param[i_val], y_val);
         }
+
     }
 
     //---------------------------------------------------------------------------//
@@ -513,7 +596,9 @@
     
     var nta_uhf_data;
     
-    function hit_api(this_ind, year) {
+    async function hit_api(this_ind, year) {
+
+        // console.log("########## hit_api ##########");
 
         // reset this value each time we hit the API
 
@@ -528,10 +613,10 @@
         console.log("census_var [hit_api]:", census_var);
         console.log("year [hit_api]:", year);
         
-        //delete old table
+        // delete old table
         $('#tab_loc').empty();
 
-        //create table and add header corresponding to EPHT Indicator Tool input fields
+        // create table and add header corresponding to EPHT Indicator Tool input fields
         $('#tab_loc').append('<table id="datatableCsv">');
 
         var row = $('<tr>');
@@ -552,95 +637,95 @@
         // constructing paths
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-        //COUNTY PATH
+        // COUNTY PATH
         var county = $.map(county2boro, function (n, i) { return n.county; });
         var county_path = this_url + "key=" + my_key + "&get=";
         for (i = 0; i < census_var.length; ++i) {
             county_path += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
-        // county_path += "&for=county:" + county.toString() + "&in=state:36";
-        county_path += "&for=county:" + county.toString() + "&in=state%3A36";
-        console.log("county_path:", county_path);
+        county_path += "&for=county:" + county.toString() + "&in=state:36";
+        // county_path += "&for=county:" + county.toString() + "&in=state%3A36";
+        // console.log("county_path:", county_path);
         
-        //ZCTA PATH
+        // ZCTA PATH
         var zcta = $.map(zcta2UHF, function (n, i) { return n.ZCTA; });
         var zcta_path = this_url + "key=" + my_key + "&get=";
         for (i = 0; i < census_var.length; ++i) {
             zcta_path += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
-        // zcta_path += "&for=zip+code+tabulation+area:" + zcta.toString() + "&in=state:36";
-        zcta_path += "&for=zip%20code%20tabulation%20area:" + zcta.toString() + "&in=state%3A36";
-        console.log("zcta_path:", zcta_path);
+        zcta_path += "&for=zip+code+tabulation+area:" + zcta.toString() + "&in=state:36";
+        // zcta_path += "&for=zip%20code%20tabulation%20area:" + zcta.toString() + "&in=state%3A36";
+        // console.log("zcta_path:", zcta_path);
         
-        //PUMA PATH
+        // PUMA PATH
         var puma = $.map(puma2subboro, function (n, i) { return n.PUMA; });
         var puma_path = this_url + "key=" + my_key + "&get=";
         for (i = 0; i < census_var.length; ++i) {
             puma_path += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
-        // puma_path += "&for=public+use+microdata+area:" + puma.toString() + "&in=state:36";
-        puma_path += "&for=public%20use%20microdata%20area:" + puma.toString() + "&in=state%3A36";
-        console.log("puma_path:", puma_path);
+        puma_path += "&for=public+use+microdata+area:" + puma.toString() + "&in=state:36";
+        // puma_path += "&for=public%20use%20microdata%20area:" + puma.toString() + "&in=state%3A36";
+        // console.log("puma_path:", puma_path);
         
-        //PUMA CD
+        // PUMA CD
         var pumacd = $.map(puma2subboro, function (n, i) { return n.PUMA; });
         var puma_path_cd = this_url + "key=" + my_key + "&get=";
         for (i = 0; i < census_var.length; ++i) {
             puma_path_cd += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
-        // puma_path_cd += "&for=public+use+microdata+area:" + pumacd.toString() + "&in=state:36";
-        puma_path_cd += "&for=public%20use%20microdata%20area:" + pumacd.toString() + "&in=state%3A36";
-        console.log("puma_path_cd:", puma_path_cd);
+        puma_path_cd += "&for=public+use+microdata+area:" + pumacd.toString() + "&in=state:36";
+        // puma_path_cd += "&for=public%20use%20microdata%20area:" + pumacd.toString() + "&in=state%3A36";
+        // console.log("puma_path_cd:", puma_path_cd);
         
-        //BX
+        // BX
         var ntaBX = $.map(tractToNTABX, function (n, i) { return n.TRACT; });
         var nta_pathBX = this_url + "key=" + my_key + "&get=";
         for (i = 0; i < census_var.length; ++i) {
             nta_pathBX += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
-        // nta_pathBX += "&for=tract:" + ntaBX.toString() + "&in=state:36+county:005";
-        nta_pathBX += "&for=tract:" + ntaBX.toString() + "&in=state%3A36%20county%3A005";
-        console.log("nta_pathBX:", nta_pathBX);
+        nta_pathBX += "&for=tract:" + ntaBX.toString() + "&in=state:36+county:005";
+        // nta_pathBX += "&for=tract:" + ntaBX.toString() + "&in=state%3A36%20county%3A005";
+        // console.log("nta_pathBX:", nta_pathBX);
         
-        //BK
+        // BK
         var ntaBK = $.map(tractToNTABK, function (n, i) { return n.TRACT; });
         var nta_pathBK = this_url + "key=" + my_key + "&get=";
         for (i = 0; i < census_var.length; ++i) {
             nta_pathBK += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
-        // nta_pathBK += "&for=tract:" + ntaBK.toString() + "&in=state:36+county:047";
-        nta_pathBK += "&for=tract:" + ntaBK.toString() + "&in=state%3A36%20county%3A047";
-        console.log("nta_pathBK:", nta_pathBK);
+        nta_pathBK += "&for=tract:" + ntaBK.toString() + "&in=state:36+county:047";
+        // nta_pathBK += "&for=tract:" + ntaBK.toString() + "&in=state%3A36%20county%3A047";
+        // console.log("nta_pathBK:", nta_pathBK);
         
-        //MN
+        // MN
         var ntaMN = $.map(tractToNTAMN, function (n, i) { return n.TRACT; });
         var nta_pathMN = this_url + "key=" + my_key + "&get=";
         for (i = 0; i < census_var.length; ++i) {
             nta_pathMN += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
-        // nta_pathMN += "&for=tract:" + ntaMN.toString() + "&in=state:36+county:061";
         nta_pathMN += "&for=tract:" + ntaMN.toString() + "&in=state:36+county:061";
-        console.log("nta_pathMN:", nta_pathMN);
+        // nta_pathMN += "&for=tract:" + ntaMN.toString() + "&in=state:36+county:061";
+        // console.log("nta_pathMN:", nta_pathMN);
         
-        //QN
+        // QN
         var ntaQN = $.map(tractToNTAQN, function (n, i) { return n.TRACT; });
         var nta_pathQN = this_url + "key=" + my_key + "&get=";
         for (i = 0; i < census_var.length; ++i) {
             nta_pathQN += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
-        // nta_pathQN += "&for=tract:" + ntaQN.toString() + "&in=state:36+county:081";
-        nta_pathQN += "&for=tract:" + ntaQN.toString() + "&in=state%3A36%20county%3A081";
-        console.log("nta_pathQN:", nta_pathQN);
+        nta_pathQN += "&for=tract:" + ntaQN.toString() + "&in=state:36+county:081";
+        // nta_pathQN += "&for=tract:" + ntaQN.toString() + "&in=state%3A36%20county%3A081";
+        // console.log("nta_pathQN:", nta_pathQN);
         
-        //SI
+        // SI
         var ntaSI = $.map(tractToNTASI, function (n, i) { return n.TRACT; });
         var nta_pathSI = this_url + "key=" + my_key + "&get=";
         for (i = 0; i < census_var.length; ++i) {
             nta_pathSI += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
-        // nta_pathSI += "&for=tract:" + ntaSI.toString() + "&in=state:36+county:085";
-        nta_pathSI += "&for=tract:" + ntaSI.toString() + "&in=state%3A36%20county%3A085";
-        console.log("nta_pathSI:", nta_pathSI);
+        nta_pathSI += "&for=tract:" + ntaSI.toString() + "&in=state:36+county:085";
+        // nta_pathSI += "&for=tract:" + ntaSI.toString() + "&in=state%3A36%20county%3A085";
+        // console.log("nta_pathSI:", nta_pathSI);
         
         
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
@@ -649,44 +734,27 @@
 
         // unnested so asynchronous -- rows aren't in pretty order, but all requests happen in parrallel = much faster
 
-        d3.json(county_path, {credentials: 'omit'}).then(city_json => parse_json(census_var, indicator, year, city_json, "county", 'county', 'Citywide', county2boro));
-        d3.json(county_path, {credentials: 'omit'}).then(county_json => parse_json(census_var, indicator, year, county_json, "county", 'county', 'Borough', county2boro));
-        d3.json(puma_path, {credentials: 'omit'}).then(puma_json => parse_json(census_var, indicator, year, puma_json, "public use microdata area", 'PUMA', 'Subboro', puma2subboro));
-        d3.json(zcta_path, {credentials: 'omit'}).then(zcta_json => parse_json(census_var, indicator, year, zcta_json, "zip code tabulation area", 'ZCTA', 'UHF42', zcta2UHF));
-        d3.json(puma_path_cd, {credentials: 'omit'}).then(cd_json => parse_json(census_var, indicator, year, cd_json, "public use microdata area", 'PUMA', 'CD', puma2subboro));
-        d3.json(nta_pathBX, {credentials: 'omit'}).then(BX_nta_json => parse_json(census_var, indicator, year, BX_nta_json, "tract", 'TRACT', 'NTA', tractToNTABX));
-        d3.json(nta_pathBK, {credentials: 'omit'}).then(BK_nta_json => parse_json(census_var, indicator, year, BK_nta_json, "tract", 'TRACT', 'NTA', tractToNTABK));
-        d3.json(nta_pathMN, {credentials: 'omit'}).then(MN_nta_json => parse_json(census_var, indicator, year, MN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAMN));
-        d3.json(nta_pathQN, {credentials: 'omit'}).then(QN_nta_json => parse_json(census_var, indicator, year, QN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAQN));
-        d3.json(nta_pathSI, {credentials: 'omit'}).then(SI_nta_json => parse_json(census_var, indicator, year, SI_nta_json, "tract", 'TRACT', 'NTA', tractToNTASI));
+        // "await Promise.all" will pause execution of "hit_api" until all the downloading and parsing is complete, which 
+        //  allows for the whole table to be constructed before converting it into an array and then into an Arquero table
 
-        // $.ajax(county_path, {crossDomain: true, dataType: "json", timeout: 0}).done(county_json => parse_json(census_var, indicator, year, county_json, "county", 'county', 'Borough', county2boro))
-        //     .fail(data => console.log(data)).fail(data => alert(data.responseText));
+        await Promise.all([
+            d3.json(county_path, {credentials: 'omit'}).then(city_json => parse_json(census_var, indicator, year, city_json, "county", 'county', 'Citywide', county2boro)),
+            d3.json(county_path, {credentials: 'omit'}).then(county_json => parse_json(census_var, indicator, year, county_json, "county", 'county', 'Borough', county2boro)),
+            d3.json(puma_path, {credentials: 'omit'}).then(puma_json => parse_json(census_var, indicator, year, puma_json, "public use microdata area", 'PUMA', 'Subboro', puma2subboro)),
+            d3.json(zcta_path, {credentials: 'omit'}).then(zcta_json => parse_json(census_var, indicator, year, zcta_json, "zip code tabulation area", 'ZCTA', 'UHF42', zcta2UHF)),
+            d3.json(puma_path_cd, {credentials: 'omit'}).then(cd_json => parse_json(census_var, indicator, year, cd_json, "public use microdata area", 'PUMA', 'CD', puma2subboro)),
+            d3.json(nta_pathBX, {credentials: 'omit'}).then(BX_nta_json => parse_json(census_var, indicator, year, BX_nta_json, "tract", 'TRACT', 'NTA', tractToNTABX)),
+            d3.json(nta_pathBK, {credentials: 'omit'}).then(BK_nta_json => parse_json(census_var, indicator, year, BK_nta_json, "tract", 'TRACT', 'NTA', tractToNTABK)),
+            d3.json(nta_pathMN, {credentials: 'omit'}).then(MN_nta_json => parse_json(census_var, indicator, year, MN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAMN)),
+            d3.json(nta_pathQN, {credentials: 'omit'}).then(QN_nta_json => parse_json(census_var, indicator, year, QN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAQN)),
+            d3.json(nta_pathSI, {credentials: 'omit'}).then(SI_nta_json => parse_json(census_var, indicator, year, SI_nta_json, "tract", 'TRACT', 'NTA', tractToNTASI))
+        ])
 
-        // $.ajax(puma_path, {crossDomain: true, dataType: "json", timeout: 0}).done(puma_json => parse_json(census_var, indicator, year, puma_json, "public use microdata area", 'PUMA', 'Subboro', puma2subboro))
-        //     .fail(data => console.log(data)).fail(data => alert(data.responseText));
+        make_arq_table();
 
-        // $.ajax(zcta_path, {crossDomain: true, dataType: "json", timeout: 0}).done(zcta_json => parse_json(census_var, indicator, year, zcta_json, "zip code tabulation area", 'ZCTA', 'UHF42', zcta2UHF))
-        //     .fail(data => console.log(data)).fail(data => alert(data.responseText));
 
-        // $.ajax(puma_path_cd, {crossDomain: true, dataType: "json", timeout: 0}).done(cd_json => parse_json(census_var, indicator, year, cd_json, "public use microdata area", 'PUMA', 'CD', puma2subboro))
-        //     .fail(data => console.log(data)).fail(data => alert(data.responseText));
+        // TO HTML, INSERT INTO ELEMENT
 
-        // $.ajax(nta_pathBX, {crossDomain: true, dataType: "json", timeout: 0}).done(BX_nta_json => parse_json(census_var, indicator, year, BX_nta_json, "tract", 'TRACT', 'NTA', tractToNTABX))
-        //     .fail(data => console.log(data)).fail(data => alert(data.responseText));
-
-        // $.ajax(nta_pathBK, {crossDomain: true, dataType: "json", timeout: 0}).done(BK_nta_json => parse_json(census_var, indicator, year, BK_nta_json, "tract", 'TRACT', 'NTA', tractToNTABK))
-        //     .fail(data => console.log(data)).fail(data => alert(data.responseText));
-
-        // $.ajax(nta_pathMN, {crossDomain: true, dataType: "json", timeout: 0}).done(MN_nta_json => parse_json(census_var, indicator, year, MN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAMN))
-        //     .fail(data => console.log(data)).fail(data => alert(data.responseText));
-
-        // $.ajax(nta_pathQN, {crossDomain: true, dataType: "json", timeout: 0}).done(QN_nta_json => parse_json(census_var, indicator, year, QN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAQN))
-        //     .fail(data => console.log(data)).fail(data => alert(data.responseText));
-
-        // $.ajax(nta_pathSI, {crossDomain: true, dataType: "json", timeout: 0}).done(SI_nta_json => parse_json(census_var, indicator, year, SI_nta_json, "tract", 'TRACT', 'NTA', tractToNTASI))
-        //     .fail(data => console.log(data)).fail(data => alert(data.responseText)); 
-        
     }
 
     //---------------------------------------------------------------------------//
@@ -695,6 +763,8 @@
 
     function parse_json(census_var, indicator, year, c_json, c_geo, from_geo, to_geo, geos) {
         
+        // console.log("to_geo", to_geo);
+
         // create table from Geo to geo table according to lookup
         var geoOL = {};
         $.each(geos, function (i, val) {
@@ -718,7 +788,7 @@
             cdata2.push(temp_OL);
         }
         
-        //get type for each variable name 
+        // get type for each variable name 
         // table name with num or denonminator assignmrnt type_OL
 
         var type_OL = {};
@@ -727,7 +797,7 @@
             type_OL[census_var[i].name] = census_var[i].type;
         }
         
-        //create object for each geographic entity with variables summed by type
+        // create object for each geographic entity with variables summed by type
         var cdata = {};
 
         for (i = 0; i < cdata2.length; ++i) {
@@ -743,7 +813,6 @@
                     // only take table values
                     if (type_OL.hasOwnProperty(key)) {
 
-                        //(type_OL
                         if (temp_OL.hasOwnProperty(type_OL[key])) {
                             temp_OL[type_OL[key]] = temp_OL[type_OL[key]] + parseInt(p[key]);
                         }
@@ -786,8 +855,6 @@
         
         // call calculation and display functions
 
-        console.log("uhf_data [parse_json]:", uhf_data);
-
         var uhf_data = populate_stats(uhf_data, indicator)
         DrawTable(uhf_data, to_geo, year, indicator);
         
@@ -803,6 +870,8 @@
     
     function populate_stats(uhf_data, indicator) {
         
+        // console.log("########## populate_stats ##########");
+
         var dataNumber = [];
         var dataPercent = [];
         var range_array = [];
@@ -831,7 +900,7 @@
 
             if (indicator == "Children Under 5 years old in Poverty") {
 
-                var test_ind = d3.round((100 * (temp_OL["num"] / (temp_OL["denom2"] + temp_OL["num"]))), 2);
+                var test_ind = d3.format(".2f")(100 * (temp_OL["num"] / (temp_OL["denom2"] + temp_OL["num"])));
 
                 if (!isNaN(test_ind)) {
                     dataPercent.push(test_ind);
@@ -843,7 +912,7 @@
             else if (indicator === "Percent Non-White") {
                 
                 // literally total population minus white-alone
-                var test_ind = d3.round((100 * ((temp_OL["denom"] - temp_OL["num"]) / (temp_OL["denom"]))), 2);
+                var test_ind = d3.format(".2f")(100 * ((temp_OL["denom"] - temp_OL["num"]) / temp_OL["denom"]));
 
                 if (!isNaN(test_ind)) {
                     dataPercent.push(test_ind);
@@ -857,7 +926,7 @@
             }
             else if (!temp_OL["denom"]) {
 
-                var test_ind = d3.round((100 * (temp_OL["num"] / (temp_OL["denom2"]))), 2);
+                var test_ind = d3.format(".2f")(100 * (temp_OL["num"] / temp_OL["denom2"]));
 
                 if (!isNaN(test_ind)) {
                     dataPercent.push(test_ind);
@@ -868,7 +937,7 @@
             }
             else {
 
-                var test_ind = d3.round((100 * (temp_OL["num"] / temp_OL["denom"])), 2);
+                var test_ind = d3.format(".2f")(100 * (temp_OL["num"] / temp_OL["denom"]));
 
                 if (!isNaN(test_ind)) {
                     dataPercent.push(test_ind);
@@ -879,7 +948,7 @@
             }
         }
         
-        data_quantile = d3.scale.quantile();
+        data_quantile = d3.scaleQuantile();
         data_quantile.domain(dataNumber);
         
         range_array.length = 0;
@@ -900,7 +969,7 @@
             i++;
         }
         
-        ///percent disparity
+        // percent disparity
         data_quantile.domain(dataPercent);
         for (var i = 0; i < dataPercent.length; i++) {
             var f = dataPercent[i];
@@ -928,6 +997,8 @@
     //  in the format that the portal is expecting (i.e., race group as measure).
 
     function DrawTable(uhf_data, to_geo, year, indicator) {
+
+        // console.log("########## DrawTable ##########");
 
         // table only clears when hit_api is called, so looping through race indicators just keeps appending rows. 
         //  export functions take data from the html table, so everything works.
@@ -979,13 +1050,13 @@
                 
                 if (indicator === "Children Under 5 years old in Poverty") {
                     
-                    var test_ind = d3.round((100 * (temp_OL["num"] / (temp_OL["denom2"] + temp_OL["num"]))), 2);
+                    var test_ind = d3.format(".2f")(100 * (temp_OL["num"] / (temp_OL["denom2"] + temp_OL["num"])));
                     
                 }
                 else if (indicator === "Percent Non-White") {
                     
                     // literally total population minus white-alone
-                    var test_ind = d3.round((100 * (((temp_OL["denom"]) - temp_OL["num"]) / (temp_OL["denom"]))), 2);
+                    var test_ind = d3.format(".2f")(100 * ((temp_OL["denom"] - temp_OL["num"]) / temp_OL["denom"]));
                 }
                 else if (indicator === "Total Population" || indicator === "Poverty TOTAL") {
 
@@ -995,11 +1066,11 @@
                 }
                 else if (!temp_OL["denom"]) {
                     
-                    var test_ind = d3.round((100 * (temp_OL["num"] / (temp_OL["denom2"]))), 2);
+                    var test_ind = d3.format(".2f")(100 * (temp_OL["num"] / temp_OL["denom2"]));
                 }
                 else {
                     
-                    var test_ind = d3.round((100 * (temp_OL["num"] / temp_OL["denom"])), 2);
+                    var test_ind = d3.format(".2f")(100 * (temp_OL["num"] / temp_OL["denom"]));
                 }
 
                 //---------------------------------------------------//
@@ -1040,6 +1111,7 @@
                     
                     $('#tab_loc table').append(row);
 
+
                 }
                 
                 if (to_geo != 'Citywide' && document.getElementById("chkrank").checked ) {
@@ -1058,6 +1130,7 @@
                 }
             }
         }
+
     }
     
     
@@ -1065,48 +1138,21 @@
     // get and download
     //---------------------------------------------------------------------------//
     
-    $(document).ready(() => console.log("$('#tab_loc>table')", $('#tab_loc>table')))[0];
-
     // function to download as CSV from http://jsfiddle.net/terryyounghk/KPEGU/
     
     $(document).ready(function () {
         
+        // console.log("########## $(document).ready [exportTableToCSV] ##########");
+
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
         // exportTableToCSV
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
         
-        function exportTableToCSV($table, filename) {
+        // this downloads the data from the html table
+        
+        function exportTableToCSV(arq_table, filename) {
             
-            // this downloads the data from the html table
-            
-            var $rows = $table.find('tr:has(th,td)'),
-            
-            // Temporary delimiter characters unlikely to be typed by keyboard
-            //  This is to avoid accidentally splitting the actual contents
-            
-            tmpColDelim = String.fromCharCode(11), // vertical tab character
-            tmpRowDelim = String.fromCharCode(0), // null character
-            
-            // actual delimiter characters for CSV format
-            colDelim = '","',
-            rowDelim = '"\r\n"',
-            
-            // Grab text from table into CSV formatted string
-            csv = '"' + $rows.map(function (i, row) {
-                var $row = $(row),
-                $cols = $row.find('th,td');
-                
-                return $cols.map(function (j, col) {
-                    var $col = $(col),
-                    text = $col.text();
-                    
-                    return text.replace('"', '""'); // escape double quotes
-                    
-                }).get().join(tmpColDelim);
-                
-            }).get().join(tmpRowDelim)
-            .split(tmpRowDelim).join(rowDelim)
-            .split(tmpColDelim).join(colDelim) + '"',
+            csv = arq_table.toCSV();
             
             // Data URI
             csvData = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csv);
@@ -1128,6 +1174,8 @@
         var ind;
         
         $("#get_data").click(function (event) {
+
+            // console.log("########## Get Data button ##########");
             
             event.preventDefault();
             
@@ -1149,7 +1197,7 @@
             
             iy_vals = [i_val, y_val]
             
-            console.log("iy_vals [get_data]:", iy_vals)
+            console.log("iy_vals [Get Data button]:", iy_vals)
             
         });
         
@@ -1159,19 +1207,16 @@
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
         // This must be a hyperlink
-        $("#exportChrome").on('click', function (event) {
+        $("#exportChrome").on('click', function () {
             
-            console.log("iy_vals [export]:", iy_vals)
+            console.log("iy_vals [exportChrome]:", iy_vals)
             
             var year = iy_vals[1];
             var indicator = census_param[iy_vals[0]].indicator
             
-            // CSV
-            exportTableToCSV.apply(this, [$('#tab_loc>table'), 'ACS ' + indicator + ' ' + year + '.csv']);
+            exportTableToCSV.apply(this, [arq_table, 'ACS ' + indicator + ' ' + year + '.csv']);
             
-            // IF CSV, don't do event.preventDefault() or return false
-            // We actually need this to be a typical hyperlink
-        });        
+        });
         
         
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
