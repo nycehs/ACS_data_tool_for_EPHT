@@ -498,7 +498,7 @@
     // from https://dmitripavlutin.com/timeout-fetch-request/
     
     async function fetchWithTimeout(resource, options = {}) {
-        const { timeout = 4000 } = options;
+        const { timeout = 8000 } = options;
         
         const controller = new AbortController();
         const id = setTimeout(() => controller.abort(), timeout);
