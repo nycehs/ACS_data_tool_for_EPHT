@@ -4,17 +4,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="" />
     <meta name="author" content="" />
+    
+    <link rel="stylesheet" href="style.css" />
+    
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fetch-retry@latest"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="geography_lookupNew.js"></script>
+    <script src="queue.v1.min.js"></script>
+    <script src="modernizr-custom.js"></script>
+    <script src="excellentexport.js"></script>
+
 </head>
-
-<link rel="stylesheet" href="style.css" />
-
-<script type="text/javascript" src="https://d3js.org/d3.v7.min.js"></script>
-<!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/d3-fetch@3"></script> -->
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script type="text/javascript" src="geography_lookupNew.js"></script>
-<script type="text/javascript" src="queue.v1.min.js"></script>
-<script type="text/javascript" src="modernizr-custom.js"></script>
-<script type="text/javascript" src="excellentexport.js"></script>
 
 <!--Arquero-->
 <script src="https://cdn.jsdelivr.net/npm/arquero@latest"></script>
@@ -50,7 +51,7 @@
     <div id='tab_loc' class="CSSTableGenerator"></div>
 </body>
 
-<script type="text/javascript">
+<script>
 
 
     //===========================================================================//
@@ -487,8 +488,35 @@
     
     
     //===========================================================================//
-    // function to turn HTML table into JS table
+    // helper functions
     //===========================================================================//
+    
+    //---------------------------------------------------------------------------//
+    // fetch with timeout
+    //---------------------------------------------------------------------------//
+
+    // from https://dmitripavlutin.com/timeout-fetch-request/
+    
+    async function fetchWithTimeout(resource, options = {}) {
+        const { timeout = 4000 } = options;
+        
+        const controller = new AbortController();
+        const id = setTimeout(() => controller.abort(), timeout);
+        const response = await fetch(resource, {
+            ...options,
+            signal: controller.signal  
+        });
+        clearTimeout(id);
+        return response;
+    }
+
+    // fetch with timeout and retries
+
+    var fetch_rt = fetchRetry(fetchWithTimeout);
+    
+    //---------------------------------------------------------------------------//
+    // turn HTML table into JS table
+    //---------------------------------------------------------------------------//
     
     // taken from https://gist.github.com/mattheo-gist/4151867
 
@@ -522,36 +550,57 @@
         return results;
     }
 
-    //===========================================================================//
-    // defining Arquero function
-    //===========================================================================//
+    //---------------------------------------------------------------------------//
+    // make Arquero table
+    //---------------------------------------------------------------------------//
     
+    // turn html table into array, convert to Arquero, sort, then replace table element
+
     function make_arq_table() {
 
+        GeoType_order = 
+            aq.table({
+                GeoType: [
+                    "Citywide",
+                    "Borough",
+                    "Subboro",
+                    "UHF42",
+                    "CD",
+                    "NTA"
+                ],
+                GeoType_order: [
+                    1, 2, 3, 4, 5, 6
+                ]
+            })
+
         datatableCsv = document.getElementById("datatableCsv");
-        actual_table = tableToObj(datatableCsv);
+        table_obj = tableToObj(datatableCsv);
         
-        arq_table = aq.from(actual_table);
+        arq_table = aq.from(table_obj);
         
         arq_table = 
             arq_table
+            .join_left(GeoType_order, "GeoType")
             .orderby(
                 "IndicatorName", 
                 "TimePeriod",
-                "GeoType", 
+                "GeoType_order", 
                 "GeoEntity", 
                 "MeasureType"
             )
+            .select(aq.not("GeoType_order"))
+
+        // easy way to center all columns in "toHTML"
 
         var colnames_arr = Array.from(arq_table.columnNames(), name => [name, "c"]);
         var colnames_obj = Object.fromEntries(colnames_arr);
 
-        document.getElementById('datatableCsv').innerHTML = arq_table.toHTML({limit: Infinity, align: colnames_obj}); // print dataTable to HTML
+        document.getElementById('datatableCsv').innerHTML = arq_table.toHTML({limit: Infinity, align: colnames_obj, style: {table: "font-weight: normal;"}}); // print dataTable to HTML
         
     }
 
     //===========================================================================//
-    // defining data-getting functions
+    // main data functions
     //===========================================================================//
 
     //---------------------------------------------------------------------------//
@@ -559,7 +608,7 @@
     //---------------------------------------------------------------------------//
     
     var datatableCsv;
-    var actual_table;
+    var table_obj;
     var arq_table;
     
     function getdata(i_val, y_val) {
@@ -694,28 +743,29 @@
         // get and parse json
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-        // unnested so asynchronous -- rows aren't in pretty order, but all requests happen in parrallel = much faster
+        // unnested so asynchronous; all requests happen in parrallel = much faster
+        // "make_arq_table" reconstructs the originally intended row order
 
         // "await Promise.all" will pause execution of "hit_api" until all the downloading and parsing is complete, which 
         //  allows for the whole table to be constructed before converting it into an array and then into an Arquero table
-
+        //  with "make_arq_table"
+        
         await Promise.all([
-            d3.json(county_path, {credentials: 'omit'}).then(city_json => parse_json(census_var, indicator, year, city_json, "county", 'county', 'Citywide', county2boro)),
-            d3.json(county_path, {credentials: 'omit'}).then(county_json => parse_json(census_var, indicator, year, county_json, "county", 'county', 'Borough', county2boro)),
-            d3.json(puma_path, {credentials: 'omit'}).then(puma_json => parse_json(census_var, indicator, year, puma_json, "public use microdata area", 'PUMA', 'Subboro', puma2subboro)),
-            d3.json(zcta_path, {credentials: 'omit'}).then(zcta_json => parse_json(census_var, indicator, year, zcta_json, "zip code tabulation area", 'ZCTA', 'UHF42', zcta2UHF)),
-            d3.json(puma_path_cd, {credentials: 'omit'}).then(cd_json => parse_json(census_var, indicator, year, cd_json, "public use microdata area", 'PUMA', 'CD', puma2subboro)),
-            d3.json(nta_pathBX, {credentials: 'omit'}).then(BX_nta_json => parse_json(census_var, indicator, year, BX_nta_json, "tract", 'TRACT', 'NTA', tractToNTABX)),
-            d3.json(nta_pathBK, {credentials: 'omit'}).then(BK_nta_json => parse_json(census_var, indicator, year, BK_nta_json, "tract", 'TRACT', 'NTA', tractToNTABK)),
-            d3.json(nta_pathMN, {credentials: 'omit'}).then(MN_nta_json => parse_json(census_var, indicator, year, MN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAMN)),
-            d3.json(nta_pathQN, {credentials: 'omit'}).then(QN_nta_json => parse_json(census_var, indicator, year, QN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAQN)),
-            d3.json(nta_pathSI, {credentials: 'omit'}).then(SI_nta_json => parse_json(census_var, indicator, year, SI_nta_json, "tract", 'TRACT', 'NTA', tractToNTASI))
+            fetch_rt(county_path).then(res => res.json()).then(city_json => parse_json(census_var, indicator, year, city_json, "county", 'county', 'Citywide', county2boro)),
+            fetch_rt(county_path).then(res => res.json()).then(county_json => parse_json(census_var, indicator, year, county_json, "county", 'county', 'Borough', county2boro)),
+            fetch_rt(puma_path).then(res => res.json()).then(puma_json => parse_json(census_var, indicator, year, puma_json, "public use microdata area", 'PUMA', 'Subboro', puma2subboro)),
+            fetch_rt(zcta_path).then(res => res.json()).then(zcta_json => parse_json(census_var, indicator, year, zcta_json, "zip code tabulation area", 'ZCTA', 'UHF42', zcta2UHF)),
+            fetch_rt(puma_path_cd).then(res => res.json()).then(cd_json => parse_json(census_var, indicator, year, cd_json, "public use microdata area", 'PUMA', 'CD', puma2subboro)),
+            fetch_rt(nta_pathBX).then(res => res.json()).then(BX_nta_json => parse_json(census_var, indicator, year, BX_nta_json, "tract", 'TRACT', 'NTA', tractToNTABX)),
+            fetch_rt(nta_pathBK).then(res => res.json()).then(BK_nta_json => parse_json(census_var, indicator, year, BK_nta_json, "tract", 'TRACT', 'NTA', tractToNTABK)),
+            fetch_rt(nta_pathMN).then(res => res.json()).then(MN_nta_json => parse_json(census_var, indicator, year, MN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAMN)),
+            fetch_rt(nta_pathQN).then(res => res.json()).then(QN_nta_json => parse_json(census_var, indicator, year, QN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAQN)),
+            fetch_rt(nta_pathSI).then(res => res.json()).then(SI_nta_json => parse_json(census_var, indicator, year, SI_nta_json, "tract", 'TRACT', 'NTA', tractToNTASI))
         ])
 
+        // turn into arquero table, etc., and replace original html table
+        
         make_arq_table();
-
-
-        // TO HTML, INSERT INTO ELEMENT
 
     }
 
