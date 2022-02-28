@@ -93,7 +93,7 @@ a.myButton:hover {
 	text-align:center;
 	padding:6px;
 	font-size:12px;
-	font-family:Arial;
+	font-family:monospace;
 	font-weight:normal;
 	color:#000000;
 }
