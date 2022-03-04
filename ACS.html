@@ -1095,6 +1095,11 @@
                         row.append($('<td>').text("Race and Ethnicity"));   // IndicatorName
                         row.append($('<td>').text(indicator));   // MeasureType
                                 
+                    } else if (indicator.startsWith("Crowding")) {
+
+                        row.append($('<td>').text(indicator));   // IndicatorName
+                        row.append($('<td>').text('Percent of Households'));   // MeasureType
+
                     } else {
 
                         row.append($('<td>').text(indicator));   // IndicatorName
