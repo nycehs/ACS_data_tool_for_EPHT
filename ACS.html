@@ -941,7 +941,7 @@
                     dataPercent.push(0);
                 }
             }
-            else if (indicator === "Total Population" || indicator === "Poverty TOTAL") {
+            else if (indicator === "Total Population" || indicator === "Poverty TOTAL" || indicator === "Housing Units") {
                 // don't push anything to dataPercent, b/c only num matters
             }
             else if (!temp_OL["denom"]) {
@@ -1076,7 +1076,7 @@
                     // literally total population minus white-alone
                     var test_ind = d3.format(".2f")(100 * ((temp_OL["denom"] - temp_OL["num"]) / temp_OL["denom"]));
                 }
-                else if (indicator === "Total Population" || indicator === "Poverty TOTAL") {
+                else if (indicator === "Total Population" || indicator === "Poverty TOTAL" || indicator === "Housing Units") {
 
                     // don't do anything b/c num already displayed
                     // var test_ind = null;
@@ -1097,7 +1097,7 @@
 
                 // if indicator is a total, don't show percent (aka, if indicator isn't a total, show percent)
 
-                if (!indicator.startsWith("Total Population") && indicator !== "Poverty TOTAL") {
+                if (!indicator.startsWith("Total Population") && indicator !== "Poverty TOTAL" && indicator !== "Housing Units") {
                     
                     // if this is a race indicator, replace "Percent" with the indicator name, and replace 
                     //  the indicator name with "Race and Ethnicity"
