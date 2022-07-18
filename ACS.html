@@ -175,6 +175,22 @@
         }
         ]
     },
+    {
+        indicator: "Means of Transportation to Work", table: "MEANS OF TRANSPORTATION TO WORK", source: 'acs/acs5', 
+        time_period: [
+        {
+            min: 2010, 
+            max: 2019,
+            variables: [
+            { name: "B08301_002E", label: "Estimate!!Total!!Car, truck, or van", type: "num" },
+            { name: "B08301_010E", label: "Estimate!!Total!!Public transportation (excluding taxicab)", type: "num" },
+            { name: "B08301_018E", label: "Estimate!!Total!!Bicycle", type: "num" },
+            { name: "B08301_019E", label: "Estimate!!Total!!Walked", type: "num" }, 
+            { name: "B08301_001E", label: "Estimate!!Total", type: "denom" }
+            ]
+        }
+        ]
+    },
     // {
     //     indicator: "Older Adults Living Alone", table: "LIVING ARRANGEMENTS OF ADULTS 18 YEARS AND OVER BY AGE", source: 'acs/acs5', 
     //     time_period: [
