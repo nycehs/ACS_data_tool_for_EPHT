@@ -79,10 +79,10 @@
 
     var census_param = [
     {
-        indicator: "Race and Ethnicity"
+        indicator: "Race and Ethnicity", category: "race_vars"
     },
     {
-        indicator: "Total Population", table: "TOTAL POPULATION", source: 'acs/acs5', 
+        indicator: "Total Population", table: "TOTAL POPULATION", source: 'acs/acs5', category: "population",
         time_period: [
         {
             min: 2010, 
@@ -94,7 +94,7 @@
         ]
     }, 
     {
-        indicator: "Housing Units", table: "HOUSING UNITS", source: 'acs/acs5', 
+        indicator: "Housing Units", table: "HOUSING UNITS", source: 'acs/acs5', category: "housing",
         time_period: [
         {
             min: 2010, 
@@ -106,7 +106,7 @@
         ]
     }, 
     {
-        indicator: "Poverty", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY SEX BY AGE", source: 'acs/acs5',
+        indicator: "Poverty", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY SEX BY AGE", source: 'acs/acs5', category: "poverty",
         time_period: [
         {
             min: 2010, 
@@ -131,7 +131,7 @@
     //     ]
     // },
     {
-        indicator: "Children Under 5 years old in Poverty", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY SEX BY AGE", source: 'acs/acs5',
+        indicator: "Children Under 5 years old in Poverty", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY SEX BY AGE", source: 'acs/acs5', category: "under_5_poverty",
         time_period: [
         {
             min: 2010, 
@@ -147,7 +147,7 @@
         ]
     },
     {
-        indicator: "Unemployment", table: "EMPLOYMENT STATUS FOR THE POPULATION 16 YEARS AND OVER", source: 'acs/acs5', 
+        indicator: "Unemployment", table: "EMPLOYMENT STATUS FOR THE POPULATION 16 YEARS AND OVER", source: 'acs/acs5', category: "unemployment",
         time_period: [
         {
             min: 2010, 
@@ -160,7 +160,7 @@
         ]
     },
     {
-        indicator: "Rent Burdened Households", table: "GROSS RENT AS A PERCENTAGE OF HOUSEHOLD INCOME IN THE PAST 12 MONTHS", source: 'acs/acs5', 
+        indicator: "Rent Burdened Households", table: "GROSS RENT AS A PERCENTAGE OF HOUSEHOLD INCOME IN THE PAST 12 MONTHS", source: 'acs/acs5', category: "rent",
         time_period: [
         {
             min: 2010, 
@@ -171,22 +171,6 @@
             { name: "B25070_009E", label: "Estimate!!Total!!40.0 to 49.9 percent", type: "num" }, 
             { name: "B25070_010E", label: "Estimate!!Total!!50.0 percent or more", type: "num" },
             { name: "B25070_001E", label: "Estimate!!Total", type: "denom" }
-            ]
-        }
-        ]
-    },
-    {
-        indicator: "Means of Transportation to Work", table: "MEANS OF TRANSPORTATION TO WORK", source: 'acs/acs5', 
-        time_period: [
-        {
-            min: 2010, 
-            max: 2019,
-            variables: [
-            { name: "B08301_002E", label: "Estimate!!Total!!Car, truck, or van", type: "num" },
-            { name: "B08301_010E", label: "Estimate!!Total!!Public transportation (excluding taxicab)", type: "num" },
-            { name: "B08301_018E", label: "Estimate!!Total!!Bicycle", type: "num" },
-            { name: "B08301_019E", label: "Estimate!!Total!!Walked", type: "num" }, 
-            { name: "B08301_001E", label: "Estimate!!Total", type: "denom" }
             ]
         }
         ]
@@ -205,7 +189,7 @@
     //     ]
     // },
     {
-        indicator: "Older Adults Living Alone", table: "Relationship by Household Type (Including Living Alone) for the Population 65 Years and Over", source: 'acs/acs5', 
+        indicator: "Older Adults Living Alone", table: "Relationship by Household Type (Including Living Alone) for the Population 65 Years and Over", source: 'acs/acs5', category: "living_alone",
         time_period: [
         {
             min: 2010, 
@@ -228,7 +212,7 @@
         ]
     },
     {
-        indicator: "Pre-1950 Homes", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5',
+        indicator: "Pre-1950 Homes", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5', category: "1950_homes",
         time_period: [
         {
             min: 2010, 
@@ -251,7 +235,7 @@
         ]
     },
     {
-        indicator: "Owner-Occupied Homes", table: "SELECTED HOUSING CHARACTERISTICS", source: 'acs/acs5/profile',
+        indicator: "Owner-Occupied Homes", table: "SELECTED HOUSING CHARACTERISTICS", source: 'acs/acs5/profile', category: "owner_occupied",
         time_period: [
         {
             min: 2010, 
@@ -272,7 +256,7 @@
         ]
     },
     {
-        indicator: "Foreign-Born", table: "SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES", source: 'acs/acs5/profile',
+        indicator: "Foreign-Born", table: "SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES", source: 'acs/acs5/profile', category: "foreign_born",
         time_period: [
         {
             min: 2010, 
@@ -293,7 +277,7 @@
         ]
     },
     {
-        indicator: "Crowding (> 1 person/room)", table: "SELECTED HOUSING CHARACTERISTICS", source: 'acs/acs5/profile',
+        indicator: "Crowding (> 1 person/room)", table: "SELECTED HOUSING CHARACTERISTICS", source: 'acs/acs5/profile', category: "crowding",
         time_period: [
         {
             min: 2010, 
@@ -316,7 +300,7 @@
         ]
     },
     {
-        indicator: "High School Graduation", table: "SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES", source: 'acs/acs5/profile', 
+        indicator: "High School Graduation", table: "SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES", source: 'acs/acs5/profile', category: "high_school",
         time_period: [
         {
             min: 2010, 
@@ -345,7 +329,7 @@
         ]
     },
     {
-        indicator: "Limited English", table: "SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES", source: 'acs/acs5/profile', 
+        indicator: "Limited English", table: "SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES", source: 'acs/acs5/profile', category: "limited_english",
         time_period: [
         {
             min: 2010, 
@@ -364,9 +348,71 @@
             ]
         }
         ]
-    }	
+    },
+    {
+        indicator: "Means of Transportation to Work", category: "transportation"
+    },
     ];
     
+    
+    //---------------------------------------------------------------------------//
+    // Means of transportation to work
+    //---------------------------------------------------------------------------//
+
+    var transportation = [
+    {
+        indicator: "Car, truck, or van", table: "MEANS OF TRANSPORTATION TO WORK", source: 'acs/acs5', category: "transportation",
+        time_period: [
+        {
+            min: 2010, 
+            max: 2019,
+            variables: [
+            { name: "B08301_002E", label: "Estimate!!Total!!Car, truck, or van", type: "num" },
+            { name: "B08301_001E", label: "Estimate!!Total", type: "denom" }
+            ]
+        }
+        ]
+    },
+    {
+        indicator: "Public transportation", table: "MEANS OF TRANSPORTATION TO WORK", source: 'acs/acs5', category: "transportation",
+        time_period: [
+        {
+            min: 2010, 
+            max: 2019,
+            variables: [
+            { name: "B08301_010E", label: "Estimate!!Total!!Public transportation (excluding taxicab)", type: "num" },
+            { name: "B08301_001E", label: "Estimate!!Total", type: "denom" }
+            ]
+        }
+        ]
+    },
+    {
+        indicator: "Bicycle", table: "MEANS OF TRANSPORTATION TO WORK", source: 'acs/acs5', category: "transportation",
+        time_period: [
+        {
+            min: 2010, 
+            max: 2019,
+            variables: [
+            { name: "B08301_018E", label: "Estimate!!Total!!Bicycle", type: "num" },
+            { name: "B08301_001E", label: "Estimate!!Total", type: "denom" }
+            ]
+        }
+        ]
+    },
+    {
+        indicator: "Walked", table: "MEANS OF TRANSPORTATION TO WORK", source: 'acs/acs5', category: "transportation",
+        time_period: [
+        {
+            min: 2010, 
+            max: 2019,
+            variables: [
+            { name: "B08301_019E", label: "Estimate!!Total!!Walked", type: "num" }, 
+            { name: "B08301_001E", label: "Estimate!!Total", type: "denom" }
+            ]
+        }
+        ]
+    },
+    ]
     
     //---------------------------------------------------------------------------//
     // variables for race indicators
@@ -383,7 +429,7 @@
     
     var race_vars = [
     {
-        indicator: "Percent Hispanic Alone", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile',
+        indicator: "Percent Hispanic Alone", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile', category: "race_vars",
         time_period: [
         {
             min: 2010, 
@@ -404,7 +450,7 @@
         ]
     },
     {
-        indicator: "Percent White Alone", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile',
+        indicator: "Percent White Alone", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile', category: "race_vars",
         time_period: [
         {
             min: 2010, 
@@ -425,7 +471,7 @@
         ]
     },
     {
-        indicator: "Percent Black Alone", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile',
+        indicator: "Percent Black Alone", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile', category: "race_vars",
         time_period: [
         {
             min: 2010, 
@@ -446,7 +492,7 @@
         ]
     },
     {
-        indicator: "Percent Asian Alone", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile',
+        indicator: "Percent Asian Alone", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile', category: "race_vars",
         time_period: [
         {
             min: 2010, 
@@ -467,7 +513,7 @@
         ]
     },
     {
-        indicator: "Percent Non-White", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile',
+        indicator: "Percent Non-White", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile', category: "race_vars",
         time_period: [
         {
             min: 2010, 
@@ -488,7 +534,7 @@
         ]
     },
     {
-        indicator: "Total Population (Race)", table: "TOTAL POPULATION", source: 'acs/acs5', 
+        indicator: "Total Population (Race)", table: "TOTAL POPULATION", source: 'acs/acs5',  category: "race_vars",
         time_period: [
         {
             min: 2010, 
@@ -641,13 +687,20 @@
     
     function getdata(i_val, y_val) {
 
-        // if this is the Race and Ethnicity indicator, loop through the constituent indicators
+        console.log("census_param[i_val]", census_param[i_val]);
 
-        if (census_param[i_val].indicator == "Race and Ethnicity") {
+        // if this is the Race and Ethnicity indicator, or the transportation indicator, loop through the constituent indicators
+
+        if (census_param[i_val].category === "race_vars") {
         
             race_vars.forEach(indicator => hit_api(indicator, y_val));
         }
+        else if (census_param[i_val].category === "transportation") {
+        
+            transportation.forEach(indicator => hit_api(indicator, y_val));
+        }
         else {
+            
             hit_api(census_param[i_val], y_val);
         }
 
@@ -657,18 +710,21 @@
     // hit_api (which constructs API calls from paramaters)
     //---------------------------------------------------------------------------//
     
-    var nta_uhf_data;
+    var nta_data_in_geo;
     
     async function hit_api(this_ind, year) {
 
+        console.log("this_ind", this_ind);
+
         // reset this value each time we hit the API
 
-        nta_uhf_data = {};
+        nta_data_in_geo = {};
         
         // filter the time period by selected year to get the correct variables
 
         var census_var = this_ind.time_period.filter(time => year >= time.min && year <= time.max)[0].variables;
         var indicator = this_ind.indicator;
+        var category = this_ind.category;
 
         // delete old table
         $('#tab_loc').empty();
@@ -779,16 +835,16 @@
         //  with "make_arq_table"
         
         await Promise.all([
-            fetch_rt(county_path).then(res => res.json()).then(city_json => parse_json(census_var, indicator, year, city_json, "county", 'county', 'Citywide', county2boro)),
-            fetch_rt(county_path).then(res => res.json()).then(county_json => parse_json(census_var, indicator, year, county_json, "county", 'county', 'Borough', county2boro)),
-            fetch_rt(puma_path).then(res => res.json()).then(puma_json => parse_json(census_var, indicator, year, puma_json, "public use microdata area", 'PUMA', 'Subboro', puma2subboro)),
-            fetch_rt(zcta_path).then(res => res.json()).then(zcta_json => parse_json(census_var, indicator, year, zcta_json, "zip code tabulation area", 'ZCTA', 'UHF42', zcta2UHF)),
-            fetch_rt(puma_path_cd).then(res => res.json()).then(cd_json => parse_json(census_var, indicator, year, cd_json, "public use microdata area", 'PUMA', 'CD', puma2subboro)),
-            fetch_rt(nta_pathBX).then(res => res.json()).then(BX_nta_json => parse_json(census_var, indicator, year, BX_nta_json, "tract", 'TRACT', 'NTA', tractToNTABX)),
-            fetch_rt(nta_pathBK).then(res => res.json()).then(BK_nta_json => parse_json(census_var, indicator, year, BK_nta_json, "tract", 'TRACT', 'NTA', tractToNTABK)),
-            fetch_rt(nta_pathMN).then(res => res.json()).then(MN_nta_json => parse_json(census_var, indicator, year, MN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAMN)),
-            fetch_rt(nta_pathQN).then(res => res.json()).then(QN_nta_json => parse_json(census_var, indicator, year, QN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAQN)),
-            fetch_rt(nta_pathSI).then(res => res.json()).then(SI_nta_json => parse_json(census_var, indicator, year, SI_nta_json, "tract", 'TRACT', 'NTA', tractToNTASI))
+            fetch_rt(county_path).then(res => res.json()).then(city_json => parse_json(census_var, indicator, category, year, city_json, "county", 'county', 'Citywide', county2boro)),
+            fetch_rt(county_path).then(res => res.json()).then(county_json => parse_json(census_var, indicator, category, year, county_json, "county", 'county', 'Borough', county2boro)),
+            fetch_rt(puma_path).then(res => res.json()).then(puma_json => parse_json(census_var, indicator, category, year, puma_json, "public use microdata area", 'PUMA', 'Subboro', puma2subboro)),
+            fetch_rt(zcta_path).then(res => res.json()).then(zcta_json => parse_json(census_var, indicator, category, year, zcta_json, "zip code tabulation area", 'ZCTA', 'UHF42', zcta2UHF)),
+            fetch_rt(puma_path_cd).then(res => res.json()).then(cd_json => parse_json(census_var, indicator, category, year, cd_json, "public use microdata area", 'PUMA', 'CD', puma2subboro)),
+            fetch_rt(nta_pathBX).then(res => res.json()).then(BX_nta_json => parse_json(census_var, indicator, category, year, BX_nta_json, "tract", 'TRACT', 'NTA', tractToNTABX)),
+            fetch_rt(nta_pathBK).then(res => res.json()).then(BK_nta_json => parse_json(census_var, indicator, category, year, BK_nta_json, "tract", 'TRACT', 'NTA', tractToNTABK)),
+            fetch_rt(nta_pathMN).then(res => res.json()).then(MN_nta_json => parse_json(census_var, indicator, category, year, MN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAMN)),
+            fetch_rt(nta_pathQN).then(res => res.json()).then(QN_nta_json => parse_json(census_var, indicator, category, year, QN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAQN)),
+            fetch_rt(nta_pathSI).then(res => res.json()).then(SI_nta_json => parse_json(census_var, indicator, category, year, SI_nta_json, "tract", 'TRACT', 'NTA', tractToNTASI))
         ])
 
         // turn into arquero table, etc., and replace original html table
@@ -801,7 +857,7 @@
     // parse_json
     //---------------------------------------------------------------------------//
 
-    function parse_json(census_var, indicator, year, c_json, c_geo, from_geo, to_geo, geos) {
+    function parse_json(census_var, indicator, category, year, c_json, c_geo, from_geo, to_geo, geos) {
         
         // create table from Geo to geo table according to lookup
         var geoOL = {};
@@ -868,24 +924,24 @@
         // aggregate by geography
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-        var uhf_data = {};
+        var data_in_geo = {};
 
         for (var key1 in cdata) {
 
             var key = cdata[key1][to_geo];
 
-            if (!uhf_data[key]) {
-                uhf_data[key] = {};
+            if (!data_in_geo[key]) {
+                data_in_geo[key] = {};
             }
 
             for (var key2 in cdata[key1]) {
 
                 if (key2 !== to_geo) {
-                    if (!uhf_data[key][key2]) {
-                        uhf_data[key][key2] = parseInt(cdata[key1][key2]);
+                    if (!data_in_geo[key][key2]) {
+                        data_in_geo[key][key2] = parseInt(cdata[key1][key2]);
                     }
                     else {
-                        uhf_data[key][key2] += parseInt(cdata[key1][key2]);
+                        data_in_geo[key][key2] += parseInt(cdata[key1][key2]);
                     }
                 }
             }
@@ -893,8 +949,8 @@
         
         // call calculation and display functions
 
-        var uhf_data = populate_stats(uhf_data, indicator)
-        DrawTable(uhf_data, to_geo, year, indicator);
+        var data_in_geo = populate_stats(data_in_geo, indicator, category)
+        DrawTable(data_in_geo, to_geo, year, indicator, category);
         
     }
     
@@ -906,7 +962,7 @@
     // I added a bunch of logic so that the Race and Ethnicity indicator is exported 
     //  in the format that the portal is expecting (i.e., race group as measure).
     
-    function populate_stats(uhf_data, indicator) {
+    function populate_stats(data_in_geo, indicator, category) {
         
         var dataNumber = [];
         var dataPercent = [];
@@ -915,23 +971,22 @@
         var ranks = [];
         var ranksPer = [];
 
-        for (var key in uhf_data) {
+        for (var key in data_in_geo) {
             
             // if race indicator, don't print number
             
-            if (!indicator.startsWith("Percent")) {
+            if (category !== "race_vars") {
                 
-                var temp_OL = uhf_data[key];
+                var temp_OL = data_in_geo[key];
                 dataNumber.push(temp_OL["num"]);
 
             }
         }
         
-        for (var key in uhf_data) {
+        for (var key in data_in_geo) {
 
-            var temp_OL = uhf_data[key];
+            var temp_OL = data_in_geo[key];
 
-            // put here: logical test for race indicator, then renaming of indicators
             // rename indicator to Race and Ethnicity, remove "Number", replace "Percent" with "Percent [race indicator]""
 
             if (indicator == "Children Under 5 years old in Poverty") {
@@ -958,7 +1013,9 @@
                 }
             }
             else if (indicator === "Total Population" || indicator === "Poverty TOTAL" || indicator === "Housing Units") {
+
                 // don't push anything to dataPercent, b/c only num matters
+
             }
             else if (!temp_OL["denom"]) {
 
@@ -1000,8 +1057,8 @@
         }
         
         var i = 0;
-        for (var key in uhf_data) {
-            uhf_data[key]["rank"] = ranks[i];
+        for (var key in data_in_geo) {
+            data_in_geo[key]["rank"] = ranks[i];
             i++;
         }
         
@@ -1015,12 +1072,14 @@
 
         // Add to orignal node
         var i = 0;
-        for (var key in uhf_data) {
-            uhf_data[key]["rankper"] = ranksPer[i];
+        for (var key in data_in_geo) {
+            data_in_geo[key]["rankper"] = ranksPer[i];
             i++;
         }
+
+        console.log("data_in_geo", data_in_geo);
         
-        return uhf_data;
+        return data_in_geo;
         
     }
     
@@ -1032,19 +1091,19 @@
     // I added a bunch of logic so that the Race and Ethnicity indicator is exported 
     //  in the format that the portal is expecting (i.e., race group as measure).
 
-    function DrawTable(uhf_data, to_geo, year, indicator) {
+    function DrawTable(data_in_geo, to_geo, year, indicator, category) {
 
         // table only clears when hit_api is called, so looping through race indicators just keeps appending rows. 
         //  export functions take data from the html table, so everything works.
         
-        for (var key in uhf_data) {
+        for (var key in data_in_geo) {
 
             var keyArray = key.split(',');
             // cd devide logic
 
             for (var i = 0; i < keyArray.length; i++) {
                 
-                var temp_OL = uhf_data[key];
+                var temp_OL = data_in_geo[key];
                 var row = $('<tr>');
 
                 //---------------------------------------------------//
@@ -1053,12 +1112,17 @@
                 
                 // if race indicator, don't print number
 
-                if (!indicator.startsWith("Percent")) {
+                if (category !== "race_vars") {
 
                     if (indicator === "Total Population (Race)") {
                         
                         row.append($('<td>').text("Race and Ethnicity"));               // IndicatorName
                         row.append($('<td>').text(indicator.replace(" \(Race\)", ""))); // MeasureType
+                        
+                    } else if (category === "transportation") {
+                        
+                        row.append($('<td>').text("Means of Transportation to Work"));  // IndicatorName
+                        row.append($('<td>').text("Number: " + indicator));   // MeasureType
                         
                     } else {
                         
@@ -1118,15 +1182,20 @@
                     // if this is a race indicator, replace "Percent" with the indicator name, and replace 
                     //  the indicator name with "Race and Ethnicity"
 
-                    if (indicator.startsWith("Percent")) {
+                    if (category === "race_vars") {
                         
-                        row.append($('<td>').text("Race and Ethnicity"));   // IndicatorName
-                        row.append($('<td>').text(indicator));   // MeasureType
+                        row.append($('<td>').text("Race and Ethnicity"));  // IndicatorName
+                        row.append($('<td>').text(indicator));             // MeasureType
                                 
-                    } else if (indicator.startsWith("Crowding")) {
+                    } else if (category === "transportation") {
 
-                        row.append($('<td>').text(indicator));   // IndicatorName
-                        row.append($('<td>').text('Percent of Households'));   // MeasureType
+                        row.append($('<td>').text("Means of Transportation to Work"));  // IndicatorName
+                        row.append($('<td>').text("Percent: " + indicator));            // MeasureType
+                                
+                    } else if (category === "crowding") {
+
+                        row.append($('<td>').text(indicator));                // IndicatorName
+                        row.append($('<td>').text('Percent of Households'));  // MeasureType
 
                     } else {
 
@@ -1134,19 +1203,19 @@
                         row.append($('<td>').text('Percent'));   // MeasureType
                     }
 
-                    row.append($('<td>').text(to_geo));      // GeoType
-                    row.append($('<td>').text(keyArray[i])); // GeoEntity
-                    row.append($('<td>').text((year - 4) + '-' + (year - 2000))); // TimePeriod
+                    row.append($('<td>').text(to_geo));       // GeoType
+                    row.append($('<td>').text(keyArray[i]));  // GeoEntity
+                    row.append($('<td>').text((year - 4) + '-' + (year - 2000)));  // TimePeriod
                     
                     if (!isNaN(test_ind)) {
-                        row.append($('<td>').text(test_ind)); // DataValue
+                        row.append($('<td>').text(test_ind));  // DataValue
                     }
                     else {
-                        row.append($('<td>').text(0)); // DataValue
+                        row.append($('<td>').text(0));  // DataValue
                     }
                     
-                    row.append($('<td>').text('0')); // UnreliabilityFlag
-                    row.append($('<td>').text(''));  // ConfidenceInterval
+                    row.append($('<td>').text('0'));  // UnreliabilityFlag
+                    row.append($('<td>').text(''));   // ConfidenceInterval
                     
                     $('#tab_loc table').append(row);
 
