@@ -29,6 +29,7 @@
         <select id='year_options'>
 
             <!-- add new years here -->
+            <option value="2021">2017-2021</option>
             <option value="2020">2016-2020</option>
             <option value="2019">2015-2019</option>
             <option value="2018">2014-2018</option>
@@ -362,26 +363,80 @@
 
     var transportation = [
     {
-        indicator: "Car, truck, or van", table: "MEANS OF TRANSPORTATION TO WORK", source: 'acs/acs5', category: "transportation",
+        indicator: "Car, truck, van, or taxi", table: "MEANS OF TRANSPORTATION TO WORK", source: 'acs/acs5', category: "transportation",
         time_period: [
         {
             min: 2010, 
-            max: 2020,
+            max: 2021,
             variables: [
-            { name: "B08301_002E", label: "Estimate!!Total!!Car, truck, or van", type: "num" },
+            { name: "B08301_002E", label: "Estimate!!Total!!Car, truck, or van:", type: "num" },
+            { name: "B08301_016E", label: "Estimate!!Total!!Taxicab", type: "num" },
             { name: "B08301_001E", label: "Estimate!!Total", type: "denom" }
             ]
         }
         ]
     },
     {
-        indicator: "Public transportation", table: "MEANS OF TRANSPORTATION TO WORK", source: 'acs/acs5', category: "transportation",
+        indicator: "Bus", table: "MEANS OF TRANSPORTATION TO WORK", source: 'acs/acs5', category: "transportation",
         time_period: [
         {
             min: 2010, 
-            max: 2020,
+            max: 2021,
             variables: [
-            { name: "B08301_010E", label: "Estimate!!Total!!Public transportation (excluding taxicab)", type: "num" },
+            { name: "B08301_011E", label: "Estimate!!Total!!Bus", type: "num" },
+            { name: "B08301_001E", label: "Estimate!!Total", type: "denom" }
+            ]
+        }
+        ]
+    },
+    {
+        indicator: "Subway or light rail", table: "MEANS OF TRANSPORTATION TO WORK", source: 'acs/acs5', category: "transportation",
+        time_period: [
+        {
+            min: 2010, 
+            max: 2021,
+            variables: [
+            { name: "B08301_012E", label: "Estimate!!Total!!Subway or elevated rail", type: "num" },
+            { name: "B08301_014E", label: "Estimate!!Total!!Light rail, streetcar or trolley (carro publico in Puerto Rico)", type: "num" },
+            { name: "B08301_001E", label: "Estimate!!Total", type: "denom" }
+            ]
+        }
+        ]
+    },
+    {
+        indicator: "Commuter rail", table: "MEANS OF TRANSPORTATION TO WORK", source: 'acs/acs5', category: "transportation",
+        time_period: [
+        {
+            min: 2010, 
+            max: 2021,
+            variables: [
+            { name: "B08301_013E", label: "Estimate!!Total!!Long-distance train or commuter rail", type: "num" },
+            { name: "B08301_001E", label: "Estimate!!Total", type: "denom" }
+            ]
+        }
+        ]
+    },
+    {
+        indicator: "Ferry", table: "MEANS OF TRANSPORTATION TO WORK", source: 'acs/acs5', category: "transportation",
+        time_period: [
+        {
+            min: 2010, 
+            max: 2021,
+            variables: [
+            { name: "B08301_015E", label: "Estimate!!Total!!Ferryboat", type: "num" },
+            { name: "B08301_001E", label: "Estimate!!Total", type: "denom" }
+            ]
+        }
+        ]
+    },
+    {
+        indicator: "Motorcycle", table: "MEANS OF TRANSPORTATION TO WORK", source: 'acs/acs5', category: "transportation",
+        time_period: [
+        {
+            min: 2010, 
+            max: 2021,
+            variables: [
+            { name: "B08301_017E", label: "Estimate!!Total!!Motorcycle", type: "num" },
             { name: "B08301_001E", label: "Estimate!!Total", type: "denom" }
             ]
         }
@@ -392,7 +447,7 @@
         time_period: [
         {
             min: 2010, 
-            max: 2020,
+            max: 2021,
             variables: [
             { name: "B08301_018E", label: "Estimate!!Total!!Bicycle", type: "num" },
             { name: "B08301_001E", label: "Estimate!!Total", type: "denom" }
@@ -405,10 +460,101 @@
         time_period: [
         {
             min: 2010, 
-            max: 2020,
+            max: 2021,
             variables: [
             { name: "B08301_019E", label: "Estimate!!Total!!Walked", type: "num" }, 
             { name: "B08301_001E", label: "Estimate!!Total", type: "denom" }
+            ]
+        }
+        ]
+    },
+    ]
+
+    //---------------------------------------------------------------------------//
+    // Commute Times (from Commuting Characteristics by Sex)
+    //---------------------------------------------------------------------------//
+
+    // ***something maybe missing because of total/male/female column names in table; also check category*** //
+
+    var commute_times = [
+    {
+        indicator: "Under 15 minutes", table: "COMMUTING CHARACTERISTICS BY SEX", source: 'acs/acs5', category: "commute_times",
+        time_period: [
+        {
+            min: 2010, 
+            max: 2021,
+            variables: [
+            { name: "S0801_C01_037E", label: "Estimate!!Total!!Workers 16 years and over!!TRAVEL TIME TO WORK!!Less than 10 minutes", type: "num" }, 
+            { name: "S0801_C01_038E", label: "Estimate!!Total!!Workers 16 years and over!!TRAVEL TIME TO WORK!!10 to 14 minutes", type: "num" }, 
+            { name: "S0801_C01_001E", label: "Estimate!!Total!!Workers 16 years and over", type: "denom" }
+            ]
+        }
+        ]
+    },
+    {
+        indicator: "15-29 minutes", table: "COMMUTING CHARACTERISTICS BY SEX", source: 'acs/acs5', category: "commute_times",
+        time_period: [
+        {
+            min: 2010, 
+            max: 2021,
+            variables: [
+            { name: "S0801_C01_039E", label: "Estimate!!Total!!Workers 16 years and over!!TRAVEL TIME TO WORK!!15 to 19 minutes", type: "num" }, 
+            { name: "S0801_C01_040E", label: "Estimate!!Total!!Workers 16 years and over!!TRAVEL TIME TO WORK!!20 to 24 minutes", type: "num" }, 
+            { name: "S0801_C01_041E", label: "Estimate!!Total!!Workers 16 years and over!!TRAVEL TIME TO WORK!!25 to 29 minutes", type: "num" }, 
+            { name: "S0801_C01_001E", label: "Estimate!!Total!!Workers 16 years and over", type: "denom" }
+            ]
+        }
+        ]
+    },
+    {
+        indicator: "30-44 minutes", table: "COMMUTING CHARACTERISTICS BY SEX", source: 'acs/acs5', category: "commute_times",
+        time_period: [
+        {
+            min: 2010, 
+            max: 2021,
+            variables: [
+            { name: "S0801_C01_042E", label: "Estimate!!Total!!Workers 16 years and over!!TRAVEL TIME TO WORK!!30 to 34 minutes", type: "num" }, 
+            { name: "S0801_C01_043E", label: "Estimate!!Total!!Workers 16 years and over!!TRAVEL TIME TO WORK!!35 to 44 minutes", type: "num" },  
+            { name: "S0801_C01_001E", label: "Estimate!!Total!!Workers 16 years and over", type: "denom" }
+            ]
+        }
+        ]
+    },
+    {
+        indicator: "45-59 minutes", table: "COMMUTING CHARACTERISTICS BY SEX", source: 'acs/acs5', category: "commute_times",
+        time_period: [
+        {
+            min: 2010, 
+            max: 2021,
+            variables: [
+            { name: "S0801_C01_044E", label: "Estimate!!Total!!Workers 16 years and over!!TRAVEL TIME TO WORK!!45 to 59 minutes", type: "num" },  
+            { name: "S0801_C01_001E", label: "Estimate!!Total!!Workers 16 years and over", type: "denom" }
+            ]
+        }
+        ]
+    },
+    {
+        indicator: "1 hours or longer", table: "COMMUTING CHARACTERISTICS BY SEX", source: 'acs/acs5', category: "commute_times",
+        time_period: [
+        {
+            min: 2010, 
+            max: 2021,
+            variables: [
+            { name: "S0801_C01_045E", label: "Estimate!!Total!!Workers 16 years and over!!TRAVEL TIME TO WORK!!60 or more minutes", type: "num" },  
+            { name: "S0801_C01_001E", label: "Estimate!!Total!!Workers 16 years and over", type: "denom" }
+            ]
+        }
+        ]
+    },
+    {
+        indicator: "Mean commute time", table: "COMMUTING CHARACTERISTICS BY SEX", source: 'acs/acs5', category: "commute_times",
+        time_period: [
+        {
+            min: 2010, 
+            max: 2021,
+            variables: [
+            { name: "S0801_C01_046E", label: "Estimate!!Total!!Workers 16 years and over!!TRAVEL TIME TO WORK!!Mean travel time to work (minutes)", type: "num" }, 
+            { name: "S0801_C01_001E", label: "Estimate!!Total!!Workers 16 years and over", type: "denom" }
             ]
         }
         ]
@@ -699,6 +845,10 @@
         else if (census_param[i_val].category === "transportation") {
         
             transportation.forEach(indicator => hit_api(indicator, y_val));
+        }
+        else if (census_param[i_val].category === "commute_times") {
+
+            commute_times.forEach(indicator => hit_api(indicator, y_val));
         }
         else {
             
