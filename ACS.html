@@ -81,10 +81,10 @@
 
     var census_param = [
     {
-        indicator: "Race and Ethnicity", category: "race_vars"
+        indicator: "Race and ethnicity", category: "race_vars"
     },
     {
-        indicator: "Total Population", table: "TOTAL POPULATION", source: 'acs/acs5', category: "population",
+        indicator: "Total population", table: "TOTAL POPULATION", source: 'acs/acs5', category: "population",
         time_period: [
         {
             min: 2010, 
@@ -108,7 +108,7 @@
         ]
     }, 
     {
-        indicator: "Poverty", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY SEX BY AGE", source: 'acs/acs5', category: "poverty",
+        indicator: "Neighborhood poverty", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY SEX BY AGE", source: 'acs/acs5', category: "poverty",
         time_period: [
         {
             min: 2010, 
@@ -133,7 +133,7 @@
     //     ]
     // },
     {
-        indicator: "Children Under 5 years old in Poverty", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY SEX BY AGE", source: 'acs/acs5', category: "under_5_poverty",
+        indicator: "Child poverty (under age 5)", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY SEX BY AGE", source: 'acs/acs5', category: "under_5_poverty",
         time_period: [
         {
             min: 2010, 
@@ -162,7 +162,7 @@
         ]
     },
     {
-        indicator: "Rent Burdened Households", table: "GROSS RENT AS A PERCENTAGE OF HOUSEHOLD INCOME IN THE PAST 12 MONTHS", source: 'acs/acs5', category: "rent",
+        indicator: "Rent-burdened households", table: "GROSS RENT AS A PERCENTAGE OF HOUSEHOLD INCOME IN THE PAST 12 MONTHS", source: 'acs/acs5', category: "rent",
         time_period: [
         {
             min: 2010, 
@@ -178,7 +178,7 @@
         ]
     },
     // {
-    //     indicator: "Older Adults Living Alone", table: "LIVING ARRANGEMENTS OF ADULTS 18 YEARS AND OVER BY AGE", source: 'acs/acs5', 
+    //     indicator: "Older adults living alone", table: "LIVING ARRANGEMENTS OF ADULTS 18 YEARS AND OVER BY AGE", source: 'acs/acs5', 
     //     time_period: [
     //     {
     //         min: 2015, 
@@ -191,7 +191,7 @@
     //     ]
     // },
     {
-        indicator: "Older Adults Living Alone", table: "Relationship by Household Type (Including Living Alone) for the Population 65 Years and Over", source: 'acs/acs5', category: "living_alone",
+        indicator: "Older adults living alone", table: "Relationship by Household Type (Including Living Alone) for the Population 65 Years and Over", source: 'acs/acs5', category: "living_alone",
         time_period: [
         {
             min: 2010, 
@@ -214,7 +214,7 @@
         ]
     },
     {
-        indicator: "Pre-1950 Homes", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5', category: "1950_homes",
+        indicator: "Very old homes", table: "YEAR STRUCTURE BUILT", source: 'acs/acs5', category: "1950_homes",
         time_period: [
         {
             min: 2010, 
@@ -237,7 +237,7 @@
         ]
     },
     {
-        indicator: "Owner-Occupied Homes", table: "SELECTED HOUSING CHARACTERISTICS", source: 'acs/acs5/profile', category: "owner_occupied",
+        indicator: "Owner-occupied homes", table: "SELECTED HOUSING CHARACTERISTICS", source: 'acs/acs5/profile', category: "owner_occupied",
         time_period: [
         {
             min: 2010, 
@@ -258,7 +258,7 @@
         ]
     },
     {
-        indicator: "Foreign-Born", table: "SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES", source: 'acs/acs5/profile', category: "foreign_born",
+        indicator: "Foreign-born", table: "SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES", source: 'acs/acs5/profile', category: "foreign_born",
         time_period: [
         {
             min: 2010, 
@@ -279,7 +279,7 @@
         ]
     },
     {
-        indicator: "Crowding (> 1 person/room)", table: "SELECTED HOUSING CHARACTERISTICS", source: 'acs/acs5/profile', category: "crowding",
+        indicator: "Household crowding", table: "SELECTED HOUSING CHARACTERISTICS", source: 'acs/acs5/profile', category: "crowding",
         time_period: [
         {
             min: 2010, 
@@ -302,7 +302,7 @@
         ]
     },
     {
-        indicator: "High School Graduation", table: "SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES", source: 'acs/acs5/profile', category: "high_school",
+        indicator: "Graduated high school", table: "SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES", source: 'acs/acs5/profile', category: "high_school",
         time_period: [
         {
             min: 2010, 
@@ -352,7 +352,7 @@
         ]
     },
     {
-        indicator: "Means of Transportation to Work", category: "transportation"
+        indicator: "Means of transportation to work", category: "transportation"
     },
     ];
     
@@ -431,7 +431,7 @@
     
     var race_vars = [
     {
-        indicator: "Percent Hispanic Alone", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile', category: "race_vars",
+        indicator: "Hispanic alone (percent)", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile', category: "race_vars",
         time_period: [
         {
             min: 2010, 
@@ -452,7 +452,7 @@
         ]
     },
     {
-        indicator: "Percent White Alone", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile', category: "race_vars",
+        indicator: "White alone (percent)", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile', category: "race_vars",
         time_period: [
         {
             min: 2010, 
@@ -473,7 +473,7 @@
         ]
     },
     {
-        indicator: "Percent Black Alone", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile', category: "race_vars",
+        indicator: "Black alone (percent)", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile', category: "race_vars",
         time_period: [
         {
             min: 2010, 
@@ -494,7 +494,7 @@
         ]
     },
     {
-        indicator: "Percent Asian Alone", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile', category: "race_vars",
+        indicator: "Asian alone (percent)", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile', category: "race_vars",
         time_period: [
         {
             min: 2010, 
@@ -515,7 +515,7 @@
         ]
     },
     {
-        indicator: "Percent Non-White", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile', category: "race_vars",
+        indicator: "Non-white (percent)", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile', category: "race_vars",
         time_period: [
         {
             min: 2010, 
@@ -536,7 +536,7 @@
         ]
     },
     {
-        indicator: "Total Population (Race)", table: "TOTAL POPULATION", source: 'acs/acs5',  category: "race_vars",
+        indicator: "Total population (race)", table: "TOTAL POPULATION", source: 'acs/acs5',  category: "race_vars",
         time_period: [
         {
             min: 2010, 
@@ -691,7 +691,7 @@
 
         console.log("census_param[i_val]", census_param[i_val]);
 
-        // if this is the Race and Ethnicity indicator, or the transportation indicator, loop through the constituent indicators
+        // if this is the Race and ethnicity indicator, or the transportation indicator, loop through the constituent indicators
 
         if (census_param[i_val].category === "race_vars") {
         
@@ -977,7 +977,7 @@
     // populate_stats
     //---------------------------------------------------------------------------//
     
-    // I added a bunch of logic so that the Race and Ethnicity indicator is exported 
+    // I added a bunch of logic so that the Race and ethnicity indicator is exported 
     //  in the format that the portal is expecting (i.e., race group as measure).
     
     function populate_stats(data_in_geo, indicator, category) {
@@ -1005,9 +1005,9 @@
 
             var temp_OL = data_in_geo[key];
 
-            // rename indicator to Race and Ethnicity, remove "Number", replace "Percent" with "Percent [race indicator]""
+            // rename indicator to Race and ethnicity, remove "Number", replace "Percent" with "Percent [race indicator]""
 
-            if (indicator == "Children Under 5 years old in Poverty") {
+            if (indicator == "Child poverty (under age 5)") {
 
                 var test_ind = d3.format(".2f")(100 * (temp_OL["num"] / (temp_OL["denom2"] + temp_OL["num"])));
 
@@ -1018,7 +1018,7 @@
                     dataPercent.push(0);
                 }
             }
-            else if (indicator === "Percent Non-White") {
+            else if (indicator === "Non-white (percent)") {
                 
                 // literally total population minus white-alone
                 var test_ind = d3.format(".2f")(100 * ((temp_OL["denom"] - temp_OL["num"]) / temp_OL["denom"]));
@@ -1030,7 +1030,7 @@
                     dataPercent.push(0);
                 }
             }
-            else if (indicator === "Total Population" || indicator === "Poverty TOTAL" || indicator === "Housing Units") {
+            else if (indicator === "Total population" || indicator === "Poverty TOTAL" || indicator === "Housing Units") {
 
                 // don't push anything to dataPercent, b/c only num matters
 
@@ -1106,7 +1106,7 @@
     // DrawTable
     //---------------------------------------------------------------------------//
 
-    // I added a bunch of logic so that the Race and Ethnicity indicator is exported 
+    // I added a bunch of logic so that the Race and ethnicity indicator is exported 
     //  in the format that the portal is expecting (i.e., race group as measure).
 
     function DrawTable(data_in_geo, to_geo, year, indicator, category) {
@@ -1132,14 +1132,14 @@
 
                 if (category !== "race_vars") {
 
-                    if (indicator === "Total Population (Race)") {
+                    if (indicator === "Total population (race)") {
                         
-                        row.append($('<td>').text("Race and Ethnicity"));               // IndicatorName
+                        row.append($('<td>').text("Race and ethnicity"));               // IndicatorName
                         row.append($('<td>').text(indicator.replace(" \(Race\)", ""))); // MeasureType
                         
                     } else if (category === "transportation") {
                         
-                        row.append($('<td>').text("Means of Transportation to Work"));  // IndicatorName
+                        row.append($('<td>').text("Means of transportation to work"));  // IndicatorName
                         row.append($('<td>').text("Number: " + indicator));   // MeasureType
                         
                     } else {
@@ -1164,17 +1164,17 @@
                 // might be able to replace these duplicated calculations by declaring a `test_ind` var inside of `parse_json`. would be available to
                 //  later functions.
                 
-                if (indicator === "Children Under 5 years old in Poverty") {
+                if (indicator === "Child poverty (under age 5)") {
                     
                     var test_ind = d3.format(".2f")(100 * (temp_OL["num"] / (temp_OL["denom2"] + temp_OL["num"])));
                     
                 }
-                else if (indicator === "Percent Non-White") {
+                else if (indicator === "Non-white (percent)") {
                     
                     // literally total population minus white-alone
                     var test_ind = d3.format(".2f")(100 * ((temp_OL["denom"] - temp_OL["num"]) / temp_OL["denom"]));
                 }
-                else if (indicator === "Total Population" || indicator === "Poverty TOTAL" || indicator === "Housing Units") {
+                else if (indicator === "Total population" || indicator === "Poverty TOTAL" || indicator === "Housing Units") {
 
                     // don't do anything b/c num already displayed
                     // var test_ind = null;
@@ -1195,26 +1195,21 @@
 
                 // if indicator is a total, don't show percent (aka, if indicator isn't a total, show percent)
 
-                if (!indicator.startsWith("Total Population") && indicator !== "Poverty TOTAL" && indicator !== "Housing Units") {
+                if (!indicator.startsWith("Total population") && indicator !== "Poverty TOTAL" && indicator !== "Housing Units") {
                     
                     // if this is a race indicator, replace "Percent" with the indicator name, and replace 
-                    //  the indicator name with "Race and Ethnicity"
+                    //  the indicator name with "Race and ethnicity"
 
                     if (category === "race_vars") {
                         
-                        row.append($('<td>').text("Race and Ethnicity"));  // IndicatorName
+                        row.append($('<td>').text("Race and ethnicity"));  // IndicatorName
                         row.append($('<td>').text(indicator));             // MeasureType
-                                
+                        
                     } else if (category === "transportation") {
 
-                        row.append($('<td>').text("Means of Transportation to Work"));  // IndicatorName
+                        row.append($('<td>').text("Means of transportation to work"));  // IndicatorName
                         row.append($('<td>').text("Percent: " + indicator));            // MeasureType
-                                
-                    } else if (category === "crowding") {
-
-                        row.append($('<td>').text(indicator));                // IndicatorName
-                        row.append($('<td>').text('Percent of Households'));  // MeasureType
-
+                        
                     } else {
 
                         row.append($('<td>').text(indicator));   // IndicatorName
