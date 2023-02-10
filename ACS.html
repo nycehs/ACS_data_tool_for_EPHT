@@ -642,7 +642,7 @@
                     "Subboro",
                     "UHF42",
                     "CD",
-                    "NTA"
+                    "NTA2010"
                 ],
                 GeoType_order: [
                     1, 2, 3, 4, 5, 6
@@ -858,11 +858,11 @@
             fetch_rt(puma_path).then(res => res.json()).then(puma_json => parse_json(census_var, indicator, category, year, puma_json, "public use microdata area", 'PUMA', 'Subboro', puma2subboro)),
             fetch_rt(zcta_path).then(res => res.json()).then(zcta_json => parse_json(census_var, indicator, category, year, zcta_json, "zip code tabulation area", 'ZCTA', 'UHF42', zcta2UHF)),
             fetch_rt(puma_path_cd).then(res => res.json()).then(cd_json => parse_json(census_var, indicator, category, year, cd_json, "public use microdata area", 'PUMA', 'CD', puma2subboro)),
-            fetch_rt(nta_pathBX).then(res => res.json()).then(BX_nta_json => parse_json(census_var, indicator, category, year, BX_nta_json, "tract", 'TRACT', 'NTA', tractToNTABX)),
-            fetch_rt(nta_pathBK).then(res => res.json()).then(BK_nta_json => parse_json(census_var, indicator, category, year, BK_nta_json, "tract", 'TRACT', 'NTA', tractToNTABK)),
-            fetch_rt(nta_pathMN).then(res => res.json()).then(MN_nta_json => parse_json(census_var, indicator, category, year, MN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAMN)),
-            fetch_rt(nta_pathQN).then(res => res.json()).then(QN_nta_json => parse_json(census_var, indicator, category, year, QN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAQN)),
-            fetch_rt(nta_pathSI).then(res => res.json()).then(SI_nta_json => parse_json(census_var, indicator, category, year, SI_nta_json, "tract", 'TRACT', 'NTA', tractToNTASI))
+            fetch_rt(nta_pathBX).then(res => res.json()).then(BX_nta_json => parse_json(census_var, indicator, category, year, BX_nta_json, "tract", 'TRACT', 'NTA2010', tractToNTABX)),
+            fetch_rt(nta_pathBK).then(res => res.json()).then(BK_nta_json => parse_json(census_var, indicator, category, year, BK_nta_json, "tract", 'TRACT', 'NTA2010', tractToNTABK)),
+            fetch_rt(nta_pathMN).then(res => res.json()).then(MN_nta_json => parse_json(census_var, indicator, category, year, MN_nta_json, "tract", 'TRACT', 'NTA2010', tractToNTAMN)),
+            fetch_rt(nta_pathQN).then(res => res.json()).then(QN_nta_json => parse_json(census_var, indicator, category, year, QN_nta_json, "tract", 'TRACT', 'NTA2010', tractToNTAQN)),
+            fetch_rt(nta_pathSI).then(res => res.json()).then(SI_nta_json => parse_json(census_var, indicator, category, year, SI_nta_json, "tract", 'TRACT', 'NTA2010', tractToNTASI))
         ])
 
         // turn into arquero table, etc., and replace original html table
