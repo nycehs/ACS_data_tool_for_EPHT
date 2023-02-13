@@ -580,7 +580,7 @@
         const id = setTimeout(() => controller.abort(), timeout);
         const response = await fetch(resource, {
             ...options,
-            signal: controller.signal  
+            signal: controller.signal
         });
         clearTimeout(id);
         return response;
@@ -642,10 +642,11 @@
                     "Subboro",
                     "UHF42",
                     "CD",
-                    "NTA"
+                    "NTA2010",
+                    "NTA2020"
                 ],
                 GeoType_order: [
-                    1, 2, 3, 4, 5, 6
+                    1, 2, 3, 4, 5, 6, 7
                 ]
             })
 
@@ -795,50 +796,107 @@
         }
         puma_path_cd += "&for=public+use+microdata+area:" + pumacd.toString() + "&in=state:36";
         
-        // ---- BX ---- //
 
-        var ntaBX = $.map(tractToNTABX, function (n, i) { return n.TRACT; });
-        var nta_pathBX = this_url + "key=" + my_key + "&get=";
-        for (i = 0; i < census_var.length; ++i) {
-            nta_pathBX += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
-        }
-        nta_pathBX += "&for=tract:" + ntaBX.toString() + "&in=state:36+county:005";
-        
-        // ---- BK ---- //
+        // switching apths depneding on year, to get NTA 2020
 
-        var ntaBK = $.map(tractToNTABK, function (n, i) { return n.TRACT; });
-        var nta_pathBK = this_url + "key=" + my_key + "&get=";
-        for (i = 0; i < census_var.length; ++i) {
-            nta_pathBK += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
+        if (year < 2020) {
+            
+            // ---- BX ---- //
+            
+            var nta2010BX = $.map(tractToNTA2010BX, function (n, i) { return n.TRACT; });
+            var nta2010_pathBX = this_url + "key=" + my_key + "&get=";
+            for (i = 0; i < census_var.length; ++i) {
+                nta2010_pathBX += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
+            }
+            nta2010_pathBX += "&for=tract:" + nta2010BX.toString() + "&in=state:36+county:005";
+            
+            // ---- BK ---- //
+            
+            var nta2010BK = $.map(tractToNTA2010BK, function (n, i) { return n.TRACT; });
+            var nta2010_pathBK = this_url + "key=" + my_key + "&get=";
+            for (i = 0; i < census_var.length; ++i) {
+                nta2010_pathBK += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
+            }
+            nta2010_pathBK += "&for=tract:" + nta2010BK.toString() + "&in=state:36+county:047";
+            
+            // ---- MN ---- //
+            
+            var nta2010MN = $.map(tractToNTA2010MN, function (n, i) { return n.TRACT; });
+            var nta2010_pathMN = this_url + "key=" + my_key + "&get=";
+            for (i = 0; i < census_var.length; ++i) {
+                nta2010_pathMN += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
+            }
+            nta2010_pathMN += "&for=tract:" + nta2010MN.toString() + "&in=state:36+county:061";
+            
+            // ---- QN ---- //
+            
+            var nta2010QN = $.map(tractToNTA2010QN, function (n, i) { return n.TRACT; });
+            var nta2010_pathQN = this_url + "key=" + my_key + "&get=";
+            for (i = 0; i < census_var.length; ++i) {
+                nta2010_pathQN += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
+            }
+            nta2010_pathQN += "&for=tract:" + nta2010QN.toString() + "&in=state:36+county:081";
+            
+            // ---- SI ---- //
+            
+            var nta2010SI = $.map(tractToNTA2010SI, function (n, i) { return n.TRACT; });
+            var nta2010_pathSI = this_url + "key=" + my_key + "&get=";
+            for (i = 0; i < census_var.length; ++i) {
+                nta2010_pathSI += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
+            }
+            nta2010_pathSI += "&for=tract:" + nta2010SI.toString() + "&in=state:36+county:085";
+            
         }
-        nta_pathBK += "&for=tract:" + ntaBK.toString() + "&in=state:36+county:047";
         
-        // ---- MN ---- //
-
-        var ntaMN = $.map(tractToNTAMN, function (n, i) { return n.TRACT; });
-        var nta_pathMN = this_url + "key=" + my_key + "&get=";
-        for (i = 0; i < census_var.length; ++i) {
-            nta_pathMN += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
+        
+        if (year >= 2020) {
+            
+            // ---- BX ---- //
+            
+            var nta2020BX = $.map(tractToNTA2020BX, function (n, i) { return n.TRACT; });
+            var nta_pathBX = this_url + "key=" + my_key + "&get=";
+            for (i = 0; i < census_var.length; ++i) {
+                nta_pathBX += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
+            }
+            nta_pathBX += "&for=tract:" + nta2020BX.toString() + "&in=state:36+county:005";
+            
+            // ---- BK ---- //
+            
+            var nta2020BK = $.map(tractToNTA2020BK, function (n, i) { return n.TRACT; });
+            var nta_pathBK = this_url + "key=" + my_key + "&get=";
+            for (i = 0; i < census_var.length; ++i) {
+                nta_pathBK += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
+            }
+            nta_pathBK += "&for=tract:" + nta2020BK.toString() + "&in=state:36+county:047";
+            
+            // ---- MN ---- //
+            
+            var nta2020MN = $.map(tractToNTA2020MN, function (n, i) { return n.TRACT; });
+            var nta_pathMN = this_url + "key=" + my_key + "&get=";
+            for (i = 0; i < census_var.length; ++i) {
+                nta_pathMN += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
+            }
+            nta_pathMN += "&for=tract:" + nta2020MN.toString() + "&in=state:36+county:061";
+            
+            // ---- QN ---- //
+            
+            var nta2020QN = $.map(tractToNTA2020QN, function (n, i) { return n.TRACT; });
+            var nta_pathQN = this_url + "key=" + my_key + "&get=";
+            for (i = 0; i < census_var.length; ++i) {
+                nta_pathQN += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
+            }
+            nta_pathQN += "&for=tract:" + nta2020QN.toString() + "&in=state:36+county:081";
+            
+            // ---- SI ---- //
+            
+            var nta2020SI = $.map(tractToNTA2020SI, function (n, i) { return n.TRACT; });
+            var nta_pathSI = this_url + "key=" + my_key + "&get=";
+            for (i = 0; i < census_var.length; ++i) {
+                nta_pathSI += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
+            }
+            nta_pathSI += "&for=tract:" + nta2020SI.toString() + "&in=state:36+county:085";
+            
         }
-        nta_pathMN += "&for=tract:" + ntaMN.toString() + "&in=state:36+county:061";
-        
-        // ---- QN ---- //
-
-        var ntaQN = $.map(tractToNTAQN, function (n, i) { return n.TRACT; });
-        var nta_pathQN = this_url + "key=" + my_key + "&get=";
-        for (i = 0; i < census_var.length; ++i) {
-            nta_pathQN += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
-        }
-        nta_pathQN += "&for=tract:" + ntaQN.toString() + "&in=state:36+county:081";
-        
-        // ---- SI ---- //
-        
-        var ntaSI = $.map(tractToNTASI, function (n, i) { return n.TRACT; });
-        var nta_pathSI = this_url + "key=" + my_key + "&get=";
-        for (i = 0; i < census_var.length; ++i) {
-            nta_pathSI += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
-        }
-        nta_pathSI += "&for=tract:" + ntaSI.toString() + "&in=state:36+county:085";
         
         
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
@@ -858,11 +916,11 @@
             fetch_rt(puma_path).then(res => res.json()).then(puma_json => parse_json(census_var, indicator, category, year, puma_json, "public use microdata area", 'PUMA', 'Subboro', puma2subboro)),
             fetch_rt(zcta_path).then(res => res.json()).then(zcta_json => parse_json(census_var, indicator, category, year, zcta_json, "zip code tabulation area", 'ZCTA', 'UHF42', zcta2UHF)),
             fetch_rt(puma_path_cd).then(res => res.json()).then(cd_json => parse_json(census_var, indicator, category, year, cd_json, "public use microdata area", 'PUMA', 'CD', puma2subboro)),
-            fetch_rt(nta_pathBX).then(res => res.json()).then(BX_nta_json => parse_json(census_var, indicator, category, year, BX_nta_json, "tract", 'TRACT', 'NTA', tractToNTABX)),
-            fetch_rt(nta_pathBK).then(res => res.json()).then(BK_nta_json => parse_json(census_var, indicator, category, year, BK_nta_json, "tract", 'TRACT', 'NTA', tractToNTABK)),
-            fetch_rt(nta_pathMN).then(res => res.json()).then(MN_nta_json => parse_json(census_var, indicator, category, year, MN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAMN)),
-            fetch_rt(nta_pathQN).then(res => res.json()).then(QN_nta_json => parse_json(census_var, indicator, category, year, QN_nta_json, "tract", 'TRACT', 'NTA', tractToNTAQN)),
-            fetch_rt(nta_pathSI).then(res => res.json()).then(SI_nta_json => parse_json(census_var, indicator, category, year, SI_nta_json, "tract", 'TRACT', 'NTA', tractToNTASI))
+            fetch_rt(nta_pathBX).then(res => res.json()).then(BX_nta_json => parse_json(census_var, indicator, category, year, BX_nta_json, "tract", 'TRACT', year < 2020 ? 'NTA2010' : 'NTA2020', year < 2020 ? tractToNTA2010BX : tractToNTA2020BX)),
+            fetch_rt(nta_pathBK).then(res => res.json()).then(BK_nta_json => parse_json(census_var, indicator, category, year, BK_nta_json, "tract", 'TRACT', year < 2020 ? 'NTA2010' : 'NTA2020', year < 2020 ? tractToNTA2010BK : tractToNTA2020BK)),
+            fetch_rt(nta_pathMN).then(res => res.json()).then(MN_nta_json => parse_json(census_var, indicator, category, year, MN_nta_json, "tract", 'TRACT', year < 2020 ? 'NTA2010' : 'NTA2020', year < 2020 ? tractToNTA2010MN : tractToNTA2020MN)),
+            fetch_rt(nta_pathQN).then(res => res.json()).then(QN_nta_json => parse_json(census_var, indicator, category, year, QN_nta_json, "tract", 'TRACT', year < 2020 ? 'NTA2010' : 'NTA2020', year < 2020 ? tractToNTA2010QN : tractToNTA2020QN)),
+            fetch_rt(nta_pathSI).then(res => res.json()).then(SI_nta_json => parse_json(census_var, indicator, category, year, SI_nta_json, "tract", 'TRACT', year < 2020 ? 'NTA2010' : 'NTA2020', year < 2020 ? tractToNTA2010SI : tractToNTA2020SI))
         ])
 
         // turn into arquero table, etc., and replace original html table
