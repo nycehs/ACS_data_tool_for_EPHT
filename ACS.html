@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -924,7 +924,6 @@
             fetch_rt(nta_pathMN).then(res => res.json()).then(MN_nta_json => parse_json(census_var, indicator, category, year, MN_nta_json, "tract", 'TRACT', `${year < 2020 ? 'NTA2010' : 'NTA2020'}`, year < 2020 ? tractToNTA2010MN : tractToNTA2020MN)),
             fetch_rt(nta_pathQN).then(res => res.json()).then(QN_nta_json => parse_json(census_var, indicator, category, year, QN_nta_json, "tract", 'TRACT', `${year < 2020 ? 'NTA2010' : 'NTA2020'}`, year < 2020 ? tractToNTA2010QN : tractToNTA2020QN)),
             fetch_rt(nta_pathSI).then(res => res.json()).then(SI_nta_json => parse_json(census_var, indicator, category, year, SI_nta_json, "tract", 'TRACT', `${year < 2020 ? 'NTA2010' : 'NTA2020'}`, year < 2020 ? tractToNTA2010SI : tractToNTA2020SI))
-        ])
 
         // turn into arquero table, etc., and replace original html table
         
