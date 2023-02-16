@@ -3574,8 +3574,16 @@ var tractToNTA2020BX = [
 ];
 
 
+var tractToNTA2020BX_2 = 
+    tractToNTA2020BX.slice().concat(
+      [{ TRACT: "030900", NTA2020: "BX0802" }]
+)
+
+console.log("tractToNTA2020BX", tractToNTA2020BX);
+console.log("tractToNTA2020BX_2", tractToNTA2020BX_2);
+
 var tractToNTA2020MN = [
-  { TRACT: "030900", NTA2020: "BX0802" },
+  // { TRACT: "030900", NTA2020: "BX0802" },
   { TRACT: "000700", NTA2020: "MN0101" },
   { TRACT: "000900", NTA2020: "MN0101" },
   { TRACT: "001300", NTA2020: "MN0101" },

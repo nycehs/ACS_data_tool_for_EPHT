@@ -862,6 +862,14 @@
                 nta_pathBX += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
             }
             nta_pathBX += "&for=tract:" + nta2020BX.toString() + "&in=state:36+county:005";
+
+            // handling the part of the bronx that is actually in manhattan (or vise versa)
+
+            var nta_BX0802 = this_url + "key=" + my_key + "&get=";
+            for (i = 0; i < census_var.length; ++i) {
+                nta_BX0802 += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
+            }
+            nta_BX0802 += "&for=tract:030900&in=state:36+county:061";
             
             // ---- BK ---- //
             
@@ -919,7 +927,43 @@
             fetch_rt(puma_path).then(res => res.json()).then(puma_json => parse_json(census_var, indicator, category, year, puma_json, "public use microdata area", 'PUMA', 'Subboro', puma2subboro)),
             fetch_rt(zcta_path).then(res => res.json()).then(zcta_json => parse_json(census_var, indicator, category, year, zcta_json, "zip code tabulation area", 'ZCTA', 'UHF42', zcta2UHF)),
             fetch_rt(puma_path_cd).then(res => res.json()).then(cd_json => parse_json(census_var, indicator, category, year, cd_json, "public use microdata area", 'PUMA', 'CD', puma2subboro)),
-            fetch_rt(nta_pathBX).then(res => res.json()).then(BX_nta_json => parse_json(census_var, indicator, category, year, BX_nta_json, "tract", 'TRACT', `${year < 2020 ? 'NTA2010' : 'NTA2020'}`, year < 2020 ? tractToNTA2010BX : tractToNTA2020BX)),
+
+            fetch_rt(nta_pathBX)
+                .then(res => {
+
+                    let json = res.json();
+                    // let json2;
+                    
+                    console.log(">>>> 1. json", json);
+                    // return json;
+
+                    return fetch_rt(nta_BX0802)
+                        .then(res2 => {
+
+                            console.log(">>>> 2. json", json);
+                            return res2.json();
+
+                        })
+                        .then(j2 => {
+
+                            console.log(">>>> 3. json", json);
+                            console.log(">>>> j2", j2);
+
+                            // json2 = j2;
+
+                            return json.then(j1 => j1.concat([j2[1]]));
+                        })
+                        .then(x => {
+                            console.log(">>>> x", x);
+                            return x;
+                        })
+
+                    console.log(">>>> 4. json", json);
+
+                    // return json.concat(json2);
+
+                }).then(BX_nta_json => parse_json(census_var, indicator, category, year, BX_nta_json, "tract", 'TRACT', `${year < 2020 ? 'NTA2010' : 'NTA2020'}`, year < 2020 ? tractToNTA2010BX : tractToNTA2020BX_2)),
+
             fetch_rt(nta_pathBK).then(res => res.json()).then(BK_nta_json => parse_json(census_var, indicator, category, year, BK_nta_json, "tract", 'TRACT', `${year < 2020 ? 'NTA2010' : 'NTA2020'}`, year < 2020 ? tractToNTA2010BK : tractToNTA2020BK)),
             fetch_rt(nta_pathMN).then(res => res.json()).then(MN_nta_json => parse_json(census_var, indicator, category, year, MN_nta_json, "tract", 'TRACT', `${year < 2020 ? 'NTA2010' : 'NTA2020'}`, year < 2020 ? tractToNTA2010MN : tractToNTA2020MN)),
             fetch_rt(nta_pathQN).then(res => res.json()).then(QN_nta_json => parse_json(census_var, indicator, category, year, QN_nta_json, "tract", 'TRACT', `${year < 2020 ? 'NTA2010' : 'NTA2020'}`, year < 2020 ? tractToNTA2010QN : tractToNTA2020QN)),
