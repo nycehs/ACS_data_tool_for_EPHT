@@ -936,55 +936,75 @@
         // "await Promise.all" will pause execution of "hit_api" until all the downloading and parsing is complete, which 
         //  allows for the whole table to be constructed before converting it into an array and then into an Arquero table
         //  with "make_arq_table"
-        
-        await Promise.all([
-            fetch_rt(county_path).then(res => res.json()).then(city_json => parse_json(census_var, indicator, category, year, city_json, "county", 'county', 'Citywide', county2boro)),
-            fetch_rt(county_path).then(res => res.json()).then(county_json => parse_json(census_var, indicator, category, year, county_json, "county", 'county', 'Borough', county2boro)),
-            fetch_rt(puma_path).then(res => res.json()).then(puma_json => parse_json(census_var, indicator, category, year, puma_json, "public use microdata area", 'PUMA', 'Subboro', puma2subboro)),
-            fetch_rt(zcta_path).then(res => res.json()).then(zcta_json => parse_json(census_var, indicator, category, year, zcta_json, "zip code tabulation area", 'ZCTA', 'UHF42', zcta2UHF)),
-            fetch_rt(puma_path_cd).then(res => res.json()).then(cd_json => parse_json(census_var, indicator, category, year, cd_json, "public use microdata area", 'PUMA', 'CD', puma2subboro)),
 
-            fetch_rt(nta_pathBX)
-                .then(res => {
+        if (year < 2020) {
+            
+            await Promise.all([
+                fetch_rt(county_path).then(res => res.json()).then(city_json => parse_json(census_var, indicator, category, year, city_json, "county", 'county', 'Citywide', county2boro)),
+                fetch_rt(county_path).then(res => res.json()).then(county_json => parse_json(census_var, indicator, category, year, county_json, "county", 'county', 'Borough', county2boro)),
+                fetch_rt(puma_path).then(res => res.json()).then(puma_json => parse_json(census_var, indicator, category, year, puma_json, "public use microdata area", 'PUMA', 'Subboro', puma2subboro)),
+                fetch_rt(zcta_path).then(res => res.json()).then(zcta_json => parse_json(census_var, indicator, category, year, zcta_json, "zip code tabulation area", 'ZCTA', 'UHF42', zcta2UHF)),
+                fetch_rt(puma_path_cd).then(res => res.json()).then(cd_json => parse_json(census_var, indicator, category, year, cd_json, "public use microdata area", 'PUMA', 'CD', puma2subboro)),
+                fetch_rt(puma_path_cd).then(res => res.json()).then(cd_json => parse_json(census_var, indicator, category, year, cd_json, "public use microdata area", 'PUMA', 'CD', puma2subboro)),
+                fetch_rt(nta_pathBX).then(res => res.json()).then(BX_nta_json => parse_json(census_var, indicator, category, year, BX_nta_json, "tract", 'TRACT', 'NTA2010', tractToNTA2010BX)),
+                fetch_rt(nta_pathBK).then(res => res.json()).then(BK_nta_json => parse_json(census_var, indicator, category, year, BK_nta_json, "tract", 'TRACT', 'NTA2010', tractToNTA2010BK)),
+                fetch_rt(nta_pathMN).then(res => res.json()).then(MN_nta_json => parse_json(census_var, indicator, category, year, MN_nta_json, "tract", 'TRACT', 'NTA2010', tractToNTA2010MN)),
+                fetch_rt(nta_pathQN).then(res => res.json()).then(QN_nta_json => parse_json(census_var, indicator, category, year, QN_nta_json, "tract", 'TRACT', 'NTA2010', tractToNTA2010QN)),
+                fetch_rt(nta_pathSI).then(res => res.json()).then(SI_nta_json => parse_json(census_var, indicator, category, year, SI_nta_json, "tract", 'TRACT', 'NTA2010', tractToNTA2010SI))
+            ])
+        }
 
-                    let json = res.json();
-                    // let json2;
-                    
-                    console.log(">>>> 1. json", json);
-                    // return json;
+        if (year >= 2020) {
+            
+            await Promise.all([
+                fetch_rt(county_path).then(res => res.json()).then(city_json => parse_json(census_var, indicator, category, year, city_json, "county", 'county', 'Citywide', county2boro)),
+                fetch_rt(county_path).then(res => res.json()).then(county_json => parse_json(census_var, indicator, category, year, county_json, "county", 'county', 'Borough', county2boro)),
+                fetch_rt(puma_path).then(res => res.json()).then(puma_json => parse_json(census_var, indicator, category, year, puma_json, "public use microdata area", 'PUMA', 'Subboro', puma2subboro)),
+                fetch_rt(zcta_path).then(res => res.json()).then(zcta_json => parse_json(census_var, indicator, category, year, zcta_json, "zip code tabulation area", 'ZCTA', 'UHF42', zcta2UHF)),
+                fetch_rt(puma_path_cd).then(res => res.json()).then(cd_json => parse_json(census_var, indicator, category, year, cd_json, "public use microdata area", 'PUMA', 'CD', puma2subboro)),
 
-                    return fetch_rt(nta_BX0802)
-                        .then(res2 => {
+                fetch_rt(nta_pathBX)
+                    .then(res => {
 
-                            console.log(">>>> 2. json", json);
-                            return res2.json();
+                        let json = res.json();
+                        // let json2;
+                        
+                        console.log(">>>> 1. json", json);
+                        // return json;
 
-                        })
-                        .then(j2 => {
+                        return fetch_rt(nta_BX0802)
+                            .then(res2 => {
 
-                            console.log(">>>> 3. json", json);
-                            console.log(">>>> j2", j2);
+                                console.log(">>>> 2. json", json);
+                                return res2.json();
 
-                            // json2 = j2;
+                            })
+                            .then(j2 => {
 
-                            return json.then(j1 => j1.concat([j2[1]]));
-                        })
-                        .then(x => {
-                            console.log(">>>> x", x);
-                            return x;
-                        })
+                                console.log(">>>> 3. json", json);
+                                console.log(">>>> j2", j2);
 
-                    console.log(">>>> 4. json", json);
+                                // json2 = j2;
 
-                    // return json.concat(json2);
+                                return json.then(j1 => j1.concat([j2[1]]));
+                            })
+                            .then(x => {
+                                console.log(">>>> x", x);
+                                return x;
+                            })
 
-                }).then(BX_nta_json => parse_json(census_var, indicator, category, year, BX_nta_json, "tract", 'TRACT', `${year < 2020 ? 'NTA2010' : 'NTA2020'}`, year < 2020 ? tractToNTA2010BX : tractToNTA2020BX_2)),
+                        console.log(">>>> 4. json", json);
 
-            fetch_rt(nta_pathBK).then(res => res.json()).then(BK_nta_json => parse_json(census_var, indicator, category, year, BK_nta_json, "tract", 'TRACT', `${year < 2020 ? 'NTA2010' : 'NTA2020'}`, year < 2020 ? tractToNTA2010BK : tractToNTA2020BK)),
-            fetch_rt(nta_pathMN).then(res => res.json()).then(MN_nta_json => parse_json(census_var, indicator, category, year, MN_nta_json, "tract", 'TRACT', `${year < 2020 ? 'NTA2010' : 'NTA2020'}`, year < 2020 ? tractToNTA2010MN : tractToNTA2020MN)),
-            fetch_rt(nta_pathQN).then(res => res.json()).then(QN_nta_json => parse_json(census_var, indicator, category, year, QN_nta_json, "tract", 'TRACT', `${year < 2020 ? 'NTA2010' : 'NTA2020'}`, year < 2020 ? tractToNTA2010QN : tractToNTA2020QN)),
-            fetch_rt(nta_pathSI).then(res => res.json()).then(SI_nta_json => parse_json(census_var, indicator, category, year, SI_nta_json, "tract", 'TRACT', `${year < 2020 ? 'NTA2010' : 'NTA2020'}`, year < 2020 ? tractToNTA2010SI : tractToNTA2020SI))
-    ])
+                        // return json.concat(json2);
+
+                    }).then(BX_nta_json => parse_json(census_var, indicator, category, year, BX_nta_json, "tract", 'TRACT', 'NTA2020', tractToNTA2020BX_2)),
+
+                fetch_rt(nta_pathBK).then(res => res.json()).then(BK_nta_json => parse_json(census_var, indicator, category, year, BK_nta_json, "tract", 'TRACT', 'NTA2020', tractToNTA2020BK)),
+                fetch_rt(nta_pathMN).then(res => res.json()).then(MN_nta_json => parse_json(census_var, indicator, category, year, MN_nta_json, "tract", 'TRACT', 'NTA2020', tractToNTA2020MN)),
+                fetch_rt(nta_pathQN).then(res => res.json()).then(QN_nta_json => parse_json(census_var, indicator, category, year, QN_nta_json, "tract", 'TRACT', 'NTA2020', tractToNTA2020QN)),
+                fetch_rt(nta_pathSI).then(res => res.json()).then(SI_nta_json => parse_json(census_var, indicator, category, year, SI_nta_json, "tract", 'TRACT', 'NTA2020', tractToNTA2020SI))
+            ])
+        }
         // turn into arquero table, etc., and replace original html table
         
         make_arq_table();
