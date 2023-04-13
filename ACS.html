@@ -1160,7 +1160,7 @@
             fetch_rt(puma_path_cd).then(res => res.json()).then(cd_json => parse_json(census_var, indicator, category, year, cd_json, "public use microdata area", 'PUMA', 'CD', puma2subboro)),
 
             fetch_rt(cdta_pathBK).then(res => res.json()).then(BK_cdta_json => parse_json(census_var, indicator, category, year, BK_cdta_json, "tract", 'TRACT', 'CDTA', tractToCDTABK)),
-            fetch_rt(cdta_pathBX).then(res => res.json()).then(BX_cdta_json => parse_json(census_var, indicator, category, year, Bx_cdta_json, "tract", 'TRACT', 'CDTA', tractToCDTABX)),
+            fetch_rt(cdta_pathBX).then(res => res.json()).then(BX_cdta_json => parse_json(census_var, indicator, category, year, BX_cdta_json, "tract", 'TRACT', 'CDTA', tractToCDTABX)),
             fetch_rt(cdta_pathMN).then(res => res.json()).then(MN_cdta_json => parse_json(census_var, indicator, category, year, MN_cdta_json, "tract", 'TRACT', 'CDTA', tractToCDTAMN)),
             fetch_rt(cdta_pathQN).then(res => res.json()).then(QN_cdta_json => parse_json(census_var, indicator, category, year, QN_cdta_json, "tract", 'TRACT', 'CDTA', tractToCDTAQN)),
             fetch_rt(cdta_pathSI).then(res => res.json()).then(SI_cdta_json => parse_json(census_var, indicator, category, year, SI_cdta_json, "tract", 'TRACT', 'CDTA', tractToCDTASI))
