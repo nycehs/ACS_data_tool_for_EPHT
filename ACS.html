@@ -658,12 +658,12 @@
                     "Subboro",
                     "UHF42",
                     "CD",
-                    "CDTA",
+                    "CDTA2020",
                     "NTA2010",
                     "NTA2020"
                 ],
                 GeoType_order: [
-                    1, 2, 3, 4, 5, 6, 7
+                    1, 2, 3, 4, 5, 6, 7, 8
                 ]
             })
 
@@ -928,25 +928,25 @@
 
          // ---- BX ---- //
             
-         var cdtaBX = $.map(tractToCDTABX, function (n, i) { return n.TRACT; });
+         var cdta2020BX = $.map(tractToCDTA2020BX, function (n, i) { return n.TRACT; });
         var cdta_pathBX = this_url + "key=" + my_key + "&get=";
         for (i = 0; i < census_var.length; ++i) {
             cdta_pathBX += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
-        cdta_pathBX += "&for=tract:" + cdtaBX.toString() + "&in=state:36+county:005";
+        cdta_pathBX += "&for=tract:" + cdta2020BX.toString() + "&in=state:36+county:005";
             
         // ---- BK ---- //
             
-        var cdtaBK = $.map(tractToCDTABK, function (n, i) { return n.TRACT; });
+        var cdta2020BK = $.map(tractToCDTA2020BK, function (n, i) { return n.TRACT; });
         var cdta_pathBK = this_url + "key=" + my_key + "&get=";
         for (i = 0; i < census_var.length; ++i) {
             cdta_pathBK += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
-        cdta_pathBK += "&for=tract:" + cdtaBK.toString() + "&in=state:36+county:047";
+        cdta_pathBK += "&for=tract:" + cdta2020BK.toString() + "&in=state:36+county:047";
             
         // ---- MN ---- //
             
-        var cdta2020MN = $.map(tractToCDTAMN, function (n, i) { return n.TRACT; });
+        var cdta2020MN = $.map(tractToCDTA2020MN, function (n, i) { return n.TRACT; });
         var cdta_pathMN = this_url + "key=" + my_key + "&get=";
         for (i = 0; i < census_var.length; ++i) {
             cdta_pathMN += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
@@ -955,21 +955,21 @@
             
         // ---- QN ---- //
             
-        var cdtaQN = $.map(tractToCDTAQN, function (n, i) { return n.TRACT; });
+        var cdta2020QN = $.map(tractToCDTA2020QN, function (n, i) { return n.TRACT; });
         var cdta_pathQN = this_url + "key=" + my_key + "&get=";
         for (i = 0; i < census_var.length; ++i) {
             cdta_pathQN += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
-        cdta_pathQN += "&for=tract:" + cdtaQN.toString() + "&in=state:36+county:081";
+        cdta_pathQN += "&for=tract:" + cdta2020QN.toString() + "&in=state:36+county:081";
             
         // ---- SI ---- //
             
-        var cdtaSI = $.map(tractToCDTASI, function (n, i) { return n.TRACT; });
+        var cdta2020SI = $.map(tractToCDTA2020SI, function (n, i) { return n.TRACT; });
         var cdta_pathSI = this_url + "key=" + my_key + "&get=";
         for (i = 0; i < census_var.length; ++i) {
             cdta_pathSI += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
         }
-        cdta_pathSI += "&for=tract:" + cdtaSI.toString() + "&in=state:36+county:085";
+        cdta_pathSI += "&for=tract:" + cdta2020SI.toString() + "&in=state:36+county:085";
         
         
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
@@ -992,11 +992,6 @@
                 fetch_rt(zcta_path).then(res => res.json()).then(zcta_json => parse_json(census_var, indicator, category, year, zcta_json, "zip code tabulation area", 'ZCTA', 'UHF42', zcta2UHF)),
                 fetch_rt(puma_path_cd).then(res => res.json()).then(cd_json => parse_json(census_var, indicator, category, year, cd_json, "public use microdata area", 'PUMA', 'CD', puma2subboro)),
                 fetch_rt(puma_path_cd).then(res => res.json()).then(cd_json => parse_json(census_var, indicator, category, year, cd_json, "public use microdata area", 'PUMA', 'CD', puma2subboro)),
-                fetch_rt(cdta_pathBX).then(res => res.json()).then(BX_cdta_json => parse_json(census_var, indicator, category, year, BX_cdta_json, "tract", 'TRACT', 'CDTA', tractToCDTABX)),
-                fetch_rt(cdta_pathBK).then(res => res.json()).then(BK_cdta_json => parse_json(census_var, indicator, category, year, BK_cdta_json, "tract", 'TRACT', 'CDTA', tractToCDTABK)),
-                fetch_rt(cdta_pathMN).then(res => res.json()).then(MN_cdta_json => parse_json(census_var, indicator, category, year, MN_cdta_json, "tract", 'TRACT', 'CDTA', tractToCDTAMN)),
-                fetch_rt(cdta_pathQN).then(res => res.json()).then(QN_cdta_json => parse_json(census_var, indicator, category, year, QN_cdta_json, "tract", 'TRACT', 'CDTA', tractToCDTAQN)),
-                fetch_rt(cdta_pathSI).then(res => res.json()).then(SI_cdta_json => parse_json(census_var, indicator, category, year, SI_cdta_json, "tract", 'TRACT', 'CDTA', tractToCDTASI)),
                 fetch_rt(nta_pathBX).then(res => res.json()).then(BX_nta_json => parse_json(census_var, indicator, category, year, BX_nta_json, "tract", 'TRACT', 'NTA2010', tractToNTA2010BX)),
                 fetch_rt(nta_pathBK).then(res => res.json()).then(BK_nta_json => parse_json(census_var, indicator, category, year, BK_nta_json, "tract", 'TRACT', 'NTA2010', tractToNTA2010BK)),
                 fetch_rt(nta_pathMN).then(res => res.json()).then(MN_nta_json => parse_json(census_var, indicator, category, year, MN_nta_json, "tract", 'TRACT', 'NTA2010', tractToNTA2010MN)),
@@ -1014,11 +1009,11 @@
                 fetch_rt(zcta_path).then(res => res.json()).then(zcta_json => parse_json(census_var, indicator, category, year, zcta_json, "zip code tabulation area", 'ZCTA', 'UHF42', zcta2UHF)),
                 fetch_rt(puma_path_cd).then(res => res.json()).then(cd_json => parse_json(census_var, indicator, category, year, cd_json, "public use microdata area", 'PUMA', 'CD', puma2subboro)),
 
-                fetch_rt(cdta_pathBX).then(res => res.json()).then(BX_cdta_json => parse_json(census_var, indicator, category, year, BX_cdta_json, "tract", 'TRACT', 'CDTA', tractToCDTABX)),
-                fetch_rt(cdta_pathBK).then(res => res.json()).then(BK_cdta_json => parse_json(census_var, indicator, category, year, BK_cdta_json, "tract", 'TRACT', 'CDTA', tractToCDTABK)),
-                fetch_rt(cdta_pathMN).then(res => res.json()).then(MN_cdta_json => parse_json(census_var, indicator, category, year, MN_cdta_json, "tract", 'TRACT', 'CDTA', tractToCDTAMN)),
-                fetch_rt(cdta_pathQN).then(res => res.json()).then(QN_cdta_json => parse_json(census_var, indicator, category, year, QN_cdta_json, "tract", 'TRACT', 'CDTA', tractToCDTAQN)),
-                fetch_rt(cdta_pathSI).then(res => res.json()).then(SI_cdta_json => parse_json(census_var, indicator, category, year, SI_cdta_json, "tract", 'TRACT', 'CDTA', tractToCDTASI)),
+                fetch_rt(cdta_pathBX).then(res => res.json()).then(BX_cdta_json => parse_json(census_var, indicator, category, year, BX_cdta_json, "tract", 'TRACT', 'CDTA2020', tractToCDTA2020BX)),
+                fetch_rt(cdta_pathBK).then(res => res.json()).then(BK_cdta_json => parse_json(census_var, indicator, category, year, BK_cdta_json, "tract", 'TRACT', 'CDTA2020', tractToCDTA2020BK)),
+                fetch_rt(cdta_pathMN).then(res => res.json()).then(MN_cdta_json => parse_json(census_var, indicator, category, year, MN_cdta_json, "tract", 'TRACT', 'CDTA2020', tractToCDTA2020MN)),
+                fetch_rt(cdta_pathQN).then(res => res.json()).then(QN_cdta_json => parse_json(census_var, indicator, category, year, QN_cdta_json, "tract", 'TRACT', 'CDTA2020', tractToCDTA2020QN)),
+                fetch_rt(cdta_pathSI).then(res => res.json()).then(SI_cdta_json => parse_json(census_var, indicator, category, year, SI_cdta_json, "tract", 'TRACT', 'CDTA2020', tractToCDTA2020SI)),
 
                 fetch_rt(nta_pathBX)
                     .then(res => {
