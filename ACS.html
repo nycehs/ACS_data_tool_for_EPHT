@@ -108,6 +108,18 @@
         ]
     }, 
     {
+        indicator: "Household income", table: "MEDIAN HOUSEHOLD INCOME IN THE PAST 12 MONTHS", source: 'acs/acs5', category: "income",
+        time_period: [
+        {
+            min: 2010, 
+            max: 2021,
+            variables: [
+            { name: "B19013_001E", label: "Estimate!!Median household income in the past 12 months", type: "num" }
+            ]
+        }
+        ]
+    }, 
+    {
         indicator: "Neighborhood poverty", table: "POVERTY STATUS IN THE PAST 12 MONTHS BY SEX BY AGE", source: 'acs/acs5', category: "poverty",
         time_period: [
         {
@@ -695,6 +707,17 @@
         
     }
 
+    //---------------------------------------------------------------------------//
+    // array of number-only indicators
+    //---------------------------------------------------------------------------//
+
+    let num_only = [
+        "Total population",
+        "Poverty TOTAL",
+        "Housing Units",
+        "Household income"
+    ]
+    
     //===========================================================================//
     // main data functions
     //===========================================================================//
@@ -1058,7 +1081,7 @@
 
             for (var key in p) {
 
-                // all data arrary will itrate
+                // all data arrary will iterate
                 if (p.hasOwnProperty(key)) {
 
                     // only take table values
@@ -1169,7 +1192,8 @@
                     dataPercent.push(0);
                 }
             }
-            else if (indicator === "Total population" || indicator === "Poverty TOTAL" || indicator === "Housing Units") {
+            // else if (indicator === "Total population" || indicator === "Poverty TOTAL" || indicator === "Housing Units" || indicator === "Household income") {
+            else if (num_only.includes(indicator)) {
 
                 // don't push anything to dataPercent, b/c only num matters
 
@@ -1315,7 +1339,8 @@
                     // literally total population minus white-alone
                     var test_ind = d3.format(".2f")(100 * ((temp_OL["denom"] - temp_OL["num"]) / temp_OL["denom"]));
                 }
-                else if (indicator === "Total population" || indicator === "Poverty TOTAL" || indicator === "Housing Units") {
+                // else if (indicator === "Total population" || indicator === "Poverty TOTAL" || indicator === "Housing Units") {
+                else if (num_only.includes(indicator)) {
 
                     // don't do anything b/c num already displayed
                     // var test_ind = null;
@@ -1336,7 +1361,8 @@
 
                 // if indicator is a total, don't show percent (aka, if indicator isn't a total, show percent)
 
-                if (!indicator.startsWith("Total population") && indicator !== "Poverty TOTAL" && indicator !== "Housing Units") {
+                // if (!indicator.startsWith("Total population") && indicator !== "Poverty TOTAL" && indicator !== "Housing Units") {
+                if (!num_only.includes(indicator)) {
                     
                     // if this is a race indicator, replace "Percent" with the indicator name, and replace 
                     //  the indicator name with "Race and ethnicity"
