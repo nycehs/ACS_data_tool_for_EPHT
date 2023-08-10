@@ -90,7 +90,7 @@
             min: 2010, 
             max: 2021,
             variables: [
-            { name: "B01003_001E", label: "Estimate!!Total", type: "num" }
+                { name: "B01003_001E", label: "Estimate!!Total", type: "num" }
             ]
         }
         ]
@@ -102,7 +102,7 @@
             min: 2010, 
             max: 2021,
             variables: [
-            { name: "B25001_001E", label: "Estimate!!Total", type: "num" }
+                { name: "B25001_001E", label: "Estimate!!Total", type: "num" }
             ]
         }
         ]
@@ -114,7 +114,7 @@
             min: 2010, 
             max: 2021,
             variables: [
-            { name: "B19013_001E", label: "Estimate!!Median household income in the past 12 months", type: "num" }
+                { name: "B19013_001E", label: "Estimate!!Median household income in the past 12 months", type: "num" }
             ]
         }
         ]
@@ -126,8 +126,48 @@
             min: 2010, 
             max: 2021,
             variables: [
-            { name: "B17001_002E", label: "Estimate!!Total!!Income in the past 12 months below poverty level", type: "num" },
-            { name: "B17001_001E", label: "Estimate!!Total", type: "denom" }
+                { name: "B17001_002E", label: "Estimate!!Total!!Income in the past 12 months below poverty level", type: "num" },
+                { name: "B17001_001E", label: "Estimate!!Total", type: "denom" }
+            ]
+        }
+        ]
+    },
+    {
+        indicator: "Independent living difficulty (adults)", table: "DISABILITY CHARACTERISTICS", source: 'acs/acs5', category: "living",
+        time_period: [
+        {
+            min: 2010, 
+            max: 2021,
+            variables: [
+                { name: "B18107_004E", label: "Estimate!!Total:!!Male:!!18 to 34 years:!!With an independent living difficulty", type: "num" },
+                { name: "B18107_007E", label: "Estimate!!Total:!!Male:!!35 to 64 years:!!With an independent living difficulty", type: "num" },
+                { name: "B18107_010E", label: "Estimate!!Total:!!Male:!!65 to 74 years:!!With an independent living difficulty", type: "num" },
+                { name: "B18107_013E", label: "Estimate!!Total:!!Male:!!75 years and over:!!With an independent living difficulty", type: "num" },
+                { name: "B18107_017E", label: "Estimate!!Total:!!Female:!!18 to 34 years:!!With an independent living difficulty", type: "num" },
+                { name: "B18107_020E", label: "Estimate!!Total:!!Female:!!35 to 64 years:!!With an independent living difficulty", type: "num" },
+                { name: "B18107_023E", label: "Estimate!!Total:!!Female:!!65 to 74 years:!!With an independent living difficulty", type: "num" },
+                { name: "B18107_026E", label: "Estimate!!Total:!!Female:!!75 years and over:!!With an independent living difficulty", type: "num" },
+                { name: "B18107_001E", label: "Estimate!!Total:", type: "denom" }
+            ]
+        }
+        ]
+    },
+    {
+        indicator: "Ambulatory difficulty (adults)", table: "DISABILITY CHARACTERISTICS", source: 'acs/acs5', category: "living",
+        time_period: [
+        {
+            min: 2010, 
+            max: 2021,
+            variables: [
+                { name: "B18105_007E", label: "Estimate!!Total:!!Male:!!18 to 34 years:!!With an ambulatory difficulty", type: "num" },
+                { name: "B18105_010E", label: "Estimate!!Total:!!Male:!!35 to 64 years:!!With an ambulatory difficulty", type: "num" },
+                { name: "B18105_013E", label: "Estimate!!Total:!!Male:!!65 to 74 years:!!With an ambulatory difficulty", type: "num" },
+                { name: "B18105_016E", label: "Estimate!!Total:!!Male:!!75 years and over:!!With an ambulatory difficulty", type: "num" },
+                { name: "B18105_023E", label: "Estimate!!Total:!!Female:!!18 to 34 years:!!With an ambulatory difficulty", type: "num" },
+                { name: "B18105_026E", label: "Estimate!!Total:!!Female:!!35 to 64 years:!!With an ambulatory difficulty", type: "num" },
+                { name: "B18105_029E", label: "Estimate!!Total:!!Female:!!65 to 74 years:!!With an ambulatory difficulty", type: "num" },
+                { name: "B18105_032E", label: "Estimate!!Total:!!Female:!!75 years and over:!!With an ambulatory difficulty", type: "num" },
+                { name: "B18105_001E", label: "Estimate!!Total:", type: "denom" }
             ]
         }
         ]
@@ -151,11 +191,11 @@
             min: 2010, 
             max: 2021,
             variables: [
-            { name: "B17001_004E", label: "Estimate!!Total!!Income in the past 12 months below poverty level!!Male!!Under 5 years", type: "num" },
-            { name: "B17001_033E", label: "Estimate!!Total!!Income in the past 12 months at or above poverty level!!Male!!Under 5 years", type: "denom2" },
+                { name: "B17001_004E", label: "Estimate!!Total!!Income in the past 12 months below poverty level!!Male!!Under 5 years", type: "num" },
+                { name: "B17001_033E", label: "Estimate!!Total!!Income in the past 12 months at or above poverty level!!Male!!Under 5 years", type: "denom2" },
 
-            { name: "B17001_018E", label: "Estimate!!Total!!Income in the past 12 months below poverty level!!Female!!Under 5 years", type: "num" },
-            { name: "B17001_047E", label: "Estimate!!Total!!Income in the past 12 months at or above poverty level!!Female!!Under 5 years", type: "denom2" }
+                { name: "B17001_018E", label: "Estimate!!Total!!Income in the past 12 months below poverty level!!Female!!Under 5 years", type: "num" },
+                { name: "B17001_047E", label: "Estimate!!Total!!Income in the past 12 months at or above poverty level!!Female!!Under 5 years", type: "denom2" }
             ]
         }
         ]
@@ -167,8 +207,8 @@
             min: 2010, 
             max: 2021,
             variables: [
-            { name: "B23025_005E", label: "Estimate!!Total!!In labor force!!Civilian labor force!!Unemployed", type: "num" },
-            { name: "B23025_003E", label: "Estimate!!Total!!In labor force!!Civilian labor force", type: "denom" }
+                { name: "B23025_005E", label: "Estimate!!Total!!In labor force!!Civilian labor force!!Unemployed", type: "num" },
+                { name: "B23025_003E", label: "Estimate!!Total!!In labor force!!Civilian labor force", type: "denom" }
             ]
         }
         ]
@@ -180,11 +220,11 @@
             min: 2010, 
             max: 2021,
             variables: [
-            { name: "B25070_007E", label: "Estimate!!Total!!30.0 to 34.9 percent", type: "num" },
-            { name: "B25070_008E", label: "Estimate!!Total!!35.0 to 39.9 percent", type: "num" },
-            { name: "B25070_009E", label: "Estimate!!Total!!40.0 to 49.9 percent", type: "num" }, 
-            { name: "B25070_010E", label: "Estimate!!Total!!50.0 percent or more", type: "num" },
-            { name: "B25070_001E", label: "Estimate!!Total", type: "denom" }
+                { name: "B25070_007E", label: "Estimate!!Total!!30.0 to 34.9 percent", type: "num" },
+                { name: "B25070_008E", label: "Estimate!!Total!!35.0 to 39.9 percent", type: "num" },
+                { name: "B25070_009E", label: "Estimate!!Total!!40.0 to 49.9 percent", type: "num" }, 
+                { name: "B25070_010E", label: "Estimate!!Total!!50.0 percent or more", type: "num" },
+                { name: "B25070_001E", label: "Estimate!!Total", type: "denom" }
             ]
         }
         ]
@@ -196,8 +236,8 @@
     //         min: 2015, 
     //         max: 2021,
     //         variables: [
-    //         { name: "B09021_023E", label: "Estimate!!Total!!65 years and over!!Lives alone", type: "num" }, 
-    //         { name: "B09021_022E", label: "Estimate!!Total!!65 years and over", type: "denom" } 
+    //             { name: "B09021_023E", label: "Estimate!!Total!!65 years and over!!Lives alone", type: "num" }, 
+    //             { name: "B09021_022E", label: "Estimate!!Total!!65 years and over", type: "denom" } 
     //         ]
     //     }
     //     ]
@@ -209,18 +249,18 @@
             min: 2010, 
             max: 2011,
             variables: [
-            { name: "B09017_014E", label: "Estimate!!Total!!In households!!In nonfamily households!!Householder!!Male!!Living alone", type: "num" },
-            { name: "B09017_017E", label: "Estimate!!Total!!In households!!In nonfamily households!!Householder!!Female!!Living alone", type: "num" },
-            { name: "B09017_001E", label: "Estimate!!Total:", type: "denom" }
+                { name: "B09017_014E", label: "Estimate!!Total!!In households!!In nonfamily households!!Householder!!Male!!Living alone", type: "num" },
+                { name: "B09017_017E", label: "Estimate!!Total!!In households!!In nonfamily households!!Householder!!Female!!Living alone", type: "num" },
+                { name: "B09017_001E", label: "Estimate!!Total:", type: "denom" }
             ]
         },
         {
             min: 2012, 
             max: 2021,
             variables: [
-            { name: "B09020_015E", label: "Estimate!!Total!!In households!!In nonfamily households!!Householder!!Male!!Living alone", type: "num" },
-            { name: "B09020_018E", label: "Estimate!!Total!!In households!!In nonfamily households!!Householder!!Female!!Living alone", type: "num" },
-            { name: "B09020_001E", label: "Estimate!!Total", type: "denom" }
+                { name: "B09020_015E", label: "Estimate!!Total!!In households!!In nonfamily households!!Householder!!Male!!Living alone", type: "num" },
+                { name: "B09020_018E", label: "Estimate!!Total!!In households!!In nonfamily households!!Householder!!Female!!Living alone", type: "num" },
+                { name: "B09020_001E", label: "Estimate!!Total", type: "denom" }
             ]
         }
         ]
@@ -232,18 +272,18 @@
             min: 2010, 
             max: 2014,
             variables: [
-            { name: "B25034_010E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
-            { name: "B25034_009E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
-            { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
+                { name: "B25034_010E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
+                { name: "B25034_009E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
+                { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
             ]
         },
         {
             min: 2015, 
             max: 2021,
             variables: [
-            { name: "B25034_011E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
-            { name: "B25034_010E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
-            { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
+                { name: "B25034_011E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
+                { name: "B25034_010E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
+                { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
             ]
         }
         ]
@@ -255,16 +295,16 @@
             min: 2010, 
             max: 2014,
             variables: [
-            { name: "DP04_0045E", label: "Estimate!!HOUSING TENURE!!Occupied housing units!!Owner-occupied", type: "num" },
-            { name: "DP04_0044E", label: "Estimate!!HOUSING TENURE!!Occupied housing units", type: "denom" }
+                { name: "DP04_0045E", label: "Estimate!!HOUSING TENURE!!Occupied housing units!!Owner-occupied", type: "num" },
+                { name: "DP04_0044E", label: "Estimate!!HOUSING TENURE!!Occupied housing units", type: "denom" }
             ]
         },
         {
             min: 2015, 
             max: 2021,
             variables: [
-            { name: "DP04_0046E", label: "Estimate!!HOUSING TENURE!!Occupied housing units!!Owner-occupied", type: "num" },
-            { name: "DP04_0045E", label: "Estimate!!HOUSING TENURE!!Occupied housing units", type: "denom" }
+                { name: "DP04_0046E", label: "Estimate!!HOUSING TENURE!!Occupied housing units!!Owner-occupied", type: "num" },
+                { name: "DP04_0045E", label: "Estimate!!HOUSING TENURE!!Occupied housing units", type: "denom" }
             ]
         }
         ]
@@ -276,24 +316,24 @@
             min: 2010, 
             max: 2018,
             variables: [
-            { name: "DP02_0092E", label: "Estimate!!PLACE OF BIRTH!!Total population!!Foreign born", type: "num" },
-            { name: "DP02_0086E", label: "Estimate!!PLACE OF BIRTH!!Total population", type: "denom" }
+                { name: "DP02_0092E", label: "Estimate!!PLACE OF BIRTH!!Total population!!Foreign born", type: "num" },
+                { name: "DP02_0086E", label: "Estimate!!PLACE OF BIRTH!!Total population", type: "denom" }
             ]
         },
         {
             min: 2019, 
             max: 2019,
             variables: [
-            { name: "DP02_0093E", label: "Estimate!!PLACE OF BIRTH!!Total population!!Foreign born", type: "num" },
-            { name: "DP02_0087E", label: "Estimate!!PLACE OF BIRTH!!Total population", type: "denom" }
+                { name: "DP02_0093E", label: "Estimate!!PLACE OF BIRTH!!Total population!!Foreign born", type: "num" },
+                { name: "DP02_0087E", label: "Estimate!!PLACE OF BIRTH!!Total population", type: "denom" }
             ]
         },
         {
             min: 2020, 
             max: 2021,
             variables: [
-            { name: "DP02_0094E", label: "Estimate!!PLACE OF BIRTH!!Total population!!Foreign born", type: "num" },
-            { name: "DP02_0088E", label: "Estimate!!PLACE OF BIRTH!!Total population", type: "denom" }
+                { name: "DP02_0094E", label: "Estimate!!PLACE OF BIRTH!!Total population!!Foreign born", type: "num" },
+                { name: "DP02_0088E", label: "Estimate!!PLACE OF BIRTH!!Total population", type: "denom" }
             ]
         }
         ]
@@ -305,18 +345,18 @@
             min: 2010, 
             max: 2014,
             variables: [
-            { name: "DP04_0077E", label: "Estimate!!OCCUPANTS PER ROOM!!Occupied housing units!!1.01 to 1.50", type: "num" },
-            { name: "DP04_0078E", label: "Estimate!!OCCUPANTS PER ROOM!!Occupied housing units!!1.51 or more", type: "num" },
-            { name: "DP04_0075E", label: "Estimate!!OCCUPANTS PER ROOM!!Occupied housing units", type: "denom" }
+                { name: "DP04_0077E", label: "Estimate!!OCCUPANTS PER ROOM!!Occupied housing units!!1.01 to 1.50", type: "num" },
+                { name: "DP04_0078E", label: "Estimate!!OCCUPANTS PER ROOM!!Occupied housing units!!1.51 or more", type: "num" },
+                { name: "DP04_0075E", label: "Estimate!!OCCUPANTS PER ROOM!!Occupied housing units", type: "denom" }
             ]
         },
         {
             min: 2015, 
             max: 2021,
             variables: [
-            { name: "DP04_0078E", label: "Estimate!!OCCUPANTS PER ROOM!!Occupied housing units!!1.01 to 1.50", type: "num" },
-            { name: "DP04_0079E", label: "Estimate!!OCCUPANTS PER ROOM!!Occupied housing units!!1.51 or more", type: "num" },
-            { name: "DP04_0076E", label: "Estimate!!OCCUPANTS PER ROOM!!Occupied housing units", type: "denom" }
+                { name: "DP04_0078E", label: "Estimate!!OCCUPANTS PER ROOM!!Occupied housing units!!1.01 to 1.50", type: "num" },
+                { name: "DP04_0079E", label: "Estimate!!OCCUPANTS PER ROOM!!Occupied housing units!!1.51 or more", type: "num" },
+                { name: "DP04_0076E", label: "Estimate!!OCCUPANTS PER ROOM!!Occupied housing units", type: "denom" }
             ]
         }
         ]
@@ -328,24 +368,24 @@
             min: 2010, 
             max: 2018,
             variables: [
-            { name: "DP02_0061E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!High school graduate (includes equivalency)", type: "num" },
-            { name: "DP02_0062E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Some college no degree", type: "num" }, 
-            { name: "DP02_0063E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Associate's degree", type: "num" },
-            { name: "DP02_0064E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Bachelor's degree", type: "num" }, 
-            { name: "DP02_0065E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Graduate or professional degree", type: "num" },
-            { name: "DP02_0058E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over", type: "denom" }
+                { name: "DP02_0061E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!High school graduate (includes equivalency)", type: "num" },
+                { name: "DP02_0062E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Some college no degree", type: "num" }, 
+                { name: "DP02_0063E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Associate's degree", type: "num" },
+                { name: "DP02_0064E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Bachelor's degree", type: "num" }, 
+                { name: "DP02_0065E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Graduate or professional degree", type: "num" },
+                { name: "DP02_0058E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over", type: "denom" }
             ]
         },
         {
             min: 2019, 
             max: 2021,
             variables: [
-            { name: "DP02_0062E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!High school graduate (includes equivalency)", type: "num" },
-            { name: "DP02_0063E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Some college no degree", type: "num" }, 
-            { name: "DP02_0064E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Associate's degree", type: "num" },
-            { name: "DP02_0065E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Bachelor's degree", type: "num" }, 
-            { name: "DP02_0066E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Graduate or professional degree", type: "num" },
-            { name: "DP02_0059E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over", type: "denom" }
+                { name: "DP02_0062E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!High school graduate (includes equivalency)", type: "num" },
+                { name: "DP02_0063E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Some college no degree", type: "num" }, 
+                { name: "DP02_0064E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Associate's degree", type: "num" },
+                { name: "DP02_0065E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Bachelor's degree", type: "num" }, 
+                { name: "DP02_0066E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over!!Graduate or professional degree", type: "num" },
+                { name: "DP02_0059E", label: "Estimate!!EDUCATIONAL ATTAINMENT!!Population 25 years and over", type: "denom" }
             ]
         }
         ]
@@ -357,24 +397,24 @@
             min: 2010, 
             max: 2018,
             variables: [
-            { name: "DP02_0113E", label: "Estimate!!LANGUAGE SPOKEN AT HOME!!Population 5 years and over!!Language other than English!!Speak English less than 'very well'", type: "num" },
-            { name: "DP02_0110E", label: "Estimate!!LANGUAGE SPOKEN AT HOME!!Population 5 years and over", type: "denom" }
+                { name: "DP02_0113E", label: "Estimate!!LANGUAGE SPOKEN AT HOME!!Population 5 years and over!!Language other than English!!Speak English less than 'very well'", type: "num" },
+                { name: "DP02_0110E", label: "Estimate!!LANGUAGE SPOKEN AT HOME!!Population 5 years and over", type: "denom" }
             ]
         },
         {
             min: 2019, 
             max: 2019,
             variables: [
-            { name: "DP02_0114E", label: "Estimate!!LANGUAGE SPOKEN AT HOME!!Population 5 years and over!!Language other than English!!Speak English less than 'very well'", type: "num" },
-            { name: "DP02_0111E", label: "Estimate!!LANGUAGE SPOKEN AT HOME!!Population 5 years and over", type: "denom" }
+                { name: "DP02_0114E", label: "Estimate!!LANGUAGE SPOKEN AT HOME!!Population 5 years and over!!Language other than English!!Speak English less than 'very well'", type: "num" },
+                { name: "DP02_0111E", label: "Estimate!!LANGUAGE SPOKEN AT HOME!!Population 5 years and over", type: "denom" }
             ]
         },
         {
             min: 2020, 
             max: 2021,
             variables: [
-            { name: "DP02_0115E", label: "Estimate!!LANGUAGE SPOKEN AT HOME!!Population 5 years and over!!Language other than English!!Speak English less than 'very well'", type: "num" },
-            { name: "DP02_0112E", label: "Estimate!!LANGUAGE SPOKEN AT HOME!!Population 5 years and over", type: "denom" }
+                { name: "DP02_0115E", label: "Estimate!!LANGUAGE SPOKEN AT HOME!!Population 5 years and over!!Language other than English!!Speak English less than 'very well'", type: "num" },
+                { name: "DP02_0112E", label: "Estimate!!LANGUAGE SPOKEN AT HOME!!Population 5 years and over", type: "denom" }
             ]
         }
         ]
@@ -397,8 +437,8 @@
             min: 2010, 
             max: 2021,
             variables: [
-            { name: "B08301_002E", label: "Estimate!!Total!!Car, truck, or van", type: "num" },
-            { name: "B08301_001E", label: "Estimate!!Total", type: "denom" }
+                { name: "B08301_002E", label: "Estimate!!Total!!Car, truck, or van", type: "num" },
+                { name: "B08301_001E", label: "Estimate!!Total", type: "denom" }
             ]
         }
         ]
@@ -410,8 +450,8 @@
             min: 2010, 
             max: 2021,
             variables: [
-            { name: "B08301_010E", label: "Estimate!!Total!!Public transportation (excluding taxicab)", type: "num" },
-            { name: "B08301_001E", label: "Estimate!!Total", type: "denom" }
+                { name: "B08301_010E", label: "Estimate!!Total!!Public transportation (excluding taxicab)", type: "num" },
+                { name: "B08301_001E", label: "Estimate!!Total", type: "denom" }
             ]
         }
         ]
@@ -423,8 +463,8 @@
             min: 2010, 
             max: 2021,
             variables: [
-            { name: "B08301_018E", label: "Estimate!!Total!!Bicycle", type: "num" },
-            { name: "B08301_001E", label: "Estimate!!Total", type: "denom" }
+                { name: "B08301_018E", label: "Estimate!!Total!!Bicycle", type: "num" },
+                { name: "B08301_001E", label: "Estimate!!Total", type: "denom" }
             ]
         }
         ]
@@ -436,8 +476,8 @@
             min: 2010, 
             max: 2021,
             variables: [
-            { name: "B08301_019E", label: "Estimate!!Total!!Walked", type: "num" }, 
-            { name: "B08301_001E", label: "Estimate!!Total", type: "denom" }
+                { name: "B08301_019E", label: "Estimate!!Total!!Walked", type: "num" }, 
+                { name: "B08301_001E", label: "Estimate!!Total", type: "denom" }
             ]
         }
         ]
@@ -465,16 +505,16 @@
             min: 2010, 
             max: 2016,
             variables: [
-            { name: "DP05_0066E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Hispanic or Latino (of any race)", type: "num" },
-            { name: "DP05_0065E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
+                { name: "DP05_0066E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Hispanic or Latino (of any race)", type: "num" },
+                { name: "DP05_0065E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
             ]
         },
         {
             min: 2017, 
             max: 2021,
             variables: [
-            { name: "DP05_0071E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Hispanic or Latino (of any race)", type: "num" },
-            { name: "DP05_0070E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
+                { name: "DP05_0071E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Hispanic or Latino (of any race)", type: "num" },
+                { name: "DP05_0070E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
             ]
         }
         ]
@@ -486,16 +526,16 @@
             min: 2010, 
             max: 2016,
             variables: [
-            { name: "DP05_0072E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!White alone", type: "num" },
-            { name: "DP05_0065E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
+                { name: "DP05_0072E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!White alone", type: "num" },
+                { name: "DP05_0065E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
             ]
         },
         {
             min: 2017, 
             max: 2021,
             variables: [
-            { name: "DP05_0077E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!White alone", type: "num" },
-            { name: "DP05_0070E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
+                { name: "DP05_0077E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!White alone", type: "num" },
+                { name: "DP05_0070E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
             ]
         }
         ]
@@ -507,16 +547,16 @@
             min: 2010, 
             max: 2016,
             variables: [
-            { name: "DP05_0073E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!Black or African American alone", type: "num" },
-            { name: "DP05_0065E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
+                { name: "DP05_0073E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!Black or African American alone", type: "num" },
+                { name: "DP05_0065E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
             ]
         },
         {
             min: 2017, 
             max: 2021,
             variables: [
-            { name: "DP05_0078E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!Black or African American alone", type: "num" },
-            { name: "DP05_0070E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
+                { name: "DP05_0078E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!Black or African American alone", type: "num" },
+                { name: "DP05_0070E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
             ]
         }
         ]
@@ -528,16 +568,16 @@
             min: 2010, 
             max: 2016,
             variables: [
-            { name: "DP05_0075E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!Asian alone", type: "num" },
-            { name: "DP05_0065E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
+                { name: "DP05_0075E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!Asian alone", type: "num" },
+                { name: "DP05_0065E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
             ]
         },
         {
             min: 2017, 
             max: 2021,
             variables: [
-            { name: "DP05_0080E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!Asian alone", type: "num" },
-            { name: "DP05_0070E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
+                { name: "DP05_0080E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!Asian alone", type: "num" },
+                { name: "DP05_0070E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
             ]
         }
         ]
@@ -549,16 +589,16 @@
             min: 2010, 
             max: 2016,
             variables: [
-            { name: "DP05_0072E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!White alone", type: "num" },
-            { name: "DP05_0065E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
+                { name: "DP05_0072E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!White alone", type: "num" },
+                { name: "DP05_0065E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
             ]
         },
         {
             min: 2017, 
             max: 2021,
             variables: [
-            { name: "DP05_0077E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!White alone", type: "num" },
-            { name: "DP05_0070E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
+                { name: "DP05_0077E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!White alone", type: "num" },
+                { name: "DP05_0070E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
             ]
         }
         ]
@@ -570,7 +610,7 @@
             min: 2010, 
             max: 2021,
             variables: [
-            { name: "B01003_001E", label: "Estimate!!Total", type: "num" }
+                { name: "B01003_001E", label: "Estimate!!Total", type: "num" }
             ]
         }
         ]
