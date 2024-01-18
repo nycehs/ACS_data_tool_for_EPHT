@@ -29,6 +29,7 @@
         <select id='year_options'>
 
             <!-- add new years here -->
+            <option value="2022">2018-2022</option>
             <option value="2021">2017-2021</option>
             <option value="2020">2016-2020</option>
             <option value="2019">2015-2019</option>
@@ -71,7 +72,7 @@
     /* 
         ACS variable names are {table}_{row}, so when the row number of an estimate changes, 
         the variable name changes also. If we keep track of those changes, we can account 
-        for them. So I recoded the census_param and race_var objects to include the 
+        for them. So I recoded the census_vars and race_var objects to include the 
         correct variable names for specified time periods, then included a test so that 
         census_var includes the correct variables. 
     */
@@ -79,9 +80,9 @@
     // denom = complete denominator
     // denom2 = combined with number to form complete denominator
 
-    var census_param = [
+    var census_vars = [
     {
-        indicator: "Race and ethnicity", category: "race_vars"
+        indicator: "Race and ethnicity", category: "race_ethnicity_vars"
     },
     {
         indicator: "Total population", table: "TOTAL POPULATION", source: 'acs/acs5', category: "population",
@@ -137,6 +138,21 @@
         time_period: [
         {
             min: 2010, 
+            max: 2010,
+            variables: [
+                { name: "B18107_004E", label: "Estimate!!Total:!!Male:!!18 to 34 years:!!With an independent living difficulty", type: "num" },
+                { name: "B18107_007E", label: "Estimate!!Total:!!Male:!!35 to 64 years:!!With an independent living difficulty", type: "num" },
+                { name: "B18107_010E", label: "Estimate!!Total:!!Male:!!65 to 74 years:!!With an independent living difficulty", type: "num" },
+                { name: "B18107_013E", label: "Estimate!!Total:!!Male:!!75 years and over:!!With an independent living difficulty", type: "num" },
+                { name: "B18107_017E", label: "Estimate!!Total:!!Female:!!18 to 34 years:!!With an independent living difficulty", type: "num" },
+                { name: "B18107_020E", label: "Estimate!!Total:!!Female:!!35 to 64 years:!!With an independent living difficulty", type: "num" },
+                { name: "B18107_023E", label: "Estimate!!Total:!!Female:!!65 to 74 years:!!With an independent living difficulty", type: "num" },
+                { name: "B18107_026E", label: "Estimate!!Total:!!Female:!!75 years and over:!!With an independent living difficulty", type: "num" },
+                { name: "B18107_001E", label: "Estimate!!Total:", type: "denom" }
+            ]
+        },
+        {
+            min: 2012, 
             max: 2021,
             variables: [
                 { name: "B18107_004E", label: "Estimate!!Total:!!Male:!!18 to 34 years:!!With an independent living difficulty", type: "num" },
@@ -149,11 +165,11 @@
                 { name: "B18107_026E", label: "Estimate!!Total:!!Female:!!75 years and over:!!With an independent living difficulty", type: "num" },
                 { name: "B18107_001E", label: "Estimate!!Total:", type: "denom" }
             ]
-        }
+        },
         ]
     },
     {
-        indicator: "Ambulatory difficulty (adults)", table: "DISABILITY CHARACTERISTICS", source: 'acs/acs5', category: "living",
+        indicator: "Ambulatory difficulty (adults)", table: "DISABILITY CHARACTERISTICS", source: 'acs/acs5', category: "ambulatory",
         time_period: [
         {
             min: 2010, 
@@ -274,7 +290,7 @@
             variables: [
                 { name: "B25034_010E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
                 { name: "B25034_009E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
-                { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
+                { name: "B25034_001E", label: "Estimate!!Total", type: "denom" }
             ]
         },
         {
@@ -283,7 +299,7 @@
             variables: [
                 { name: "B25034_011E", label: "Estimate!!Total!!Built 1939 or earlier", type: "num" },
                 { name: "B25034_010E", label: "Estimate!!Total!!Built 1940 to 1949", type: "num" },
-                { name: "B25034_001E", label: "Estimate!!Total", type: "denom2" }
+                { name: "B25034_001E", label: "Estimate!!Total", type: "denom" }
             ]
         }
         ]
@@ -420,7 +436,7 @@
         ]
     },
     {
-        indicator: "Commuting modes", category: "transportation"
+        indicator: "Commuting modes", category: "commuting_modes_vars"
     },
     ];
     
@@ -429,9 +445,9 @@
     // Commuting modes
     //---------------------------------------------------------------------------//
 
-    var transportation = [
+    var commuting_modes_vars = [
     {
-        indicator: "Car, truck, or van", table: "MEANS OF TRANSPORTATION TO WORK", source: 'acs/acs5', category: "transportation",
+        indicator: "Car, truck, or van", table: "MEANS OF TRANSPORTATION TO WORK", source: 'acs/acs5', category: "commuting_modes_vars",
         time_period: [
         {
             min: 2010, 
@@ -444,7 +460,7 @@
         ]
     },
     {
-        indicator: "Public transportation", table: "MEANS OF TRANSPORTATION TO WORK", source: 'acs/acs5', category: "transportation",
+        indicator: "Public transportation", table: "MEANS OF TRANSPORTATION TO WORK", source: 'acs/acs5', category: "commuting_modes_vars",
         time_period: [
         {
             min: 2010, 
@@ -457,7 +473,7 @@
         ]
     },
     {
-        indicator: "Bicycle", table: "MEANS OF TRANSPORTATION TO WORK", source: 'acs/acs5', category: "transportation",
+        indicator: "Bicycle", table: "MEANS OF TRANSPORTATION TO WORK", source: 'acs/acs5', category: "commuting_modes_vars",
         time_period: [
         {
             min: 2010, 
@@ -470,7 +486,7 @@
         ]
     },
     {
-        indicator: "Walked", table: "MEANS OF TRANSPORTATION TO WORK", source: 'acs/acs5', category: "transportation",
+        indicator: "Walked", table: "MEANS OF TRANSPORTATION TO WORK", source: 'acs/acs5', category: "commuting_modes_vars",
         time_period: [
         {
             min: 2010, 
@@ -497,9 +513,9 @@
         probably sum to > 100%. 
     */
     
-    var race_vars = [
+    var race_ethnicity_vars = [
     {
-        indicator: "Hispanic alone (percent)", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile', category: "race_vars",
+        indicator: "Hispanic alone (percent)", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile', category: "race_ethnicity_vars",
         time_period: [
         {
             min: 2010, 
@@ -520,7 +536,7 @@
         ]
     },
     {
-        indicator: "White alone (percent)", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile', category: "race_vars",
+        indicator: "White alone (percent)", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile', category: "race_ethnicity_vars",
         time_period: [
         {
             min: 2010, 
@@ -541,7 +557,7 @@
         ]
     },
     {
-        indicator: "Black alone (percent)", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile', category: "race_vars",
+        indicator: "Black alone (percent)", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile', category: "race_ethnicity_vars",
         time_period: [
         {
             min: 2010, 
@@ -562,7 +578,7 @@
         ]
     },
     {
-        indicator: "Asian alone (percent)", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile', category: "race_vars",
+        indicator: "Asian alone (percent)", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile', category: "race_ethnicity_vars",
         time_period: [
         {
             min: 2010, 
@@ -583,13 +599,13 @@
         ]
     },
     {
-        indicator: "Non-white (percent)", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile', category: "race_vars",
+        indicator: "Non-white (percent)", table: "ACS DEMOGRAPHIC AND HOUSING ESTIMATES", source: 'acs/acs5/profile', category: "race_ethnicity_vars",
         time_period: [
         {
             min: 2010, 
             max: 2016,
             variables: [
-                { name: "DP05_0072E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!White alone", type: "num" },
+                { name: "DP05_0072E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!White alone", type: "num2" },
                 { name: "DP05_0065E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
             ]
         },
@@ -597,14 +613,14 @@
             min: 2017, 
             max: 2021,
             variables: [
-                { name: "DP05_0077E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!White alone", type: "num" },
+                { name: "DP05_0077E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population!!Not Hispanic or Latino!!White alone", type: "num2" },
                 { name: "DP05_0070E", label: "Estimate!!HISPANIC OR LATINO AND RACE!!Total population", type: "denom" }
             ]
         }
         ]
     },
     {
-        indicator: "Total population (race)", table: "TOTAL POPULATION", source: 'acs/acs5',  category: "race_vars",
+        indicator: "Total population (race)", table: "TOTAL POPULATION", source: 'acs/acs5',  category: "race_ethnicity_vars",
         time_period: [
         {
             min: 2010, 
@@ -626,7 +642,7 @@
 
     var options = $("#ind_options");
     
-    $.each(census_param, function (i, d) {
+    $.each(census_vars, function (i, d) {
         options.append($("<option />").val(i).text(d.indicator));
     });
     
@@ -753,6 +769,7 @@
 
     let num_only = [
         "Total population",
+        "Total population (race)",
         "Poverty TOTAL",
         "Housing Units",
         "Household income"
@@ -772,21 +789,21 @@
     
     function getdata(i_val, y_val) {
 
-        console.log("census_param[i_val]", census_param[i_val]);
+        console.log("census_vars[i_val]", census_vars[i_val]);
 
-        // if this is the Race and ethnicity indicator, or the transportation indicator, loop through the constituent indicators
+        // if this is the Race and ethnicity indicator, or the commuting_modes_vars indicator, loop through the constituent indicators
 
-        if (census_param[i_val].category === "race_vars") {
+        if (census_vars[i_val].category === "race_ethnicity_vars") {
         
-            race_vars.forEach(indicator => hit_api(indicator, y_val));
+            race_ethnicity_vars.forEach(indicator => hit_api(indicator, y_val));
         }
-        else if (census_param[i_val].category === "transportation") {
+        else if (census_vars[i_val].category === "commuting_modes_vars") {
         
-            transportation.forEach(indicator => hit_api(indicator, y_val));
+            commuting_modes_vars.forEach(indicator => hit_api(indicator, y_val));
         }
         else {
             
-            hit_api(census_param[i_val], y_val);
+            hit_api(census_vars[i_val], y_val);
         }
 
     }
@@ -860,28 +877,30 @@
             zcta_path += "&for=zip+code+tabulation+area:" + zcta.toString();
         }
         
-        // ---- PUMA PATH ---- //
 
-        var puma = $.map(puma2subboro, function (n, i) { return n.PUMA; });
-        var puma_path = this_url + "key=" + my_key + "&get=";
-        for (i = 0; i < census_var.length; ++i) {
-            puma_path += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
-        }
-        puma_path += "&for=public+use+microdata+area:" + puma.toString() + "&in=state:36";
-        
-        // ---- PUMA CD ---- //
-
-        var pumacd = $.map(puma2subboro, function (n, i) { return n.PUMA; });
-        var puma_path_cd = this_url + "key=" + my_key + "&get=";
-        for (i = 0; i < census_var.length; ++i) {
-            puma_path_cd += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
-        }
-        puma_path_cd += "&for=public+use+microdata+area:" + pumacd.toString() + "&in=state:36";
-        
-
-        // switching apths depneding on year, to get NTA 2020
+        // switching paths depneding on year, to get NTA 2020
 
         if (year < 2020) {
+
+            // these PUMAs are (will be) only valid for pre-2020 data
+            
+            // ---- PUMA PATH ---- //
+
+            var puma = $.map(puma2subboro, function (n, i) { return n.PUMA; });
+            var puma_path = this_url + "key=" + my_key + "&get=";
+            for (i = 0; i < census_var.length; ++i) {
+                puma_path += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
+            }
+            puma_path += "&for=public+use+microdata+area:" + puma.toString() + "&in=state:36";
+            
+            // ---- PUMA CD ---- //
+
+            var pumacd = $.map(puma2subboro, function (n, i) { return n.PUMA; });
+            var puma_path_cd = this_url + "key=" + my_key + "&get=";
+            for (i = 0; i < census_var.length; ++i) {
+                puma_path_cd += (i == (census_var.length - 1)) ? census_var[i].name : census_var[i].name + ",";
+            }
+            puma_path_cd += "&for=public+use+microdata+area:" + pumacd.toString() + "&in=state:36";
             
             // ---- BX ---- //
             
@@ -1195,7 +1214,7 @@
             
             // if race indicator, don't print number
             
-            if (category !== "race_vars") {
+            if (category !== "race_ethnicity_vars") {
                 
                 var temp_OL = data_in_geo[key];
                 dataNumber.push(temp_OL["num"]);
@@ -1223,7 +1242,7 @@
             else if (indicator === "Non-white (percent)") {
                 
                 // literally total population minus white-alone
-                var test_ind = d3.format(".2f")(100 * ((temp_OL["denom"] - temp_OL["num"]) / temp_OL["denom"]));
+                var test_ind = d3.format(".2f")(100 * ((temp_OL["denom"] - temp_OL["num2"]) / temp_OL["denom"]));
 
                 if (!isNaN(test_ind)) {
                     dataPercent.push(test_ind);
@@ -1237,17 +1256,6 @@
 
                 // don't push anything to dataPercent, b/c only num matters
 
-            }
-            else if (!temp_OL["denom"]) {
-
-                var test_ind = d3.format(".2f")(100 * (temp_OL["num"] / temp_OL["denom2"]));
-
-                if (!isNaN(test_ind)) {
-                    dataPercent.push(test_ind);
-                }
-                else {
-                    dataPercent.push(0);
-                }
             }
             else {
 
@@ -1335,17 +1343,17 @@
                 
                 // if race indicator, don't print number
 
-                if (category !== "race_vars") {
+                if (category !== "race_ethnicity_vars" || indicator === "Total population (race)") {
 
                     if (indicator === "Total population (race)") {
                         
                         row.append($('<td>').text("Race and ethnicity"));               // IndicatorName
                         row.append($('<td>').text(indicator.replace(" \(Race\)", ""))); // MeasureType
                         
-                    } else if (category === "transportation") {
+                    } else if (category === "commuting_modes_vars") {
                         
-                        row.append($('<td>').text("Commuting modes"));  // IndicatorName
-                        row.append($('<td>').text("Number: " + indicator));   // MeasureType
+                        row.append($('<td>').text("Commuting modes"));        // IndicatorName
+                        row.append($('<td>').text(indicator + " (number)"));  // MeasureType
                         
                     } else {
                         
@@ -1377,7 +1385,7 @@
                 else if (indicator === "Non-white (percent)") {
                     
                     // literally total population minus white-alone
-                    var test_ind = d3.format(".2f")(100 * ((temp_OL["denom"] - temp_OL["num"]) / temp_OL["denom"]));
+                    var test_ind = d3.format(".2f")(100 * ((temp_OL["denom"] - temp_OL["num2"]) / temp_OL["denom"]));
                 }
                 // else if (indicator === "Total population" || indicator === "Poverty TOTAL" || indicator === "Housing Units") {
                 else if (num_only.includes(indicator)) {
@@ -1385,10 +1393,6 @@
                     // don't do anything b/c num already displayed
                     // var test_ind = null;
                     
-                }
-                else if (!temp_OL["denom"]) {
-                    
-                    var test_ind = d3.format(".2f")(100 * (temp_OL["num"] / temp_OL["denom2"]));
                 }
                 else {
                     
@@ -1407,15 +1411,15 @@
                     // if this is a race indicator, replace "Percent" with the indicator name, and replace 
                     //  the indicator name with "Race and ethnicity"
 
-                    if (category === "race_vars") {
+                    if (category === "race_ethnicity_vars") {
                         
                         row.append($('<td>').text("Race and ethnicity"));  // IndicatorName
                         row.append($('<td>').text(indicator));             // MeasureType
                         
-                    } else if (category === "transportation") {
+                    } else if (category === "commuting_modes_vars") {
 
                         row.append($('<td>').text("Means of transportation to work"));  // IndicatorName
-                        row.append($('<td>').text("Percent: " + indicator));            // MeasureType
+                        row.append($('<td>').text(indicator + " (percent)"));           // MeasureType
                         
                     } else {
 
@@ -1532,7 +1536,7 @@
         $("#exportChrome").on('click', function () {
             
             var year = iy_vals[1];
-            var indicator = census_param[iy_vals[0]].indicator
+            var indicator = census_vars[iy_vals[0]].indicator
             
             exportTableToCSV.apply(this, [arq_table, 'ACS ' + indicator + ' ' + year + '.csv']);
             
